@@ -12,28 +12,49 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @State var website: String = "https://therecipecritic.com/easy-shrimp-tacos/"
+    @State var navPath: NavigationPath = NavigationPath()
+    @StateObject private var viewModel: ContentViewModel = ContentViewModel()
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default) private var items: FetchedResults<Item>
+        sortDescriptors: [],
+        animation: .default) private var recipeList: FetchedResults<RecipeItem>
 
     var body: some View {
         
-        Text(website)
-            .onOpenURL { _ in
-                addItem()
-            }
+       
         
-        NavigationView {
+        NavigationStack(path: $navPath) {
+            Text(website)
+                .onOpenURL { _ in
+                    addItem()
+                    NetworkManager.main.networkRequest(url: website).sink { status in
+                        switch status {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            print(error)
+                        }
+                    } receiveValue: { recipe in
+                        let newRecipe = Recipe(id: recipe?.id ?? UUID(), title: recipe?.title ?? "", ingredients: recipe?.ingredients ?? [])
+                        navPath.append(newRecipe)
+                    }
+                    .store(in: &viewModel.subscriptions)
+                }
+                .navigationDestination(for: Recipe.self) { recipe in
+                    RecipeView(recipe: recipe)
+                }
+                
+            
             List {
-                ForEach(items) { item in
+                ForEach(recipeList, id: \.id) { item in
                     NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                        RecipeView(recipe: Recipe(dataItem: item))
                     } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+                        Text(item.title ?? "error")
                     }
                 }
                 .onDelete(perform: deleteItems)
+                
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -51,9 +72,18 @@ struct ContentView: View {
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
+            let newRecipe = RecipeItem(context: viewContext)
+            newRecipe.title = "new Recipe"
+            newRecipe.id = UUID()
+            let i1 = Ingredient(context: viewContext)
+            let i2 = Ingredient(context: viewContext)
+            let i3 = Ingredient(context: viewContext)
+            
+            i1.value = "test 1"
+            i2.value = "test 2"
+            i3.value = "test 3"
+            
+            newRecipe.ingredients = [i1, i2, i3]
             do {
                 try viewContext.save()
             } catch {
@@ -67,8 +97,7 @@ struct ContentView: View {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
+            offsets.map { recipeList[$0] }.forEach(viewContext.delete)
             do {
                 try viewContext.save()
             } catch {
@@ -80,13 +109,6 @@ struct ContentView: View {
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

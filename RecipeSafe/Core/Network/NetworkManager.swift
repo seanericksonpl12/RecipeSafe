@@ -10,12 +10,12 @@ import Combine
 import SwiftSoup
 import SwiftyJSON
 
-class NetworkManager {
-    public static let main: NetworkManager = NetworkManager()
+final class NetworkManager {
     
-    func networkRequest(url: String) throws -> AnyPublisher<Recipe?, Error> {
-        guard let url = URL(string: url) else { throw URLError(.badURL) }
-        
+    static let main: NetworkManager = NetworkManager()
+    
+    func networkRequest(url: String) -> AnyPublisher<Recipe?, Error> {
+        guard let url = URL(string: url) else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .tryMap {
