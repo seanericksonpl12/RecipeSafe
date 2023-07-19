@@ -10,36 +10,46 @@ import Combine
 import SwiftSoup
 import SwiftyJSON
 
-class NetworkManager {
-    public static let main: NetworkManager = NetworkManager()
+final class NetworkManager {
     
-    func networkRequest(url: String) throws -> AnyPublisher<Recipe, Error> {
-        guard let url = URL(string: url) else { throw URLError(.badURL) }
-        
-        return URLSession.shared.dataTaskPublisher(for: url)
+    static let main: NetworkManager = NetworkManager()
+    
+    func networkRequest(url: String) -> AnyPublisher<Recipe?, Error> {
+        let slicedURL = url.replacing("RecipeSafe://", with: "")
+        guard let components = URLComponents(string: slicedURL) else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
+        if components.scheme != "https" { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
+        guard let url = components.url else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
+        let session = URLSession.shared
+        session.configuration.tlsMinimumSupportedProtocolVersion = .TLSv13
+        return session.dataTaskPublisher(for: url)
             .map(\.data)
             .tryMap {
                 guard let str = String(data: $0, encoding: .utf8) else { throw URLError(.cannotDecodeRawData) }
                 return str
             }
             .tryMap { [weak self] in
-                guard let self = self else { return Recipe(ingredients: []) }
+                guard let self = self else { return nil }
                 return try self.soupify(html: $0)
             }
+            .catch { _ in
+                return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
+            }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-            
+        
     }
     
-    func soupify(html: String) throws -> Recipe {
+    func soupify(html: String) throws -> Recipe? {
         let doc: Document = try SwiftSoup.parse(html)
         let scripts = try doc.select("script[type=application/ld+json]").first()?.data()
-        guard let jsonString = scripts?.data(using: .utf8, allowLossyConversion: false) else { return Recipe(ingredients: []) }
+        guard let jsonString = scripts?.data(using: .utf8, allowLossyConversion: false) else { return nil }
         
         
         let json = try JSON(data: jsonString)
+        let title = json["@graph"][0]["headline"]
+        let ingrd = json["@graph"][7].filter { $0.0.contains("recipeIngredient")}[0].1.arrayValue.map { $0.stringValue }
         
-        let ingrd =  json["@graph"][7].filter { $0.0.contains("recipeIngredient")}[0].1.arrayValue.map { $0.stringValue }
-        return Recipe(ingredients: ingrd)
+        return Recipe(title: title.stringValue, ingredients: ingrd, img: nil)
         
     }
 }
