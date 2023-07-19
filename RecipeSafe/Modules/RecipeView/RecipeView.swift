@@ -13,9 +13,7 @@ struct RecipeView: View {
     
     var body: some View {
         Text(recipe.title)
-            .onOpenURL { url in
-                recipe.title = "passed!"
-            }
+            
         List(recipe.ingredients, id: \.self) { item in
             Text(item)
         }

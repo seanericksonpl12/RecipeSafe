@@ -15,8 +15,13 @@ final class NetworkManager {
     static let main: NetworkManager = NetworkManager()
     
     func networkRequest(url: String) -> AnyPublisher<Recipe?, Error> {
-        guard let url = URL(string: url) else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
-        return URLSession.shared.dataTaskPublisher(for: url)
+        let slicedURL = url.replacing("RecipeSafe://", with: "")
+        guard let components = URLComponents(string: slicedURL) else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
+        if components.scheme != "https" { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
+        guard let url = components.url else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
+        let session = URLSession.shared
+        session.configuration.tlsMinimumSupportedProtocolVersion = .TLSv13
+        return session.dataTaskPublisher(for: url)
             .map(\.data)
             .tryMap {
                 guard let str = String(data: $0, encoding: .utf8) else { throw URLError(.cannotDecodeRawData) }
@@ -26,8 +31,12 @@ final class NetworkManager {
                 guard let self = self else { return nil }
                 return try self.soupify(html: $0)
             }
+            .catch { _ in
+                return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
+            }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-            
+        
     }
     
     func soupify(html: String) throws -> Recipe? {
@@ -37,9 +46,10 @@ final class NetworkManager {
         
         
         let json = try JSON(data: jsonString)
+        let title = json["@graph"][0]["headline"]
+        let ingrd = json["@graph"][7].filter { $0.0.contains("recipeIngredient")}[0].1.arrayValue.map { $0.stringValue }
         
-        let ingrd =  json["@graph"][7].filter { $0.0.contains("recipeIngredient")}[0].1.arrayValue.map { $0.stringValue }
-        return Recipe(title: "title", ingredients: ingrd, img: nil)
+        return Recipe(title: title.stringValue, ingredients: ingrd, img: nil)
         
     }
 }

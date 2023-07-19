@@ -25,6 +25,7 @@
 		926687A42A60CA9E00117A59 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926687A32A60CA9E00117A59 /* ContentViewModel.swift */; };
 		926687AC2A619ABE00117A59 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926687AB2A619ABE00117A59 /* ShareViewController.swift */; };
 		926687B32A619ABE00117A59 /* Shared.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 926687A92A619ABE00117A59 /* Shared.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +90,7 @@
 		926687B82A619F5A00117A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		926687B92A61A67100117A59 /* RecipeSafe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RecipeSafe.entitlements; sourceTree = "<group>"; };
 		926687BA2A61A6B100117A59 /* Shared.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shared.entitlements; sourceTree = "<group>"; };
+		92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,8 +130,8 @@
 		925DCBE82A61D71500B84A38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				926687A32A60CA9E00117A59 /* ContentViewModel.swift */,
-				9266876C2A608C9200117A59 /* ContentView.swift */,
+				92924CD92A673B46000EC3B8 /* RecipeView */,
+				92924CD82A673B33000EC3B8 /* ContentView */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -190,7 +192,6 @@
 		925DCBF02A61D75400B84A38 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				925DCBF42A65FBFC00B84A38 /* RecipeView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -272,6 +273,24 @@
 				926687B02A619ABE00117A59 /* Info.plist */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		92924CD82A673B33000EC3B8 /* ContentView */ = {
+			isa = PBXGroup;
+			children = (
+				9266876C2A608C9200117A59 /* ContentView.swift */,
+				926687A32A60CA9E00117A59 /* ContentViewModel.swift */,
+			);
+			path = ContentView;
+			sourceTree = "<group>";
+		};
+		92924CD92A673B46000EC3B8 /* RecipeView */ = {
+			isa = PBXGroup;
+			children = (
+				925DCBF42A65FBFC00B84A38 /* RecipeView.swift */,
+				92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */,
+			);
+			path = RecipeView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -450,6 +469,7 @@
 				926687A42A60CA9E00117A59 /* ContentViewModel.swift in Sources */,
 				926687A22A60A26600117A59 /* Recipe.swift in Sources */,
 				926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */,
+				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
 				9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
