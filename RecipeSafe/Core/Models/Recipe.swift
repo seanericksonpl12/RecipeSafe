@@ -26,6 +26,11 @@ struct Recipe: Hashable {
     var title: String
     var ingredients: [String]
     var img: URL?
+    var url: URL?
+    var description: String?
+    var instructions: [String]?
+    var prepTime: Int?
+    var cookTime: Int?
 }
 
 struct RecipeData: Codable {
