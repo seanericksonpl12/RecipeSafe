@@ -13,6 +13,12 @@ struct Recipe: Hashable {
         self.id = dataItem.id ?? UUID()
         self.title = dataItem.title ?? "error"
         self.ingredients = (dataItem.ingredients?.allObjects as? [Ingredient] ?? []).map { $0.value ?? "" }
+        self.instructions = (dataItem.instructions?.array as? [Instruction] ?? []).map { $0.value ?? "" }
+        self.description = dataItem.desc
+        self.cookTime = dataItem.cookTime
+        self.prepTime = dataItem.prepTime
+        self.img = dataItem.imageUrl
+        self.url = dataItem.url
     }
     
     init(id: UUID = UUID(), title: String, ingredients: [String], img: URL? = nil) {

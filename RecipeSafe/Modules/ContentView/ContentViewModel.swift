@@ -47,15 +47,29 @@ extension ContentView {
                 let newRecipe = RecipeItem(context: context)
                 newRecipe.title = "new Recipe"
                 newRecipe.id = UUID()
+                newRecipe.cookTime = "20 min"
+                newRecipe.prepTime = "1 hour"
+                newRecipe.desc = "some description"
+                
                 let i1 = Ingredient(context: context)
                 let i2 = Ingredient(context: context)
                 let i3 = Ingredient(context: context)
+                
+                let in1 = Instruction(context: context)
+                let in2 = Instruction(context: context)
+                let in3 = Instruction(context: context)
                 
                 i1.value = "test 1"
                 i2.value = "test 2"
                 i3.value = "test 3"
                 
+                in1.value = "instruction 1"
+                in2.value = "instruction 2"
+                in3.value = "instruction 3"
+                
                 newRecipe.ingredients = [i1, i2, i3]
+                newRecipe.instructions = [in1, in2, in3]
+                
                 do {
                     try context.save()
                 } catch {
