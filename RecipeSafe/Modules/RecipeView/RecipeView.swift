@@ -43,12 +43,12 @@ struct RecipeView: View {
         
         // MARK: - TESTING VALUES, DELETE ON JSON UPDATE
         .onAppear {
-            recipe.description = "Juicy, perfectly spiced shrimp are wrapped in warm flour tortillas and piled high with tasty toppings in this easy shrimp tacos recipe!"
-            recipe.img = URL(string: "https://therecipecritic.com/wp-content/uploads/2022/12/shrimp_tacos-1-750x1000.jpg")
-            recipe.instructions = ["Prep your shrimp. If frozen, run them under cool water until thawed. Peel them and remove the tails.&nbsp;",
-                                   "Meanwhile, prep your toppings.&nbsp;",
-                                   "Add the shrimp to a skillet along with the olive oil and spices. Cook over medium-high heat until the shrimp are pink, flipping/stirring them occasionally (about 5-6 minutes). ",
-                                   "Assemble tacos as desired and serve immediately.&nbsp;"]
+//            recipe.description = "Juicy, perfectly spiced shrimp are wrapped in warm flour tortillas and piled high with tasty toppings in this easy shrimp tacos recipe!"
+//            recipe.img = URL(string: "https://therecipecritic.com/wp-content/uploads/2022/12/shrimp_tacos-1-750x1000.jpg")
+//            recipe.instructions = ["Prep your shrimp. If frozen, run them under cool water until thawed. Peel them and remove the tails.&nbsp;",
+//                                   "Meanwhile, prep your toppings.&nbsp;",
+//                                   "Add the shrimp to a skillet along with the olive oil and spices. Cook over medium-high heat until the shrimp are pink, flipping/stirring them occasionally (about 5-6 minutes). ",
+//                                   "Assemble tacos as desired and serve immediately.&nbsp;"]
         }
     }
     

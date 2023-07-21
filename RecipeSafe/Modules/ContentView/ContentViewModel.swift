@@ -31,8 +31,9 @@ extension ContentView {
                     print(error)
                 }
             } receiveValue: { [weak self] recipe in
+                // TODO: - Error Handling
                 guard let self = self else { return }
-                let newRecipe = Recipe(id: recipe?.id ?? UUID(), title: recipe?.title ?? "", ingredients: recipe?.ingredients ?? [])
+                guard let newRecipe = recipe else { return }
                 self.navPath.append(newRecipe)
             }
             .store(in: &subscriptions)

@@ -29,8 +29,8 @@ struct Recipe: Hashable {
     var url: URL?
     var description: String?
     var instructions: [String]?
-    var prepTime: Int?
-    var cookTime: Int?
+    var prepTime: String?
+    var cookTime: String?
 }
 
 struct RecipeData: Codable {
