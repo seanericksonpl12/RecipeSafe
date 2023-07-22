@@ -9,7 +9,7 @@ import CoreData
 
 struct PersistenceController {
     static let shared = PersistenceController()
-
+    
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
@@ -28,9 +28,9 @@ struct PersistenceController {
         }
         return result
     }()
-
+    
     let container: NSPersistentContainer
-
+    
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "RecipeSafe")
         if inMemory {
@@ -40,7 +40,7 @@ struct PersistenceController {
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-
+                
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -53,5 +53,57 @@ struct PersistenceController {
             }
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
+    }
+    
+    func saveItem(recipe: Recipe) {
+        do {
+            let request = try container.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
+            guard let recipes = request as? [RecipeItem] else { print("casting fail"); return }
+            
+            guard let url = recipe.url else { return }
+            if recipes.contains(where: { $0.url == url }) { print("recipe is duplicate."); return }
+            
+            let newRecipe = RecipeItem(context: container.viewContext)
+            newRecipe.id = recipe.id
+            newRecipe.title = recipe.title
+            newRecipe.desc = recipe.description
+            newRecipe.cookTime = recipe.cookTime
+            newRecipe.prepTime = recipe.prepTime
+            newRecipe.url = recipe.url
+            newRecipe.imageUrl = recipe.img
+            newRecipe.ingredients = []
+            newRecipe.instructions = []
+            recipe.ingredients.forEach { item in
+                let i = Ingredient(context: container.viewContext)
+                i.value = item
+                newRecipe.addToIngredients(i)
+            }
+            recipe.instructions.forEach { item in
+                let i = Instruction(context: container.viewContext)
+                i.value = item
+                newRecipe.addToInstructions(i)
+            }
+            
+            try container.viewContext.save()
+            
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+    
+    func deleteItems(offsets: IndexSet) {
+        do {
+            let request = try container.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
+            guard let list = request as? [RecipeItem] else { print("casting fail"); return }
+            offsets.map { list[$0] }.forEach(container.viewContext.delete)
+            
+            try container.viewContext.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
     }
 }

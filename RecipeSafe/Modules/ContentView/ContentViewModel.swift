@@ -34,6 +34,7 @@ extension ContentView {
                 // TODO: - Error Handling
                 guard let self = self else { return }
                 guard let newRecipe = recipe else { return }
+                self.saveItem(newRecipe)
                 self.navPath.append(newRecipe)
             }
             .store(in: &subscriptions)
@@ -73,26 +74,22 @@ extension ContentView {
                 do {
                     try context.save()
                 } catch {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                     let nsError = error as NSError
                     fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
                 }
             }
         }
         
+        private func saveItem(_ recipe: Recipe) {
+            withAnimation {
+                PersistenceController.shared.saveItem(recipe: recipe)
+            }
+        }
         
-        func deleteItems(context: NSManagedObjectContext, list: FetchedResults<RecipeItem>, offsets: IndexSet) {
+        
+        func deleteItems(offsets: IndexSet) {
             withAnimation(.spring()) {
-                offsets.map { list[$0] }.forEach(context.delete)
-                do {
-                    try context.save()
-                } catch {
-                    // Replace this implementation with code to handle the error appropriately.
-                    // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    let nsError = error as NSError
-                    fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-                }
+                PersistenceController.shared.deleteItems(offsets: offsets)
             }
         }
     }

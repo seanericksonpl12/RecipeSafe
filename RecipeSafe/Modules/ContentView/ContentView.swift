@@ -42,9 +42,7 @@ struct ContentView: View {
                         Text(item.title ?? "")
                     }
                 }
-                .onDelete { indexSet in
-                    viewModel.deleteItems(context: self.viewContext, list: recipeList, offsets: indexSet)
-                }
+                .onDelete { viewModel.deleteItems(offsets: $0) }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
