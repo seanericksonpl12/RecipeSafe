@@ -30,7 +30,9 @@ final class NetworkManager {
             }
             .tryMap { [weak self] in
                 guard let self = self else { return nil }
-                return try self.soupify(html: $0)
+                var recipe = try self.soupify(html: $0)
+                recipe?.url = url
+                return recipe
             }
             .catch { _ in
                 return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
