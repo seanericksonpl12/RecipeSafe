@@ -4,10 +4,19 @@
         <attribute name="value" optional="YES" attributeType="String"/>
         <relationship name="recipe" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecipeItem" inverseName="ingredients" inverseEntity="RecipeItem"/>
     </entity>
+    <entity name="Instruction" representedClassName="Instruction" syncable="YES" codeGenerationType="class">
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="recipe" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecipeItem" inverseName="instructions" inverseEntity="RecipeItem"/>
+    </entity>
     <entity name="RecipeItem" representedClassName="RecipeItem" syncable="YES" codeGenerationType="class">
+        <attribute name="cookTime" optional="YES" attributeType="String"/>
+        <attribute name="desc" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageUrl" optional="YES" attributeType="URI"/>
+        <attribute name="prepTime" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="URI"/>
         <relationship name="ingredients" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ingredient" inverseName="recipe" inverseEntity="Ingredient"/>
+        <relationship name="instructions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Instruction" inverseName="recipe" inverseEntity="Instruction"/>
     </entity>
 </model>

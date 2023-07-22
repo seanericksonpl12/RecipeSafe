@@ -13,6 +13,7 @@ import SwiftyJSON
 final class NetworkManager {
     
     static let main: NetworkManager = NetworkManager()
+    private let scriptTag: String = "script[type=application/ld+json]"
     
     func networkRequest(url: String) -> AnyPublisher<Recipe?, Error> {
         let slicedURL = url.replacing("RecipeSafe://", with: "")
@@ -41,15 +42,23 @@ final class NetworkManager {
     
     func soupify(html: String) throws -> Recipe? {
         let doc: Document = try SwiftSoup.parse(html)
-        let scripts = try doc.select("script[type=application/ld+json]").first()?.data()
+        let scripts = try doc.select(scriptTag).first()?.data()
         guard let jsonString = scripts?.data(using: .utf8, allowLossyConversion: false) else { return nil }
-        
-        
         let json = try JSON(data: jsonString)
-        let title = json["@graph"][0]["headline"]
-        let ingrd = json["@graph"][7].filter { $0.0.contains("recipeIngredient")}[0].1.arrayValue.map { $0.stringValue }
-        
-        return Recipe(title: title.stringValue, ingredients: ingrd, img: nil)
-        
+        return Recipe(json: json)
+    }
+    
+    // MARK: - TESTING ONLY
+    private func printJSON(json: JSON) {
+        let info = json["@graph"]
+        print("count: \(info.count)")
+        print("0: \(info[0])")
+        print("1: \(info[1])")
+        print("2: \(info[2])")
+        print("3: \(info[3])")
+        print("4: \(info[4])")
+        print("5: \(info[5])")
+        print("6: \(info[6])")
+        print("7: \(info[7])")
     }
 }
