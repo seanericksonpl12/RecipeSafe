@@ -32,7 +32,7 @@ struct RecipeView: View {
             }
             
             Section {
-                ForEach(Array((recipe.instructions!.enumerated())), id: \.offset) { index, item in
+                ForEach(Array(recipe.instructions.enumerated()), id: \.offset) { index, item in
                     HStack {
                         VStack {
                             Text((index + 1).formatted())

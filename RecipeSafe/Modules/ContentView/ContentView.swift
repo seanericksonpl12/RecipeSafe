@@ -32,7 +32,12 @@ struct ContentView: View {
             List {
                 ForEach(recipeList, id: \.id) { item in
                     NavigationLink {
-                        RecipeView(recipe: Recipe(dataItem: item))
+                        if let recipe = Recipe(dataItem: item) {
+                            RecipeView(recipe: recipe)
+                        } else {
+                            // TODO: - Replace with error screen
+                            EmptyView()
+                        }
                     } label: {
                         Text(item.title ?? "")
                     }

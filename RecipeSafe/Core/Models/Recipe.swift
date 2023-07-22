@@ -11,24 +11,23 @@ import SwiftyJSON
 struct Recipe: Hashable {
     
     // MARK: - Core Data Init
-    init(dataItem: RecipeItem) {
-        self.id = dataItem.id ?? UUID()
-        self.title = dataItem.title ?? "error"
-        self.ingredients = (dataItem.ingredients?.allObjects as? [Ingredient] ?? []).map { $0.value ?? "" }
-        self.instructions = (dataItem.instructions?.array as? [Instruction] ?? []).map { $0.value ?? "" }
+    init?(dataItem: RecipeItem) {
+        guard let id = dataItem.id else { return nil }
+        guard let title = dataItem.title else { return nil }
+        guard let ingredientArr = dataItem.ingredients?.allObjects as? [Ingredient] else { return nil }
+        guard let instructionArr = dataItem.instructions?.array as? [Instruction] else { return nil }
+        if ingredientArr.contains(where: { $0.value == nil }) { return nil }
+        if instructionArr.contains(where: { $0.value == nil }) { return nil }
+        
+        self.id = id
+        self.title = title
+        self.ingredients = ingredientArr.map { $0.value! }
+        self.instructions = instructionArr.map { $0.value! }
         self.description = dataItem.desc
         self.cookTime = dataItem.cookTime
         self.prepTime = dataItem.prepTime
         self.img = dataItem.imageUrl
         self.url = dataItem.url
-    }
-    
-    // MARK: - Testing Init
-    init(id: UUID = UUID(), title: String, ingredients: [String], img: URL? = nil) {
-        self.id = id
-        self.title = title
-        self.ingredients = ingredients
-        self.img = img
     }
     
     // MARK: - JSON Init
@@ -45,7 +44,9 @@ struct Recipe: Hashable {
         let cook = info[7][JSONKeys.cookTime.rawValue].stringValue
         let url = info[7][JSONKeys.url.rawValue].url
         
-        if title == "" || ingrd.isEmpty || instructions.isEmpty || url == nil || url?.absoluteString == "" {
+        guard let checkedUrl = url else { return nil }
+        
+        if title == "" || ingrd.isEmpty || instructions.isEmpty || checkedUrl.absoluteString == "" {
             return nil
         }
         
@@ -56,16 +57,25 @@ struct Recipe: Hashable {
         self.instructions = instructions
         self.prepTime = prep
         self.cookTime = cook
-        self.url = url
+        self.url = checkedUrl
     }
     
+    // MARK: - Testing Init
+    init(title: String, ingredients: [String], img: URL? = nil) {
+        self.title = title
+        self.ingredients = ingredients
+        self.img = img
+        self.instructions = []
+    }
+    
+    // MARK: - Properties
     var id: UUID = UUID()
     var title: String
     var ingredients: [String]
     var img: URL?
     var url: URL?
     var description: String?
-    var instructions: [String]?
+    var instructions: [String]
     var prepTime: String?
     var cookTime: String?
 }
