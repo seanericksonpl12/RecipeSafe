@@ -11,7 +11,7 @@ import CoreData
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
-        sortDescriptors: [],
+        sortDescriptors: [SortDescriptor(\.title)],
         animation: .default) private var recipeList: FetchedResults<RecipeItem>
     
     @StateObject private var viewModel: ContentViewModel = ContentViewModel()
@@ -42,7 +42,11 @@ struct ContentView: View {
                         Text(item.title ?? "")
                     }
                 }
-                .onDelete { viewModel.deleteItems(offsets: $0) }
+                .onDelete {
+                    viewModel.deleteItem(offset: $0,
+                                         list: recipeList,
+                                         context: viewContext)
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -59,8 +63,6 @@ struct ContentView: View {
             Text("Select an item")
         }
     }
-    
-    
 }
 
 struct ContentView_Previews: PreviewProvider {

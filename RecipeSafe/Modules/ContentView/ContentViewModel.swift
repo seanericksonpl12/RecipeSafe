@@ -80,16 +80,23 @@ extension ContentView {
             }
         }
         
-        private func saveItem(_ recipe: Recipe) {
-            withAnimation {
-                PersistenceController.shared.saveItem(recipe: recipe)
+        func deleteItem(offset: IndexSet,
+                        list: FetchedResults<RecipeItem>,
+                        context: NSManagedObjectContext) {
+            offset
+                .map { list[$0] }
+                .forEach { context.delete($0) }
+            do {
+                try context.save()
+            } catch {
+                print("viewContext error.")
             }
         }
         
         
-        func deleteItems(offsets: IndexSet) {
-            withAnimation(.spring()) {
-                PersistenceController.shared.deleteItems(offsets: offsets)
+        private func saveItem(_ recipe: Recipe) {
+            withAnimation {
+                PersistenceController.shared.saveItem(recipe: recipe)
             }
         }
     }
