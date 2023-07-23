@@ -39,28 +39,65 @@ final class NetworkManager {
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
-        
     }
     
-    func soupify(html: String) throws -> Recipe? {
+    // MARK: - Web Scraping
+    private func soupify(html: String) throws -> Recipe? {
         let doc: Document = try SwiftSoup.parse(html)
         let scripts = try doc.select(scriptTag).first()?.data()
         guard let jsonString = scripts?.data(using: .utf8, allowLossyConversion: false) else { return nil }
+        
         let json = try JSON(data: jsonString)
-        return Recipe(json: json)
+        guard let dict = searchFor(keys: JSONKeys.allCases.map({$0.rawValue}),
+                                   excluding: ["review"],
+                                   json: json)
+        else { return nil }
+        
+        return Recipe(json: dict)
     }
     
-    // MARK: - TESTING ONLY
-    private func printJSON(json: JSON) {
-        let info = json["@graph"]
-        print("count: \(info.count)")
-        print("0: \(info[0])")
-        print("1: \(info[1])")
-        print("2: \(info[2])")
-        print("3: \(info[3])")
-        print("4: \(info[4])")
-        print("5: \(info[5])")
-        print("6: \(info[6])")
-        print("7: \(info[7])")
+    // MARK: - JSON Search
+    private func searchFor(keys: [String],
+                           excluding: [String] = [],
+                           json: JSON) -> [String: JSON]? {
+        
+        var rtrnDict = [String: JSON]()
+        var queue: [JSON] = []
+        
+        queue.append(json)
+        
+        while(!queue.isEmpty && rtrnDict.count < keys.count) {
+            
+            let cur = queue.remove(at: 0)
+            let arr = cur.arrayValue
+            let dict = cur.dictionaryValue
+            
+            if !arr.isEmpty {
+                queue.append(contentsOf: arr)
+            }
+            else if !dict.isEmpty {
+                keys.forEach {
+                    if let val = dict[$0] { rtrnDict[$0] = val }
+                }
+                
+                dict.forEach {
+                    if !excluding.contains($0.key) {
+                        queue.append($0.value)
+                    }
+                }
+            }
+        }
+
+        return rtrnDict
+    }
+    
+    private enum JSONKeys: String, CaseIterable {
+        case recipeIngredient
+        case recipeInstructions
+        case headline
+        case thumbnailUrl
+        case description
+        case cookTime
+        case prepTime
     }
 }

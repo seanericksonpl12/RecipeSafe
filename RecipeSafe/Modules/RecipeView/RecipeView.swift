@@ -91,11 +91,15 @@ struct RecipeView: View {
             Divider()
             HStack {
                 Spacer()
-                Text("Prep Time: 20 min")
-                    .font(.footnote)
+                if let prep = recipe.prepTime {
+                    Text("Prep Time: \(prep)")
+                        .font(.footnote)
+                }
                 Spacer()
-                Text("Cook Time: 10 min")
-                    .font(.footnote)
+                if let cook = recipe.cookTime {
+                    Text("Cook Time: \(cook)")
+                        .font(.footnote)
+                }
                 Spacer()
             }
         }

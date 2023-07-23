@@ -42,17 +42,18 @@ struct Recipe: Hashable {
     }
     
     // MARK: - JSON Init
-    init?(json: JSON) {
-        let info = json[JSONKeys.allInfo.rawValue]
-        if info.isEmpty || !info.exists() { print("no info"); return nil }
+    init?(json: [String: JSON]) {
         
-        let title: String = info[0][JSONKeys.title.rawValue].stringValue
-        let ingrd: [String] = info[7].filter { $0.0.contains(JSONKeys.ingredient.rawValue)}[0].1.arrayValue.map { $0.stringValue }
-        let img: URL? = info[0][JSONKeys.imageUrl.rawValue].url
-        let description: String = info[1][JSONKeys.description.rawValue].stringValue
-        let instructions: [String] = info[7][JSONKeys.instructions.rawValue].arrayValue.map { $0[JSONKeys.instructionValue.rawValue].stringValue }
-        let prep = info[7][JSONKeys.prepTime.rawValue].stringValue
-        let cook = info[7][JSONKeys.cookTime.rawValue].stringValue
+        guard let title: String = json[JSONKeys.title.rawValue]?.stringValue
+        else { print("no title"); return nil }
+        guard let ingrd: [String] = json[JSONKeys.ingredient.rawValue]?.arrayValue.map({ $0.stringValue })
+        else { print("no ingredients"); return nil }
+        guard let instructions: [String] = json[JSONKeys.instructions.rawValue]?.arrayValue.map({ $0[JSONKeys.instructionValue.rawValue].stringValue })
+        else { print("no instructions"); return nil }
+        let img: URL? = json[JSONKeys.imageUrl.rawValue]?.url
+        let description = json[JSONKeys.description.rawValue]?.stringValue
+        let prep = json[JSONKeys.prepTime.rawValue]?.stringValue
+        let cook = json[JSONKeys.cookTime.rawValue]?.stringValue
         
         if title == "" || ingrd.isEmpty || instructions.isEmpty  {
             print("empty variable")
@@ -79,7 +80,6 @@ struct Recipe: Hashable {
 }
 
 fileprivate enum JSONKeys: String {
-    case allInfo = "@graph"
     case description
     case title = "headline"
     case ingredient = "recipeIngredient"
