@@ -18,7 +18,15 @@ struct ContentView: View {
     
     var body: some View {
         
-        
+        switch viewModel.viewState {
+        case .loading:
+            LoadingView()
+        case .successfullyLoaded, .started, .failedToLoad:
+            listView
+        }
+    }
+    
+    var listView: some View {
         NavigationStack(path: $viewModel.navPath) {
             
             List {
@@ -26,9 +34,6 @@ struct ContentView: View {
                     NavigationLink {
                         if let recipe = Recipe(dataItem: item) {
                             RecipeView(recipe: recipe)
-                        } else {
-                            // TODO: - Replace with error screen
-                            EmptyView()
                         }
                     } label: {
                         Text(item.title ?? "")
@@ -57,6 +62,12 @@ struct ContentView: View {
             .onOpenURL { url in
                 viewModel.onURLOpen(url: url.absoluteString)
             }
+            .alert("Couldn't Curate Recipe", isPresented: $viewModel.displayBadSite) {
+                Button("OK") { viewModel.displayBadSite = false }
+            } message: {
+                Text("Please try a different site or create your own recipe")
+            }
+            
             Text("Select an item")
         }
     }
