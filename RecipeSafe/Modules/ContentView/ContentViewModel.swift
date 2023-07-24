@@ -40,11 +40,11 @@ extension ContentView {
                 // TODO: - Error Handling
                 guard let self = self else { return }
                 self.viewState = .successfullyLoaded
-                guard let newRecipe = recipe else {
+                guard var newRecipe = recipe else {
                     displayBadSite = true
                     return
                 }
-                DispatchQueue.main.async { self.saveItem(newRecipe) }
+                DispatchQueue.main.async { newRecipe.dataEntity = self.saveItem(newRecipe) }
                 self.navPath.append(newRecipe)
             }
             .store(in: &subscriptions)
@@ -104,9 +104,9 @@ extension ContentView {
         }
         
         
-        private func saveItem(_ recipe: Recipe) {
+        private func saveItem(_ recipe: Recipe) -> RecipeItem? {
             withAnimation {
-                PersistenceController.shared.saveItem(recipe: recipe)
+                return PersistenceController.shared.saveItem(recipe: recipe)
             }
         }
     }
