@@ -15,6 +15,7 @@ struct RecipeView: View {
     var body: some View {
         
         customHeader
+            .padding(.top, -50)
         
         List {
             
@@ -67,6 +68,7 @@ struct RecipeView: View {
             
             Text(recipe.title)
                 .font(.title)
+                .fontWeight(.heavy)
                 .padding()
             Spacer()
         }

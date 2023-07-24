@@ -12,7 +12,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
-        animation: .default) private var recipeList: FetchedResults<RecipeItem>
+        animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
     
     @StateObject private var viewModel: ContentViewModel = ContentViewModel()
     
@@ -20,14 +20,6 @@ struct ContentView: View {
         
         
         NavigationStack(path: $viewModel.navPath) {
-            Text("Recipes")
-                .onOpenURL { url in
-                    viewModel.onURLOpen(url: url.absoluteString)
-                }
-                .navigationDestination(for: Recipe.self) { recipe in
-                    RecipeView(recipe: recipe)
-                }
-            
             
             List {
                 ForEach(recipeList, id: \.id) { item in
@@ -47,11 +39,13 @@ struct ContentView: View {
                                          list: recipeList,
                                          context: viewContext)
                 }
+                
+            }
+            .navigationTitle("Recipes")
+            .navigationDestination(for: Recipe.self) { recipe in
+                RecipeView(recipe: recipe)
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
                 ToolbarItem {
                     Button{
                         viewModel.addItem(context: self.viewContext)
@@ -59,6 +53,9 @@ struct ContentView: View {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
+            }
+            .onOpenURL { url in
+                viewModel.onURLOpen(url: url.absoluteString)
             }
             Text("Select an item")
         }

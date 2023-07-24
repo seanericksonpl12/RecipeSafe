@@ -34,7 +34,7 @@ extension ContentView {
                 // TODO: - Error Handling
                 guard let self = self else { return }
                 guard let newRecipe = recipe else { return }
-                self.saveItem(newRecipe)
+                DispatchQueue.main.async { self.saveItem(newRecipe) }
                 self.navPath.append(newRecipe)
             }
             .store(in: &subscriptions)
