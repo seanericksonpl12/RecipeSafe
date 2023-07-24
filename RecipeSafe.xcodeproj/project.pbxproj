@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA3562A6EED7E0086ADB5 /* StringExtensions.swift */; };
 		925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */; };
 		925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF42A65FBFC00B84A38 /* RecipeView.swift */; };
 		9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876A2A608C9200117A59 /* RecipeSafeApp.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		920DA3562A6EED7E0086ADB5 /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTypes.swift; sourceTree = "<group>"; };
 		925DCBF42A65FBFC00B84A38 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		926687672A608C9200117A59 /* RecipeSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecipeSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,6 +187,7 @@
 		925DCBEF2A61D74B00B84A38 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				920DA3562A6EED7E0086ADB5 /* StringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */,
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
 				926687A42A60CA9E00117A59 /* ContentViewModel.swift in Sources */,
+				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
 				926687A22A60A26600117A59 /* Recipe.swift in Sources */,
 				926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */,
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,

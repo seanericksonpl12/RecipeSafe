@@ -99,5 +99,6 @@ final class NetworkManager {
         case description
         case cookTime
         case prepTime
+        case name
     }
 }
