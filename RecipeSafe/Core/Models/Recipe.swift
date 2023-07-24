@@ -44,16 +44,59 @@ struct Recipe: Hashable {
     // MARK: - JSON Init
     init?(json: [String: JSON]) {
         
-        guard let title: String = json[JSONKeys.title.rawValue]?.stringValue
+        guard let title: String =
+                json[JSONKeys.title.rawValue]?
+            .stringValue
+            .htmlFormatted() ??
+                json[JSONKeys.name.rawValue]?
+            .stringValue
+            .htmlFormatted()
+                
         else { print("no title"); return nil }
-        guard let ingrd: [String] = json[JSONKeys.ingredient.rawValue]?.arrayValue.map({ $0.stringValue })
+        
+        guard let ingrd: [String] =
+                json[JSONKeys.ingredient.rawValue]?
+            .arrayValue
+            .map({
+                $0.stringValue.htmlFormatted()
+            })
+                
         else { print("no ingredients"); return nil }
-        guard let instructions: [String] = json[JSONKeys.instructions.rawValue]?.arrayValue.map({ $0[JSONKeys.instructionValue.rawValue].stringValue })
+        
+        guard var instructions: [String] =
+                json[JSONKeys.instructions.rawValue]?
+            .arrayValue
+            .map({
+                $0[JSONKeys.instructionValue.rawValue].stringValue.htmlFormatted()
+            })
+                
         else { print("no instructions"); return nil }
-        let img: URL? = json[JSONKeys.imageUrl.rawValue]?.url
-        let description = json[JSONKeys.description.rawValue]?.stringValue
-        let prep = json[JSONKeys.prepTime.rawValue]?.stringValue
-        let cook = json[JSONKeys.cookTime.rawValue]?.stringValue
+        
+        if instructions.contains("") {
+            instructions =
+            json[JSONKeys.instructions.rawValue]?
+                .arrayValue
+                .map({
+                    $0.stringValue.htmlFormatted()
+                }) ?? []
+        }
+        
+        let img: URL? = json[JSONKeys.imageUrl.rawValue]?
+            .url
+        
+        let description = json[JSONKeys.description.rawValue]?
+            .stringValue
+            .htmlFormatted()
+        
+        let prep = json[JSONKeys.prepTime.rawValue]?
+            .stringValue
+            .htmlFormatted()
+            .replacingOccurrences(of: "PT", with: "")
+        
+        let cook = json[JSONKeys.cookTime.rawValue]?
+            .stringValue
+            .htmlFormatted()
+            .replacingOccurrences(of: "PT", with: "")
         
         if title == "" || ingrd.isEmpty || instructions.isEmpty  {
             print("empty variable")
@@ -76,7 +119,7 @@ struct Recipe: Hashable {
         self.img = img
         self.instructions = []
     }
-
+    
 }
 
 fileprivate enum JSONKeys: String {
@@ -88,4 +131,5 @@ fileprivate enum JSONKeys: String {
     case imageUrl = "thumbnailUrl"
     case prepTime
     case cookTime
+    case name
 }
