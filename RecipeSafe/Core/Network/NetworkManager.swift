@@ -49,7 +49,7 @@ final class NetworkManager {
         
         let json = try JSON(data: jsonString)
         guard let dict = searchFor(keys: JSONKeys.allCases.map({$0.rawValue}),
-                                   excluding: ["review"],
+                                   excluding: ["review", "author"],
                                    json: json)
         else { return nil }
         
@@ -63,7 +63,6 @@ final class NetworkManager {
         
         var rtrnDict = [String: JSON]()
         var queue: [JSON] = []
-        
         queue.append(json)
         
         while(!queue.isEmpty && rtrnDict.count < keys.count) {
@@ -87,7 +86,7 @@ final class NetworkManager {
                 }
             }
         }
-
+        print(rtrnDict["recipeInstructions"])
         return rtrnDict
     }
     

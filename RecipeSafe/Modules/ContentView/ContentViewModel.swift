@@ -16,24 +16,34 @@ extension ContentView {
         // MARK: - Published
         @Published var navPath: NavigationPath = .init()
         @Published var popup: Bool = false
+        @Published var displayBadSite: Bool = false
+        @Published var viewState: ViewState = .started
         
         // MARK: - Properties
         private var subscriptions = Set<AnyCancellable>()
         
         // MARK: - URL Handling
         func onURLOpen(url: String) {
+            self.viewState = .loading
             self.navPath = .init()
-            NetworkManager.main.networkRequest(url: url).sink { status in
+            NetworkManager.main.networkRequest(url: url).sink { [weak self] status in
+                guard let self = self else { return }
                 switch status {
                 case .finished:
                     break
                 case .failure(let error):
+                    self.displayBadSite = true
+                    self.viewState = .failedToLoad
                     print(error)
                 }
             } receiveValue: { [weak self] recipe in
                 // TODO: - Error Handling
                 guard let self = self else { return }
-                guard let newRecipe = recipe else { return }
+                self.viewState = .successfullyLoaded
+                guard let newRecipe = recipe else {
+                    displayBadSite = true
+                    return
+                }
                 DispatchQueue.main.async { self.saveItem(newRecipe) }
                 self.navPath.append(newRecipe)
             }
