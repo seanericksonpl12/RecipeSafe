@@ -70,6 +70,19 @@ struct ContentView: View {
             } message: {
                 Text("Please try a different site or create your own recipe")
             }
+            .alert("Recipe Already Exists", isPresented: $viewModel.duplicateFound) {
+                Button("Overwrite") {
+                    viewModel.overwriteRecipe(deletingDup: true)
+                }
+                Button("Save Copy") {
+                    viewModel.overwriteRecipe()
+                }
+                Button("Cancel") {
+                    viewModel.cancelOverwrite()
+                }
+            } message: {
+                Text("Would you like to overwrite it or save a new copy?")
+            }
             
             Text("Select an item")
         }

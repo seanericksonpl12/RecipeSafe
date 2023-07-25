@@ -58,12 +58,6 @@ struct PersistenceController {
     
     func saveItem(recipe: Recipe) -> RecipeItem? {
         do {
-            let request = try container.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
-            guard let recipes = request as? [RecipeItem] else { print("casting fail"); return nil }
-            
-            guard let url = recipe.url else { return nil }
-            if recipes.contains(where: { $0.url == url }) { print("recipe is duplicate."); return nil }
-            
             let newRecipe = RecipeItem(context: container.viewContext)
             newRecipe.id = recipe.id
             newRecipe.title = recipe.title
@@ -90,6 +84,21 @@ struct PersistenceController {
         } catch {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+    
+    func findDuplicates(_ recipe: Recipe) -> RecipeItem? {
+        do {
+            
+            let request = try container.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
+            guard let recipes = request as? [RecipeItem] else { print("casting fail"); throw URLError(.resourceUnavailable) }
+            
+            guard let url = recipe.url else { throw URLError(.badURL) }
+            return recipes.first { $0.url == url }
+            
+        } catch {
+            print(error.localizedDescription)
+            return nil
         }
     }
 }

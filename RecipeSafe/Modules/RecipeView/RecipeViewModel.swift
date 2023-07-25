@@ -16,6 +16,7 @@ import CoreData
     @Published var editingEnabled: Bool = false
     @Published var titleText: String = ""
     @Published var descriptionText: String = ""
+    @Published var confirmationPopup: Bool = false
     
     init(recipe: Recipe) {
         self.recipe = recipe

@@ -23,8 +23,9 @@ struct RecipeView: View {
                                isEditing: $viewModel.editingEnabled,
                                saveAction: { viewModel.saveChanges() },
                                cancelAction: { viewModel.cancelEditing() },
-                               deleteAction: { viewModel.deleteSelf(dismissal: dismissView) },
-                               imgUrl: viewModel.recipe.img)
+                               deleteAction: { viewModel.confirmationPopup = true },
+                               imgUrl: viewModel.recipe.img,
+                               siteUrl: viewModel.recipe.url)
             
             
             List {
@@ -49,6 +50,16 @@ struct RecipeView: View {
                                     addAction: { viewModel.recipe.instructions.insert("", at: 0) },
                                     optionalDisplayValue: "new instruction")
                 
+            }
+            .alert("Delete This Recipe", isPresented: $viewModel.confirmationPopup) {
+                Button("Delete", role: .destructive) {
+                    viewModel.deleteSelf(dismissal: dismissView)
+                }
+                Button("Cancel", role: .cancel) {
+                    viewModel.confirmationPopup = false
+                }
+            } message: {
+                Text("Are you sure you want to delete this recipe?")
             }
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
             
