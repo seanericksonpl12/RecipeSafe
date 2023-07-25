@@ -15,12 +15,14 @@ extension ContentView {
         
         // MARK: - Published
         @Published var navPath: NavigationPath = .init()
-        @Published var popup: Bool = false
+        @Published var duplicateFound: Bool = false
         @Published var displayBadSite: Bool = false
         @Published var viewState: ViewState = .started
         
         // MARK: - Properties
         private var subscriptions = Set<AnyCancellable>()
+        private var waitingRecipe = Recipe(title: "", ingredients: [])
+        private var waitingDuplicate: RecipeItem?
         
         // MARK: - URL Handling
         func onURLOpen(url: String) {
@@ -40,20 +42,47 @@ extension ContentView {
                 // TODO: - Error Handling
                 guard let self = self else { return }
                 self.viewState = .successfullyLoaded
-                guard var newRecipe = recipe else {
-                    displayBadSite = true
-                    return
-                }
-                DispatchQueue.main.async { newRecipe.dataEntity = self.saveItem(newRecipe) }
-                self.navPath.append(newRecipe)
+                self.handleNewRecipe(recipe)
             }
             .store(in: &subscriptions)
         }
         
+        // MARK: - Recipe Handling
+        private func handleNewRecipe(_ recipe: Recipe?) {
+            let sharedData = PersistenceController.shared
+            
+            guard var newRecipe = recipe else {
+                displayBadSite = true
+                return
+            }
+            if let duplicate = sharedData.findDuplicates(newRecipe) {
+                self.duplicateFound = true
+                waitingRecipe = newRecipe
+                waitingDuplicate = duplicate
+            } else {
+                DispatchQueue.main.async { newRecipe.dataEntity = sharedData.saveItem(recipe: newRecipe) }
+                self.navPath.append(newRecipe)
+            }
+        }
+        
         
         // MARK: - Core Data Functions
+        func overwriteRecipe(deletingDup: Bool = false) {
+            let sharedData = PersistenceController.shared
+            if let dup = waitingDuplicate, deletingDup {
+                sharedData.container.viewContext.delete(dup)
+            }
+            DispatchQueue.main.async { self.waitingRecipe.dataEntity = sharedData.saveItem(recipe: self.waitingRecipe) }
+            self.navPath.append(waitingRecipe)
+            self.waitingDuplicate = nil
+        }
+        
+        func cancelOverwrite() {
+            self.waitingDuplicate = nil
+            self.duplicateFound = false
+        }
+        
         func addItem(context: NSManagedObjectContext) {
-            popup.toggle()
             withAnimation {
                 let newRecipe = RecipeItem(context: context)
                 newRecipe.title = "new Recipe"
@@ -100,13 +129,6 @@ extension ContentView {
                 try context.save()
             } catch {
                 print("viewContext error.")
-            }
-        }
-        
-        
-        private func saveItem(_ recipe: Recipe) -> RecipeItem? {
-            withAnimation {
-                return PersistenceController.shared.saveItem(recipe: recipe)
             }
         }
     }
