@@ -147,14 +147,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		920DA3612A6F59CF0086ADB5 /* List */ = {
+		920DA3612A6F59CF0086ADB5 /* Editable */ = {
 			isa = PBXGroup;
 			children = (
 				920DA3622A701BF10086ADB5 /* EditableSectionView.swift */,
 				920DA3642A70225E0086ADB5 /* EditableHeaderView.swift */,
 				920DA36C2A702B830086ADB5 /* EditableDescriptionView.swift */,
 			);
-			path = List;
+			path = Editable;
 			sourceTree = "<group>";
 		};
 		920DA3692A7026DC0086ADB5 /* Modifiers */ = {
@@ -163,6 +163,15 @@
 				920DA36A2A70270F0086ADB5 /* EditableToolbar.swift */,
 			);
 			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		920DA36E2A702EA90086ADB5 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				920DA35F2A6F0F8C0086ADB5 /* LottieView.swift */,
+				920DA3582A6F053A0086ADB5 /* LoadingView.swift */,
+			);
+			path = Loading;
 			sourceTree = "<group>";
 		};
 		925DCBE82A61D71500B84A38 /* Modules */ = {
@@ -233,10 +242,9 @@
 		925DCBF02A61D75400B84A38 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				920DA36E2A702EA90086ADB5 /* Loading */,
 				920DA3692A7026DC0086ADB5 /* Modifiers */,
-				920DA3612A6F59CF0086ADB5 /* List */,
-				920DA3582A6F053A0086ADB5 /* LoadingView.swift */,
-				920DA35F2A6F0F8C0086ADB5 /* LottieView.swift */,
+				920DA3612A6F59CF0086ADB5 /* Editable */,
 			);
 			path = Components;
 			sourceTree = "<group>";

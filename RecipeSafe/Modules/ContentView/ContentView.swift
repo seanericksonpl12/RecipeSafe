@@ -33,7 +33,7 @@ struct ContentView: View {
                 ForEach(recipeList, id: \.id) { item in
                     NavigationLink {
                         if let recipe = Recipe(dataItem: item) {
-                            RecipeView(recipe: recipe)
+                            RecipeView(viewModel: RecipeViewModel(recipe: recipe))
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     } label: {
@@ -48,8 +48,9 @@ struct ContentView: View {
                 
             }
             .navigationTitle("Recipes")
+            .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(recipe: recipe)
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
                     .navigationBarTitleDisplayMode(.inline)
             }
             .toolbar {

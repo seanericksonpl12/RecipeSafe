@@ -37,7 +37,9 @@ struct EditableToolbar: ViewModifier {
                     ToolbarItem {
                         Menu {
                             Button("Edit") {
-                                isEditing = true
+                                withAnimation {
+                                    isEditing = true
+                                }
                             }
                             if let url = urlLink {
                                 Link("Open in Safari", destination: url)
