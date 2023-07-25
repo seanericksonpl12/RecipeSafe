@@ -6,104 +6,52 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct RecipeView: View {
     
-    @State var recipe: Recipe = Recipe(title: "", ingredients: [])
+    @Environment(\.dismiss) private var dismissView
+    
+    @StateObject var viewModel: RecipeViewModel
+   
     
     // MARK: - Body
     var body: some View {
         
-        customHeader
-            .padding(.top, -50)
-        
-        List {
-            
-            Section {
-                customDescriptionSection
-            }
-            
-            Section {
-                ForEach(recipe.ingredients, id: \.self) { item in
-                    Text(item)
-                        .font(.callout)
-                }
-            } header: {
-                Text("Ingredients")
-            }
-            
-            Section {
-                ForEach(Array(recipe.instructions.enumerated()), id: \.offset) { index, item in
-                    HStack {
-                        VStack {
-                            Text((index + 1).formatted())
-                                .font(.caption)
-                                .fontWeight(.bold)
-                            Spacer()
-                        }
-                        Text(item)
-                            .font(.callout)
-                    }
-                }
-            } header: {
-                Text("Instructions")
-            }
-        }
-        
-    }
-    
-    // MARK: - Header
-    var customHeader: some View {
-        HStack {
-            Spacer()
-            AsyncImage(url: recipe.img) { img in
-                img.resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: 70, maxHeight: 70)
-                    .clipShape(Circle())
-            } placeholder: {
-                Image(systemName: "circle.dotted")
-                    .frame(maxWidth: 70, maxHeight: 70)
-            }
-            
-            Text(recipe.title)
-                .font(.title)
-                .fontWeight(.heavy)
-                .padding()
-            Spacer()
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    print("Open Menu")
-                } label: {
-                    Image(systemName: "ellipsis")
-                }
-            }
-        }
-    }
-    
-    // MARK: - Description
-    var customDescriptionSection: some View {
         VStack {
-            Text(recipe.description ?? "")
-                .multilineTextAlignment(.center)
-                .font(.callout)
-                .fontWeight(.light)
-            Divider()
-            HStack {
-                Spacer()
-                if let prep = recipe.prepTime {
-                    Text("Prep Time: \(prep)")
-                        .font(.footnote)
-                }
-                Spacer()
-                if let cook = recipe.cookTime {
-                    Text("Cook Time: \(cook)")
-                        .font(.footnote)
-                }
-                Spacer()
+            EditableHeaderView(headerText: $viewModel.recipe.title,
+                               isEditing: $viewModel.editingEnabled,
+                               saveAction: { viewModel.saveChanges() },
+                               cancelAction: { viewModel.cancelEditing() },
+                               deleteAction: { viewModel.deleteSelf(dismissal: dismissView) },
+                               imgUrl: viewModel.recipe.img)
+            
+            
+            List {
+                
+                EditableDescriptionView(isEditing: $viewModel.editingEnabled,
+                                        description: $viewModel.descriptionText,
+                                        prepTime: viewModel.recipe.prepTime,
+                                        cookTime: viewModel.recipe.cookTime)
+                
+                EditableSectionView(list: $viewModel.recipe.ingredients,
+                                    isEditing: $viewModel.editingEnabled,
+                                    headerText: "Ingredients",
+                                    deleteAction: { viewModel.deleteFromIngr(offsets: $0) },
+                                    addAction: { viewModel.recipe.ingredients.insert("", at: 0) },
+                                    optionalDisplayValue: "new ingredient")
+                
+                EditableSectionView(list: $viewModel.recipe.instructions,
+                                    isEditing: $viewModel.editingEnabled,
+                                    headerText: "Instructions",
+                                    numbered: true,
+                                    deleteAction: { viewModel.deleteFromInst(offsets: $0) },
+                                    addAction: { viewModel.recipe.instructions.insert("", at: 0) },
+                                    optionalDisplayValue: "new instruction")
+                
             }
+            .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+            
         }
     }
     
@@ -111,6 +59,6 @@ struct RecipeView: View {
 
 struct RecipeView_Previews: PreviewProvider {
     static var previews: some View {
-        RecipeView(recipe: Recipe(title: "Shrimp Tacos", ingredients: ["Shrimp tails", "Cajon Seasoning", "Oil"]))
+        RecipeView(viewModel: RecipeViewModel(recipe: Recipe(title: "", ingredients: [])))
     }
 }

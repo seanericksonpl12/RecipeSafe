@@ -56,13 +56,13 @@ struct PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
     
-    func saveItem(recipe: Recipe) {
+    func saveItem(recipe: Recipe) -> RecipeItem? {
         do {
             let request = try container.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
-            guard let recipes = request as? [RecipeItem] else { print("casting fail"); return }
+            guard let recipes = request as? [RecipeItem] else { print("casting fail"); return nil }
             
-            guard let url = recipe.url else { return }
-            if recipes.contains(where: { $0.url == url }) { print("recipe is duplicate."); return }
+            guard let url = recipe.url else { return nil }
+            if recipes.contains(where: { $0.url == url }) { print("recipe is duplicate."); return nil }
             
             let newRecipe = RecipeItem(context: container.viewContext)
             newRecipe.id = recipe.id
@@ -86,7 +86,7 @@ struct PersistenceController {
             }
             
             try container.viewContext.save()
-            
+            return newRecipe
         } catch {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")

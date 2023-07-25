@@ -12,6 +12,11 @@
 		920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA35A2A6F0B7E0086ADB5 /* ViewState.swift */; };
 		920DA35E2A6F0EF70086ADB5 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 920DA35D2A6F0EF70086ADB5 /* Lottie */; };
 		920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA35F2A6F0F8C0086ADB5 /* LottieView.swift */; };
+		920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA3622A701BF10086ADB5 /* EditableSectionView.swift */; };
+		920DA3652A70225E0086ADB5 /* EditableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA3642A70225E0086ADB5 /* EditableHeaderView.swift */; };
+		920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA3672A70269F0086ADB5 /* ViewExtensions.swift */; };
+		920DA36B2A70270F0086ADB5 /* EditableToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA36A2A70270F0086ADB5 /* EditableToolbar.swift */; };
+		920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA36C2A702B830086ADB5 /* EditableDescriptionView.swift */; };
 		925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */; };
 		925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF42A65FBFC00B84A38 /* RecipeView.swift */; };
 		9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876A2A608C9200117A59 /* RecipeSafeApp.swift */; };
@@ -76,6 +81,11 @@
 		920DA3582A6F053A0086ADB5 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		920DA35A2A6F0B7E0086ADB5 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		920DA35F2A6F0F8C0086ADB5 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		920DA3622A701BF10086ADB5 /* EditableSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableSectionView.swift; sourceTree = "<group>"; };
+		920DA3642A70225E0086ADB5 /* EditableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableHeaderView.swift; sourceTree = "<group>"; };
+		920DA3672A70269F0086ADB5 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		920DA36A2A70270F0086ADB5 /* EditableToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableToolbar.swift; sourceTree = "<group>"; };
+		920DA36C2A702B830086ADB5 /* EditableDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDescriptionView.swift; sourceTree = "<group>"; };
 		925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTypes.swift; sourceTree = "<group>"; };
 		925DCBF42A65FBFC00B84A38 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		926687672A608C9200117A59 /* RecipeSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecipeSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +147,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		920DA3612A6F59CF0086ADB5 /* Editable */ = {
+			isa = PBXGroup;
+			children = (
+				920DA3622A701BF10086ADB5 /* EditableSectionView.swift */,
+				920DA3642A70225E0086ADB5 /* EditableHeaderView.swift */,
+				920DA36C2A702B830086ADB5 /* EditableDescriptionView.swift */,
+			);
+			path = Editable;
+			sourceTree = "<group>";
+		};
+		920DA3692A7026DC0086ADB5 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				920DA36A2A70270F0086ADB5 /* EditableToolbar.swift */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		920DA36E2A702EA90086ADB5 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				920DA35F2A6F0F8C0086ADB5 /* LottieView.swift */,
+				920DA3582A6F053A0086ADB5 /* LoadingView.swift */,
+			);
+			path = Loading;
+			sourceTree = "<group>";
+		};
 		925DCBE82A61D71500B84A38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				920DA3562A6EED7E0086ADB5 /* StringExtensions.swift */,
+				920DA3672A70269F0086ADB5 /* ViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -204,8 +242,9 @@
 		925DCBF02A61D75400B84A38 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				920DA3582A6F053A0086ADB5 /* LoadingView.swift */,
-				920DA35F2A6F0F8C0086ADB5 /* LottieView.swift */,
+				920DA36E2A702EA90086ADB5 /* Loading */,
+				920DA3692A7026DC0086ADB5 /* Modifiers */,
+				920DA3612A6F59CF0086ADB5 /* Editable */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -478,6 +517,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */,
+				920DA3652A70225E0086ADB5 /* EditableHeaderView.swift in Sources */,
 				926687742A608C9200117A59 /* Persistence.swift in Sources */,
 				9266876D2A608C9200117A59 /* ContentView.swift in Sources */,
 				925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */,
@@ -485,11 +525,15 @@
 				920DA3592A6F053A0086ADB5 /* LoadingView.swift in Sources */,
 				926687A42A60CA9E00117A59 /* ContentViewModel.swift in Sources */,
 				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
+				920DA36B2A70270F0086ADB5 /* EditableToolbar.swift in Sources */,
 				926687A22A60A26600117A59 /* Recipe.swift in Sources */,
 				926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */,
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
+				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
+				920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */,
+				920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */,
 				9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

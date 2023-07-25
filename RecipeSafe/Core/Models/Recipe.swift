@@ -20,6 +20,7 @@ struct Recipe: Hashable {
     var instructions: [String]
     var prepTime: String?
     var cookTime: String?
+    var dataEntity: RecipeItem?
     
     // MARK: - Core Data Init
     init?(dataItem: RecipeItem) {
@@ -39,6 +40,7 @@ struct Recipe: Hashable {
         self.prepTime = dataItem.prepTime
         self.img = dataItem.imageUrl
         self.url = dataItem.url
+        self.dataEntity = dataItem
     }
     
     // MARK: - JSON Init
