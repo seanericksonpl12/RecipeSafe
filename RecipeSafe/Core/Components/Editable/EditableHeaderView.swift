@@ -17,6 +17,7 @@ struct EditableHeaderView: View {
     var deleteAction: () -> Void
     
     var imgUrl: URL?
+    var siteUrl: URL?
     
     var body: some View {
         HStack {
@@ -38,6 +39,7 @@ struct EditableHeaderView: View {
             Spacer()
         }
         .editableToolbar(isEditing: $isEditing,
+                         url: siteUrl,
                          saveAction: saveAction,
                          cancelAction: cancelAction,
                          deleteAction: deleteAction)
