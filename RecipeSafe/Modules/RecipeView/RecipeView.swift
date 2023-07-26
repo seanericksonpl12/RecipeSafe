@@ -12,7 +12,7 @@ struct RecipeView: View {
     
     @Environment(\.dismiss) private var dismissView
     
-    @StateObject var viewModel: RecipeViewModel
+    @EnvironmentObject private var viewModel: RecipeViewModel
    
     
     // MARK: - Body
@@ -66,10 +66,4 @@ struct RecipeView: View {
         }
     }
     
-}
-
-struct RecipeView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeView(viewModel: RecipeViewModel(recipe: Recipe(title: "", ingredients: [])))
-    }
 }

@@ -14,7 +14,7 @@ struct ContentView: View {
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
     
-    @StateObject private var viewModel: ContentViewModel = ContentViewModel()
+    @EnvironmentObject private var viewModel: ContentViewModel
     
     var body: some View {
         
@@ -33,7 +33,8 @@ struct ContentView: View {
                 ForEach(recipeList, id: \.id) { item in
                     NavigationLink {
                         if let recipe = Recipe(dataItem: item) {
-                            RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+                            RecipeView()
+                                .environmentObject(RecipeViewModel(recipe: recipe))
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     } label: {
@@ -50,7 +51,8 @@ struct ContentView: View {
             .navigationTitle("Recipes")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+                RecipeView()
+                    .environmentObject(RecipeViewModel(recipe: recipe))
                     .navigationBarTitleDisplayMode(.inline)
             }
             .toolbar {
