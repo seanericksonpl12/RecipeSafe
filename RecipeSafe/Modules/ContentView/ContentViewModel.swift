@@ -60,8 +60,10 @@ import Combine
             waitingRecipe = newRecipe
             waitingDuplicate = duplicate
         } else {
-            DispatchQueue.main.async { newRecipe.dataEntity = sharedData.saveItem(recipe: newRecipe) }
-            self.navPath.append(newRecipe)
+            DispatchQueue.main.async {
+                newRecipe.dataEntity = sharedData.saveItem(recipe: newRecipe)
+                self.navPath.append(newRecipe)
+            }
         }
     }
     

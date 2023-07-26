@@ -80,6 +80,10 @@ import CoreData
         self.recipe.instructions.remove(atOffsets: offsets)
     }
     
+    func toggleDelete() {
+        self.confirmationPopup = true
+    }
+    
     func deleteSelf(dismissal: DismissAction) {
         if let entity = recipe.dataEntity {
             let context = PersistenceController.shared.container.viewContext
