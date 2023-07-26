@@ -14,7 +14,7 @@ struct ContentView: View {
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
     
-    @EnvironmentObject private var viewModel: ContentViewModel
+    @StateObject var viewModel: ContentViewModel
     
     var body: some View {
         
@@ -91,6 +91,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView(viewModel: ContentViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

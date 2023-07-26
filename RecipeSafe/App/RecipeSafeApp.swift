@@ -13,9 +13,8 @@ struct RecipeSafeApp: App {
 
     var body: some Scene {
         WindowGroup {
-                ContentView()
+                ContentView(viewModel: ContentViewModel())
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .environmentObject(ContentViewModel())
         }
     }
 }
