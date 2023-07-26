@@ -29,32 +29,29 @@ import CoreData
         withAnimation {
             self.editingEnabled = false
         }
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.recipe.dataEntity?.title = self.recipe.title
-            self.recipe.dataEntity?.desc = self.descriptionText
-            self.recipe.description = self.descriptionText
-            
-            let context = PersistenceController.shared.container.viewContext
-            self.recipe.instructions.removeAll { $0 == "" }
-            self.recipe.ingredients.removeAll { $0 == "" }
-            
-            self.recipe.dataEntity?.ingredients = []
-            self.recipe.dataEntity?.instructions = []
-            self.recipe.ingredients.forEach {
-                let i = Ingredient(context: context)
-                i.value = $0
-                self.recipe.dataEntity?.addToIngredients(i)
-            }
-            self.recipe.instructions.forEach {
-                let i = Instruction(context: context)
-                i.value = $0
-                self.recipe.dataEntity?.addToInstructions(i)
-            }
-
-            try? context.save()
+        self.recipe.dataEntity?.title = self.recipe.title
+        self.recipe.dataEntity?.desc = self.descriptionText
+        self.recipe.description = self.descriptionText
+        
+        let context = PersistenceController.shared.container.viewContext
+        self.recipe.instructions.removeAll { $0 == "" }
+        self.recipe.ingredients.removeAll { $0 == "" }
+        
+        self.recipe.dataEntity?.ingredients = []
+        self.recipe.dataEntity?.instructions = []
+        self.recipe.ingredients.forEach {
+            let i = Ingredient(context: context)
+            i.value = $0
+            self.recipe.dataEntity?.addToIngredients(i)
         }
+        self.recipe.instructions.forEach {
+            let i = Instruction(context: context)
+            i.value = $0
+            self.recipe.dataEntity?.addToInstructions(i)
+        }
+        
+        try? context.save()
+        
     }
     
     func cancelEditing() {
@@ -62,20 +59,17 @@ import CoreData
         withAnimation {
             self.editingEnabled = false
         }
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
-            self.recipe.description = self.recipe.dataEntity?.desc
-            self.descriptionText = self.recipe.description ?? self.descriptionText
-           
-            guard var ingredientArr = self.recipe.dataEntity?.ingredients?.allObjects as? [Ingredient] else { return }
-            guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
-            ingredientArr = ingredientArr.filter { $0.value != nil }
-            instructionArr = instructionArr.filter { $0.value != nil }
-            
-            self.recipe.ingredients = ingredientArr.map { $0.value! }
-            self.recipe.instructions = instructionArr.map { $0.value! }
-        }
+        self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
+        self.recipe.description = self.recipe.dataEntity?.desc
+        self.descriptionText = self.recipe.description ?? self.descriptionText
+        
+        guard var ingredientArr = self.recipe.dataEntity?.ingredients?.allObjects as? [Ingredient] else { return }
+        guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
+        ingredientArr = ingredientArr.filter { $0.value != nil }
+        instructionArr = instructionArr.filter { $0.value != nil }
+        
+        self.recipe.ingredients = ingredientArr.map { $0.value! }
+        self.recipe.instructions = instructionArr.map { $0.value! }
     }
     
     func deleteFromIngr(offsets: IndexSet) {
@@ -92,7 +86,7 @@ import CoreData
             context.delete(entity)
             try? context.save()
         }
-            
+        
         dismissal.callAsFunction()
     }
 }
