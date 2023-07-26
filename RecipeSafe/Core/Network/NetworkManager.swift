@@ -10,35 +10,41 @@ import Combine
 import SwiftSoup
 import SwiftyJSON
 
-final class NetworkManager {
-    
-    static let main: NetworkManager = NetworkManager()
+final class NetworkManager: NetworkProtocol {
+    var session: URLSession
     private let scriptTag: String = "script[type=application/ld+json]"
+    
+    init(configuration: URLSessionConfiguration) {
+        self.session = URLSession(configuration: configuration)
+    }
+    
+    convenience init() {
+        self.init(configuration: .default)
+    }
     
     func networkRequest(url: String) -> AnyPublisher<Recipe?, Error> {
         let slicedURL = url.replacing("RecipeSafe://", with: "")
-        guard let components = URLComponents(string: slicedURL) else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
-        if components.scheme != "https" { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
-        guard let url = components.url else { return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher() }
-        let session = URLSession.shared
-        session.configuration.tlsMinimumSupportedProtocolVersion = .TLSv13
-        return session.dataTaskPublisher(for: url)
-            .map(\.data)
-            .tryMap {
-                guard let str = String(data: $0, encoding: .utf8) else { throw URLError(.cannotDecodeRawData) }
-                return str
-            }
-            .tryMap { [weak self] in
-                guard let self = self else { return nil }
-                var recipe = try self.soupify(html: $0)
-                recipe?.url = url
-                return recipe
-            }
-            .catch { _ in
-                return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
-            }
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        guard let components = URLComponents(string: slicedURL) else {
+            return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
+        }
+        if components.scheme != "https" {
+            return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
+        }
+        guard let url = components.url else {
+            return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
+        }
+        
+        let request = URLRequest(url: url)
+        
+        return execute(request: request,
+                       customDecodingStrategy: { [weak self] data in
+            guard let self = self else { throw URLError(.cancelled) }
+            guard let str = String(data: data, encoding: .utf8) else { throw URLError(.cannotDecodeRawData) }
+            var recipe = try self.soupify(html: str)
+            recipe?.url = url
+            return recipe
+        },
+                       retries: 0)
     }
     
     // MARK: - Web Scraping
@@ -86,7 +92,6 @@ final class NetworkManager {
                 }
             }
         }
-        print(rtrnDict["recipeInstructions"])
         return rtrnDict
     }
     

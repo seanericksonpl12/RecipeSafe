@@ -23,12 +23,13 @@ extension ContentView {
         private var subscriptions = Set<AnyCancellable>()
         private var waitingRecipe = Recipe(title: "", ingredients: [])
         private var waitingDuplicate: RecipeItem?
+        private var network: NetworkManager = NetworkManager()
         
         // MARK: - URL Handling
         func onURLOpen(url: String) {
             self.viewState = .loading
             self.navPath = .init()
-            NetworkManager.main.networkRequest(url: url).sink { [weak self] status in
+            network.networkRequest(url: url).sink { [weak self] status in
                 guard let self = self else { return }
                 switch status {
                 case .finished:
@@ -39,9 +40,7 @@ extension ContentView {
                     print(error)
                 }
             } receiveValue: { [weak self] recipe in
-                // TODO: - Error Handling
                 guard let self = self else { return }
-                self.viewState = .successfullyLoaded
                 self.handleNewRecipe(recipe)
             }
             .store(in: &subscriptions)
@@ -49,6 +48,8 @@ extension ContentView {
         
         // MARK: - Recipe Handling
         private func handleNewRecipe(_ recipe: Recipe?) {
+            self.viewState = .successfullyLoaded
+            
             let sharedData = PersistenceController.shared
             
             guard var newRecipe = recipe else {
