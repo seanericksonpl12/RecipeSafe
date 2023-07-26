@@ -17,6 +17,8 @@
 		920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA3672A70269F0086ADB5 /* ViewExtensions.swift */; };
 		920DA36B2A70270F0086ADB5 /* EditableToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA36A2A70270F0086ADB5 /* EditableToolbar.swift */; };
 		920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920DA36C2A702B830086ADB5 /* EditableDescriptionView.swift */; };
+		92535C232A7174F1003E30BD /* NetworkProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92535C222A7174F1003E30BD /* NetworkProtocol.swift */; };
+		92535C252A71847A003E30BD /* NetworkTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92535C242A71847A003E30BD /* NetworkTester.swift */; };
 		925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */; };
 		925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF42A65FBFC00B84A38 /* RecipeView.swift */; };
 		9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876A2A608C9200117A59 /* RecipeSafeApp.swift */; };
@@ -86,6 +88,8 @@
 		920DA3672A70269F0086ADB5 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		920DA36A2A70270F0086ADB5 /* EditableToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableToolbar.swift; sourceTree = "<group>"; };
 		920DA36C2A702B830086ADB5 /* EditableDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableDescriptionView.swift; sourceTree = "<group>"; };
+		92535C222A7174F1003E30BD /* NetworkProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocol.swift; sourceTree = "<group>"; };
+		92535C242A71847A003E30BD /* NetworkTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTester.swift; sourceTree = "<group>"; };
 		925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTypes.swift; sourceTree = "<group>"; };
 		925DCBF42A65FBFC00B84A38 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		926687672A608C9200117A59 /* RecipeSafe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecipeSafe.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -226,6 +230,8 @@
 			isa = PBXGroup;
 			children = (
 				9266879C2A608F6400117A59 /* NetworkManager.swift */,
+				92535C222A7174F1003E30BD /* NetworkProtocol.swift */,
+				92535C242A71847A003E30BD /* NetworkTester.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -518,6 +524,7 @@
 			files = (
 				925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */,
 				920DA3652A70225E0086ADB5 /* EditableHeaderView.swift in Sources */,
+				92535C252A71847A003E30BD /* NetworkTester.swift in Sources */,
 				926687742A608C9200117A59 /* Persistence.swift in Sources */,
 				9266876D2A608C9200117A59 /* ContentView.swift in Sources */,
 				925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */,
@@ -528,6 +535,7 @@
 				920DA36B2A70270F0086ADB5 /* EditableToolbar.swift in Sources */,
 				926687A22A60A26600117A59 /* Recipe.swift in Sources */,
 				926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */,
+				92535C232A7174F1003E30BD /* NetworkProtocol.swift in Sources */,
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
 				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
