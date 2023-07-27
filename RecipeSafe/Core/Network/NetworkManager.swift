@@ -92,7 +92,6 @@ final class NetworkManager: NetworkProtocol {
                 }
             }
         }
-        print(rtrnDict)
         return rtrnDict
     }
     

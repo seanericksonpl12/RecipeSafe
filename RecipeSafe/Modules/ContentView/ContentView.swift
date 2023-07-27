@@ -61,6 +61,11 @@ struct ContentView: View {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
+                ToolbarItem {
+                    Button("Test") {
+                        viewModel.gpt.testNewGPT()
+                    }
+                }
             }
             .onOpenURL { url in
                 viewModel.onURLOpen(url: url.absoluteString)

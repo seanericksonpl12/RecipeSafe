@@ -24,6 +24,8 @@ import Combine
     private var waitingDuplicate: RecipeItem?
     private var network: NetworkManager = NetworkManager()
     
+    var gpt: GPTSocket = GPTSocket()
+    
     // MARK: - URL Handling
     func onURLOpen(url: String) {
         self.viewState = .loading
