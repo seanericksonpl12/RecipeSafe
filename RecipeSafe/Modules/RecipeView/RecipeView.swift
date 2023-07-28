@@ -12,7 +12,7 @@ struct RecipeView: View {
     
     @Environment(\.dismiss) private var dismissView
     
-    @EnvironmentObject private var viewModel: RecipeViewModel
+    @StateObject var viewModel: RecipeViewModel
    
     
     // MARK: - Body
@@ -23,7 +23,7 @@ struct RecipeView: View {
                                isEditing: $viewModel.editingEnabled,
                                saveAction: { viewModel.saveChanges() },
                                cancelAction: { viewModel.cancelEditing() },
-                               deleteAction: { viewModel.confirmationPopup = true },
+                               deleteAction: { viewModel.toggleDelete() },
                                imgUrl: viewModel.recipe.img,
                                siteUrl: viewModel.recipe.url)
             
@@ -55,9 +55,7 @@ struct RecipeView: View {
                 Button("Delete", role: .destructive) {
                     viewModel.deleteSelf(dismissal: dismissView)
                 }
-                Button("Cancel", role: .cancel) {
-                    viewModel.confirmationPopup = false
-                }
+                Button("Cancel", role: .cancel){}
             } message: {
                 Text("Are you sure you want to delete this recipe?")
             }

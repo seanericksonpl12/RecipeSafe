@@ -24,6 +24,8 @@ import Combine
     private var waitingDuplicate: RecipeItem?
     private var network: NetworkManager = NetworkManager()
     
+    var gpt: GPTSocket = GPTSocket()
+    
     // MARK: - URL Handling
     func onURLOpen(url: String) {
         self.viewState = .loading
@@ -36,7 +38,7 @@ import Combine
             case .failure(let error):
                 self.displayBadSite = true
                 self.viewState = .failedToLoad
-                print(error)
+                print(error.localizedDescription)
             }
         } receiveValue: { [weak self] recipe in
             guard let self = self else { return }
@@ -60,8 +62,10 @@ import Combine
             waitingRecipe = newRecipe
             waitingDuplicate = duplicate
         } else {
-            DispatchQueue.main.async { newRecipe.dataEntity = sharedData.saveItem(recipe: newRecipe) }
-            self.navPath.append(newRecipe)
+            DispatchQueue.main.async {
+                newRecipe.dataEntity = sharedData.saveItem(recipe: newRecipe)
+                self.navPath.append(newRecipe)
+            }
         }
     }
     

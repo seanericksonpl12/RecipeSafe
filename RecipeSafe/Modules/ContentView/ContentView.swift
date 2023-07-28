@@ -14,7 +14,7 @@ struct ContentView: View {
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
     
-    @EnvironmentObject private var viewModel: ContentViewModel
+    @StateObject var viewModel: ContentViewModel
     
     var body: some View {
         
@@ -33,8 +33,7 @@ struct ContentView: View {
                 ForEach(recipeList, id: \.id) { item in
                     NavigationLink {
                         if let recipe = Recipe(dataItem: item) {
-                            RecipeView()
-                                .environmentObject(RecipeViewModel(recipe: recipe))
+                            RecipeView(viewModel: RecipeViewModel(recipe: recipe))
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     } label: {
@@ -51,8 +50,7 @@ struct ContentView: View {
             .navigationTitle("Recipes")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView()
-                    .environmentObject(RecipeViewModel(recipe: recipe))
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
                     .navigationBarTitleDisplayMode(.inline)
             }
             .toolbar {
@@ -61,6 +59,11 @@ struct ContentView: View {
                         viewModel.addItem(context: self.viewContext)
                     } label: {
                         Label("Add Item", systemImage: "plus")
+                    }
+                }
+                ToolbarItem {
+                    Button("Test") {
+                        viewModel.gpt.testNewGPT()
                     }
                 }
             }
@@ -93,6 +96,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView(viewModel: ContentViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
