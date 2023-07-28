@@ -8,7 +8,7 @@
 import Foundation
 import SwiftyJSON
 
-struct Recipe: Hashable {
+struct Recipe: Hashable, Decodable {
     
     // MARK: - Properties
     var id: UUID = UUID()
@@ -83,6 +83,26 @@ struct Recipe: Hashable {
                 }) ?? []
         }
         
+        if instructions.contains("") {
+            instructions = []
+            print("new instructions")
+            json[JSONKeys.instructions.rawValue]?
+                .arrayValue
+                .map({
+                    $0[JSONKeys.instructionValueWrapper.rawValue].arrayValue
+                })
+                .forEach {
+                    $0.forEach {
+                        let instruction = $0[JSONKeys.instructionValue.rawValue].stringValue.htmlFormatted()
+                        instructions.append(instruction)
+                    }
+                }
+        }
+        
+        if instructions.contains("") {
+            return nil
+        }
+        
         let img: URL? = json[JSONKeys.imageUrl.rawValue]?
             .url
         
@@ -122,6 +142,23 @@ struct Recipe: Hashable {
         self.instructions = []
     }
     
+    enum CodingKeys: String, CodingKey {
+        case title, description, ingredients, instructions
+        case thumbnail = "thumbnail"
+        case cook_time = "cook_time"
+        case prep_time = "prep_time"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.ingredients = try container.decode(Array<String>.self, forKey: .ingredients)
+        self.instructions = try container.decode(Array<String>.self, forKey: .instructions)
+        self.img = URL(string: try container.decodeIfPresent(String.self, forKey: .thumbnail) ?? "")
+        self.cookTime = try container.decodeIfPresent(String.self, forKey: .cook_time)
+        self.prepTime = try container.decodeIfPresent(String.self, forKey: .prep_time)
+    }
 }
 
 fileprivate enum JSONKeys: String {
@@ -130,8 +167,38 @@ fileprivate enum JSONKeys: String {
     case ingredient = "recipeIngredient"
     case instructions = "recipeInstructions"
     case instructionValue = "text"
+    case instructionValueWrapper = "itemListElement"
     case imageUrl = "thumbnailUrl"
     case prepTime
     case cookTime
     case name
+}
+
+struct DecodableRecipe: Codable {
+    let title: String
+    let description: String?
+    let ingredients: [String]
+    let instructions: [String]
+    let imageUrl: URL?
+    let prepTime: String
+    let cookTime: String
+    
+    enum CodingKeys: String, CodingKey {
+        case title, description, ingredients, instructions
+        case imageUrl = "thumbnail"
+        case cookTime = "cook_time"
+        case prepTime = "prep_time"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.ingredients = try container.decode(Array<String>.self, forKey: .ingredients)
+        self.instructions = try container.decode(Array<String>.self, forKey: .instructions)
+        self.imageUrl = try container.decode(URL.self, forKey: .imageUrl)
+        self.cookTime = try container.decode(String.self, forKey: .cookTime)
+        self.prepTime = try container.decode(String.self, forKey: .prepTime)
+    }
+    
 }

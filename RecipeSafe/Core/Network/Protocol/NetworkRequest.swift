@@ -9,11 +9,21 @@ import Foundation
 
 protocol NetworkRequest {
     
+    associatedtype Response
+    
     var url: String { get }
-    var method: HTTPMethod { get }
+    var method: HTTPMethod? { get }
     var header: [String:String] { get }
     var queryItems: [String:String] { get }
     var body: Data? { get }
+    
+    func decode(_ data: Data) throws -> Response
+}
+
+extension NetworkRequest where Response: Decodable {
+    func decode(_ data: Data) throws -> Response {
+        return try JSONDecoder().decode(Response.self, from: data)
+    }
 }
 
 extension NetworkRequest {

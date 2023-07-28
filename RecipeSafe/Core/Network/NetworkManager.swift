@@ -11,6 +11,7 @@ import SwiftSoup
 import SwiftyJSON
 
 final class NetworkManager: NetworkProtocol {
+    
     var session: URLSession
     private let scriptTag: String = "script[type=application/ld+json]"
     
@@ -22,29 +23,45 @@ final class NetworkManager: NetworkProtocol {
         self.init(configuration: .default)
     }
     
-    func networkRequest(url: String) -> AnyPublisher<Recipe?, Error> {
+    func networkRequest(url: String) -> AnyPublisher<Recipe, Error> {
         let slicedURL = url.replacing("RecipeSafe://", with: "")
-        guard let components = URLComponents(string: slicedURL) else {
-            return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
-        }
-        if components.scheme != "https" {
-            return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
-        }
-        guard let url = components.url else {
-            return Fail(error: NetworkError.invalidURL("Bad URL")).eraseToAnyPublisher()
+        
+        let request = RecipeRequest(url: slicedURL)
+        
+        return executeRequest(request: request, retries: 0)
+    }
+    
+    func gptRequest(url: String) -> AnyPublisher<Recipe, Error> {
+        let slicedURL = url.replacing("RecipeSafe://", with: "")
+        guard let url = URL(string: slicedURL) else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
         
-        let request = URLRequest(url: url)
+        guard let html = try? String(contentsOf: url, encoding: .utf8) else {
+            return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
+        }
         
-        return execute(request: request,
-                       customDecodingStrategy: { [weak self] data in
-            guard let self = self else { throw URLError(.cancelled) }
-            guard let str = String(data: data, encoding: .utf8) else { throw URLError(.cannotDecodeRawData) }
-            var recipe = try self.soupify(html: str)
-            recipe?.url = url
-            return recipe
-        },
-                       retries: 0)
+        do {
+            let doc: Document = try SwiftSoup.parse(html)
+            let scripts = try doc.select("script[type=application/ld+json]").first()?.data()
+            guard let jsonData = scripts?.data(using: .utf8, allowLossyConversion: false) else {
+                return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
+            }
+            
+            let json = try JSON(data: jsonData).rawString(.utf8, options: [])
+            if let jsonString = json {
+                
+                var newRequest = GPTRequest()
+                newRequest.messages = [
+                    ["role": "system", "content": "The user will give you JSON representing a recipe, you will tell them the title, ingredients, instructions, description, thumbnail, cook time, and prep time of the recipe in json format using keys \"title\", \"ingredients\", \"instructions\", \"description\", \"thumbnail\", \"cook_time\", \"prep_time\""],
+                    ["role": "user", "content": "Here is the json: \(jsonString)"]
+                ]
+                return executeRequest(request: newRequest, retries: 0)
+            }
+        } catch {
+            print("failed")
+        }
+        return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
     }
     
     // MARK: - Web Scraping

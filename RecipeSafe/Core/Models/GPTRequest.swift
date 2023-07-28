@@ -29,6 +29,8 @@ struct GPTResponse: Codable {
 
 struct GPTRequest: NetworkRequest {
     
+    typealias Response = Recipe
+    
     private let apiKey: String = "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"
     
     var url: String {
@@ -44,11 +46,10 @@ struct GPTRequest: NetworkRequest {
         ]
     }
     
-    var method: HTTPMethod { .post }
+    var method: HTTPMethod? { .post }
     
     var messages: [[String: String]] = [
-        ["role": "system", "content": "You're a friendly, helpful assistant"],
-        ["role": "user", "content": "Hello Mister Robot, how many pennies do you think I can eat before getting sick"]
+        ["role": "system", "content": "The user will give you JSON representing a recipe, you will tell them the title, ingredients, instructions, description, thumbnail image url, cook time, and prep time of the recipe."]
     ]
     
     var body: Data? {
@@ -64,4 +65,18 @@ struct GPTRequest: NetworkRequest {
         messages.append(message)
     }
     
+    func decode(_ data: Data) throws -> Recipe {
+        let decoder = JSONDecoder()
+        let gptResponse = try decoder.decode(GPTResponse.self, from: data)
+        print(gptResponse)
+        guard let jsonString = gptResponse.choices[0].message["content"] else {
+            print("json string fail.")
+            throw URLError(.cannotParseResponse)
+        }
+        guard let data: Data = jsonString.data(using: .utf8) else {
+            print("data encoding failed.")
+            throw URLError(.cannotParseResponse)
+        }
+        return try JSONDecoder().decode(Recipe.self, from: data)
+    }
 }

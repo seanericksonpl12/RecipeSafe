@@ -38,7 +38,7 @@ import Combine
             case .failure(let error):
                 self.displayBadSite = true
                 self.viewState = .failedToLoad
-                print(error)
+                print(error.localizedDescription)
             }
         } receiveValue: { [weak self] recipe in
             guard let self = self else { return }
