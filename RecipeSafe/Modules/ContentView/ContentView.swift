@@ -51,7 +51,7 @@ struct ContentView: View {
                                          context: viewContext)
                 }
             }
-            .navigationTitle("Recipes")
+            .navigationTitle("content.nav.title".localized)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Recipe.self) { recipe in
                 RecipeView(viewModel: RecipeViewModel(recipe: recipe))
@@ -62,7 +62,7 @@ struct ContentView: View {
                     Button{
                         viewModel.addItem(context: self.viewContext)
                     } label: {
-                        Label("Add Item", systemImage: "plus")
+                        Label("content.toolbar.add".localized, systemImage: "plus")
                     }
                 }
                 ToolbarItem {
@@ -74,28 +74,26 @@ struct ContentView: View {
             .onOpenURL { url in
                 viewModel.onURLOpen(url: url.absoluteString)
             }
-            .alert("Couldn't Curate Recipe", isPresented: $viewModel.displayBadSite) {
-                Button("OK") { viewModel.displayBadSite = false }
+            .alert("content.alert.fail.title".localized, isPresented: $viewModel.displayBadSite) {
+                Button("button.ok".localized) { viewModel.displayBadSite = false }
             } message: {
-                Text("Please try a different site or create your own recipe")
+                Text("content.alert.fail.desc".localized)
             }
-            .alert("Recipe Already Exists", isPresented: $viewModel.duplicateFound) {
-                Button("Overwrite") {
+            .alert("content.alert.copy.title".localized, isPresented: $viewModel.duplicateFound) {
+                Button("button.overwrite".localized) {
                     viewModel.overwriteRecipe(deletingDup: true)
                 }
-                Button("Save Copy") {
+                Button("button.savecopy".localized) {
                     viewModel.overwriteRecipe()
                 }
-                Button("Cancel") {
+                Button("button.cancel".localized) {
                     viewModel.cancelOverwrite()
                 }
             } message: {
-                Text("Would you like to overwrite it or save a new copy?")
+                Text("content.alert.copy.desc".localized)
             }
-            
-            Text("Select an item")
         }
-        .searchable(text: $viewModel.searchText, prompt: "Find a Recipe")
+        .searchable(text: $viewModel.searchText, prompt: "content.search.prompt".localized)
     }
 }
 

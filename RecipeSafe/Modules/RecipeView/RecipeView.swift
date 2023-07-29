@@ -37,27 +37,27 @@ struct RecipeView: View {
                 
                 EditableSectionView(list: $viewModel.recipe.ingredients,
                                     isEditing: $viewModel.editingEnabled,
-                                    headerText: "Ingredients",
+                                    headerText: "recipe.ingredients.title".localized,
                                     deleteAction: { viewModel.deleteFromIngr(offsets: $0) },
                                     addAction: { viewModel.recipe.ingredients.insert("", at: 0) },
-                                    optionalDisplayValue: "new ingredient")
+                                    optionalDisplayValue: "recipe.ingredients.new".localized)
                 
                 EditableSectionView(list: $viewModel.recipe.instructions,
                                     isEditing: $viewModel.editingEnabled,
-                                    headerText: "Instructions",
+                                    headerText: "recipe.instructions.title".localized,
                                     numbered: true,
                                     deleteAction: { viewModel.deleteFromInst(offsets: $0) },
                                     addAction: { viewModel.recipe.instructions.insert("", at: 0) },
-                                    optionalDisplayValue: "new instruction")
+                                    optionalDisplayValue: "recipe.instructions.new".localized)
                 
             }
-            .alert("Delete This Recipe", isPresented: $viewModel.confirmationPopup) {
-                Button("Delete", role: .destructive) {
+            .alert("recipe.alert.delete.title".localized, isPresented: $viewModel.confirmationPopup) {
+                Button("button.delete".localized, role: .destructive) {
                     viewModel.deleteSelf(dismissal: dismissView)
                 }
-                Button("Cancel", role: .cancel){}
+                Button("button.cancel".localized, role: .cancel){}
             } message: {
-                Text("Are you sure you want to delete this recipe?")
+                Text("recipe.alert.delete.desc".localized)
             }
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
             

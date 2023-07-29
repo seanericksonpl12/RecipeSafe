@@ -11,12 +11,12 @@ struct EmptyListView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text("Looks Empty...")
+            Text("empty.title".localized)
                 .font(.title)
                 .fontWeight(.heavy)
                 .foregroundColor(.gray)
                 .padding()
-            Text("Open a recipe from safari, or create your own!")
+            Text("empty.desc".localized)
                 .font(.caption)
                 .foregroundColor(.gray)
             Spacer()

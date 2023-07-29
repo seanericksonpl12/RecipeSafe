@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Formatting
 extension String {
     
     func htmlFormatted() -> String {
@@ -22,4 +23,9 @@ extension String {
                                                              documentAttributes: nil) else { return self }
         return String(attributedString.string)
     }
+}
+
+// MARK: - Localized Value
+extension String {
+    var localized: String { String(localized: LocalizationValue(stringLiteral: self)) }
 }

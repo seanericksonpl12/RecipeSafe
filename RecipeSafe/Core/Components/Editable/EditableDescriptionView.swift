@@ -26,12 +26,12 @@ struct EditableDescriptionView: View {
                 HStack {
                     Spacer()
                     if let prep = prepTime {
-                        Text("Prep Time: \(prep)")
+                        Text("recipe.preptime".localized + prep)
                             .font(.footnote)
                     }
                     Spacer()
                     if let cook = cookTime {
-                        Text("Cook Time: \(cook)")
+                        Text("recipe.cooktime".localized + cook)
                             .font(.footnote)
                     }
                     Spacer()
