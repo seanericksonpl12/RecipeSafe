@@ -26,7 +26,7 @@ struct Recipe: Hashable, Decodable {
     init?(dataItem: RecipeItem) {
         guard let id = dataItem.id else { return nil }
         guard let title = dataItem.title else { return nil }
-        guard let ingredientArr = dataItem.ingredients?.allObjects as? [Ingredient] else { return nil }
+        guard let ingredientArr = dataItem.ingredients?.array as? [Ingredient] else { return nil }
         guard let instructionArr = dataItem.instructions?.array as? [Instruction] else { return nil }
         if ingredientArr.contains(where: { $0.value == nil }) { return nil }
         if instructionArr.contains(where: { $0.value == nil }) { return nil }
