@@ -178,13 +178,14 @@
 			path = Modifiers;
 			sourceTree = "<group>";
 		};
-		920DA36E2A702EA90086ADB5 /* Loading */ = {
+		920DA36E2A702EA90086ADB5 /* Placeholders */ = {
 			isa = PBXGroup;
 			children = (
+				9247212B2A75B06500D879CA /* EmptyListView.swift */,
 				920DA35F2A6F0F8C0086ADB5 /* LottieView.swift */,
 				920DA3582A6F053A0086ADB5 /* LoadingView.swift */,
 			);
-			path = Loading;
+			path = Placeholders;
 			sourceTree = "<group>";
 		};
 		925DCBE82A61D71500B84A38 /* Modules */ = {
@@ -260,10 +261,9 @@
 		925DCBF02A61D75400B84A38 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				920DA36E2A702EA90086ADB5 /* Loading */,
+				920DA36E2A702EA90086ADB5 /* Placeholders */,
 				920DA3692A7026DC0086ADB5 /* Modifiers */,
 				920DA3612A6F59CF0086ADB5 /* Editable */,
-				9247212B2A75B06500D879CA /* EmptyListView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";

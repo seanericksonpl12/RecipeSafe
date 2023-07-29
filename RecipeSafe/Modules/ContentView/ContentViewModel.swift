@@ -17,6 +17,7 @@ import Combine
     @Published var duplicateFound: Bool = false
     @Published var displayBadSite: Bool = false
     @Published var viewState: ViewState = .started
+    @Published var searchText: String = ""
     
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
@@ -25,6 +26,17 @@ import Combine
     private var network: NetworkManager = NetworkManager()
     
     var gpt: GPTSocket = GPTSocket()
+    
+    // MARK: - Computed Properties
+    var searchList: (FetchedResults<RecipeItem>) -> [RecipeItem] {
+        { [self] list in
+            if searchText.isEmpty {
+                return Array(list)
+            } else {
+                return list.filter({ $0.title?.lowercased().contains(searchText.lowercased()) ?? false })
+            }
+        }
+    }
     
     // MARK: - URL Handling
     func onURLOpen(url: String) {

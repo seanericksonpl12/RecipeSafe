@@ -35,7 +35,7 @@ struct ContentView: View {
             }
             
             List {
-                ForEach(recipeList, id: \.id) { item in
+                ForEach(viewModel.searchList(recipeList), id: \.id) { item in
                     NavigationLink {
                         if let recipe = Recipe(dataItem: item) {
                             RecipeView(viewModel: RecipeViewModel(recipe: recipe))
@@ -50,7 +50,6 @@ struct ContentView: View {
                                          list: recipeList,
                                          context: viewContext)
                 }
-                
             }
             .navigationTitle("Recipes")
             .navigationBarTitleDisplayMode(.inline)
@@ -96,6 +95,7 @@ struct ContentView: View {
             
             Text("Select an item")
         }
+        .searchable(text: $viewModel.searchText, prompt: "Find a Recipe")
     }
 }
 
