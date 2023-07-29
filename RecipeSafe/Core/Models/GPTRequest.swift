@@ -31,7 +31,11 @@ struct GPTRequest: NetworkRequest {
     
     typealias Response = Recipe
     
-    private let apiKey: String = "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"
+    private let apiKey: String =  {
+        if let path = Bundle.main.path(forResource: "Info", ofType: "plist"), let dict = NSDictionary(contentsOfFile: path) as? [String: AnyObject] {
+            return dict["OpenAIKey"] as? String ?? ""
+        } else { return "" }
+    }()
     
     var url: String {
         let base: String = "https://api.openai.com/v1"
