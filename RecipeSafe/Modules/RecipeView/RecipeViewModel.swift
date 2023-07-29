@@ -63,7 +63,7 @@ import CoreData
         self.recipe.description = self.recipe.dataEntity?.desc
         self.descriptionText = self.recipe.description ?? self.descriptionText
         
-        guard var ingredientArr = self.recipe.dataEntity?.ingredients?.allObjects as? [Ingredient] else { return }
+        guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }
         guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
         ingredientArr = ingredientArr.filter { $0.value != nil }
         instructionArr = instructionArr.filter { $0.value != nil }
