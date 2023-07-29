@@ -25,26 +25,26 @@ struct EditableToolbar: ViewModifier {
                         Button {
                             saveAction()
                         } label: {
-                            Text("Save")
+                            Text("button.save".localized)
                         }
                     }
                     ToolbarItem {
-                        Button("Cancel", role: .destructive) {
+                        Button("button.cancel".localized, role: .destructive) {
                             cancelAction()
                         }
                     }
                 } else {
                     ToolbarItem {
                         Menu {
-                            Button("Edit") {
+                            Button("button.edit".localized) {
                                 withAnimation {
                                     isEditing = true
                                 }
                             }
                             if let url = urlLink {
-                                Link("Open in Safari", destination: url)
+                                Link("button.link.safari".localized, destination: url)
                             }
-                            Button("Delete", role: .destructive) {
+                            Button("button.delete".localized, role: .destructive) {
                                 deleteAction()
                             }
                         } label: {
