@@ -22,14 +22,16 @@ struct EditableHeaderView: View {
     var body: some View {
         HStack {
             Spacer()
-            AsyncImage(url: imgUrl) { img in
-                img.resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: 70, maxHeight: 70)
-                    .clipShape(Circle())
-            } placeholder: {
-                Image(systemName: "circle.dotted")
-                    .frame(maxWidth: 70, maxHeight: 70)
+            if let url = imgUrl {
+                AsyncImage(url: url) { img in
+                    img.resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: 70, maxHeight: 70)
+                        .clipShape(Circle())
+                } placeholder: {
+                    LoadingView()
+                        .frame(maxWidth: 70, maxHeight: 70)
+                }
             }
             TextField("", text: $headerText, axis: .vertical)
                 .font(.title)
