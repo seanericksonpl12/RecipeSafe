@@ -29,6 +29,11 @@ struct ContentView: View {
     var listView: some View {
         NavigationStack(path: $viewModel.navPath) {
             
+            if recipeList.isEmpty {
+                EmptyListView()
+                    .padding()
+            }
+            
             List {
                 ForEach(recipeList, id: \.id) { item in
                     NavigationLink {
