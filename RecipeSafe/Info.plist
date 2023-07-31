@@ -17,5 +17,12 @@
 	</array>
 	<key>OpenAIKey</key>
 	<string>$(OPENAI_API_KEY)</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIImageName</key>
+		<string>logo-clear</string>
+		<key>UILaunchScreen</key>
+		<dict/>
+	</dict>
 </dict>
 </plist>
