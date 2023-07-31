@@ -19,6 +19,11 @@ struct EmptyListView: View {
             Text("empty.desc".localized)
                 .font(.caption)
                 .foregroundColor(.gray)
+            Image("logo-clear")
+                .resizable()
+                .frame(maxWidth: 150, maxHeight: 150)
+                .opacity(0.5)
+                .padding(.top, 50)
             Spacer()
         }
     }
