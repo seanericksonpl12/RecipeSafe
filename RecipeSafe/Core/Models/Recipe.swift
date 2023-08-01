@@ -8,7 +8,7 @@
 import Foundation
 import SwiftyJSON
 
-struct Recipe: Hashable, Decodable {
+struct Recipe: Hashable, Decodable, Identifiable {
     
     // MARK: - Properties
     var id: UUID = UUID()
@@ -20,6 +20,7 @@ struct Recipe: Hashable, Decodable {
     var instructions: [String]
     var prepTime: String?
     var cookTime: String?
+    var photoData: Data?
     var dataEntity: RecipeItem?
     
     // MARK: - Core Data Init
@@ -40,6 +41,7 @@ struct Recipe: Hashable, Decodable {
         self.prepTime = dataItem.prepTime
         self.img = dataItem.imageUrl
         self.url = dataItem.url
+        self.photoData = dataItem.photoData
         self.dataEntity = dataItem
     }
     
