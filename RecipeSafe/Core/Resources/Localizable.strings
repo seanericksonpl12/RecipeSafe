@@ -25,6 +25,11 @@
 "recipe.cooktime" = "Cook Time: ";
 "recipe.preptime" = "Prep Time: ";
 
+// MARK: - CreateRecipeView
+"create.display.title" = "Title";
+"create.alert.title" = "Add a title before saving!";
+"create.display.desc" = "Description";
+
 
 // MARK: - EmptyListView
 "empty.title" = "Looks Empty...";

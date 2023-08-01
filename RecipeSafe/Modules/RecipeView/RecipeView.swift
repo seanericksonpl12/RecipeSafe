@@ -19,14 +19,12 @@ struct RecipeView: View {
     var body: some View {
         
         VStack {
-            EditableHeaderView(headerText: $viewModel.recipe.title,
+            EditableHeaderView(recipe: $viewModel.recipe,
                                isEditing: $viewModel.editingEnabled,
                                saveAction: { viewModel.saveChanges() },
                                cancelAction: { viewModel.cancelEditing() },
                                deleteAction: { viewModel.toggleDelete() },
-                               imgUrl: viewModel.recipe.img,
-                               siteUrl: viewModel.recipe.url,
-                               photoData: viewModel.recipe.photoData)
+                               optionalDisplay: "Title")
             
             
             List {

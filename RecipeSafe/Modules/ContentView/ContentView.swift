@@ -90,7 +90,9 @@ struct ContentView: View {
         }
         .searchable(text: $viewModel.searchText, prompt: "content.search.prompt".localized)
         .sheet(isPresented: $viewModel.customRecipeSheet) {
-            CreateRecipeView()
+            NavigationView {
+                CreateRecipeView()
+            }
         }
     }
 }

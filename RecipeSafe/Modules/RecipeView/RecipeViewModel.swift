@@ -34,6 +34,7 @@ extension RecipeViewModel {
         }
         self.recipe.dataEntity?.title = self.recipe.title
         self.recipe.dataEntity?.desc = self.descriptionText
+        self.recipe.dataEntity?.photoData = self.recipe.photoData
         self.recipe.description = self.descriptionText
         
         let context = PersistenceController.shared.container.viewContext
@@ -64,6 +65,7 @@ extension RecipeViewModel {
         }
         self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
         self.recipe.description = self.recipe.dataEntity?.desc
+        self.recipe.photoData = self.recipe.dataEntity?.photoData
         self.descriptionText = self.recipe.description ?? self.descriptionText
         
         guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }
