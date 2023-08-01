@@ -60,14 +60,9 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem {
                     Button{
-                        viewModel.addItem(context: self.viewContext)
+                        viewModel.customRecipeSheet = true
                     } label: {
                         Label("content.toolbar.add".localized, systemImage: "plus")
-                    }
-                }
-                ToolbarItem {
-                    Button("Test") {
-                        viewModel.gpt.testNewGPT()
                     }
                 }
             }
@@ -94,6 +89,9 @@ struct ContentView: View {
             }
         }
         .searchable(text: $viewModel.searchText, prompt: "content.search.prompt".localized)
+        .sheet(isPresented: $viewModel.customRecipeSheet) {
+            CreateRecipeView()
+        }
     }
 }
 

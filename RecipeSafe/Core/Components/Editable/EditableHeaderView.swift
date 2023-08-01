@@ -12,12 +12,13 @@ struct EditableHeaderView: View {
     @Binding var headerText: String
     @Binding var isEditing: Bool
     
-    var saveAction: () -> Void
-    var cancelAction: () -> Void
-    var deleteAction: () -> Void
+    var saveAction: () -> Void = {}
+    var cancelAction: () -> Void = {}
+    var deleteAction: () -> Void = {}
     
     var imgUrl: URL?
     var siteUrl: URL?
+    var optionalDisplay: String?
     
     var body: some View {
         HStack {
@@ -33,7 +34,7 @@ struct EditableHeaderView: View {
                         .frame(maxWidth: 70, maxHeight: 70)
                 }
             }
-            TextField("", text: $headerText, axis: .vertical)
+            TextField("", text: $headerText, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                 .font(.title)
                 .fontWeight(.heavy)
                 .padding()

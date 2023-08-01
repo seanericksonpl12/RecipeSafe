@@ -14,15 +14,18 @@ import CoreData
 @MainActor class RecipeViewModel: ObservableObject {
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = false
-    @Published var titleText: String = ""
     @Published var descriptionText: String = ""
     @Published var confirmationPopup: Bool = false
     
     init(recipe: Recipe) {
         self.recipe = recipe
         self.descriptionText = recipe.description ?? ""
-        self.titleText = recipe.title
     }
+}
+
+
+// MARK: - Functions
+extension RecipeViewModel {
     
     func saveChanges() {
         

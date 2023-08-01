@@ -40,15 +40,15 @@ struct RecipeView: View {
                                     headerText: "recipe.ingredients.title".localized,
                                     deleteAction: { viewModel.deleteFromIngr(offsets: $0) },
                                     addAction: { viewModel.recipe.ingredients.insert("", at: 0) },
-                                    optionalDisplayValue: "recipe.ingredients.new".localized)
+                                    optionalDisplay: "recipe.ingredients.new".localized)
                 
                 EditableSectionView(list: $viewModel.recipe.instructions,
                                     isEditing: $viewModel.editingEnabled,
                                     headerText: "recipe.instructions.title".localized,
                                     numbered: true,
                                     deleteAction: { viewModel.deleteFromInst(offsets: $0) },
-                                    addAction: { viewModel.recipe.instructions.insert("", at: 0) },
-                                    optionalDisplayValue: "recipe.instructions.new".localized)
+                                    addAction: { viewModel.recipe.instructions.append("") },
+                                    optionalDisplay: "recipe.instructions.new".localized)
                 
             }
             .alert("recipe.alert.delete.title".localized, isPresented: $viewModel.confirmationPopup) {

@@ -14,11 +14,12 @@ struct EditableDescriptionView: View {
     
     var prepTime: String?
     var cookTime: String?
+    var optionalDisplay: String?
     
     var body: some View {
         Section {
             VStack {
-                TextField("", text: $description, axis: .vertical)
+                TextField("", text: $description, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                     .multilineTextAlignment(.center)
                     .font(.callout)
                     .fontWeight(.light)

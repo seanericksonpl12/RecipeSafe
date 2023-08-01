@@ -16,7 +16,7 @@ struct EditableSectionView: View {
     var font: Font = .callout
     var deleteAction: (IndexSet) -> Void
     var addAction: () -> Void
-    var optionalDisplayValue: String = ""
+    var optionalDisplay: String = ""
     
     var body: some View {
         Section {
@@ -30,12 +30,15 @@ struct EditableSectionView: View {
                             Spacer()
                         }
                     }
-                    TextField(item == "" ? optionalDisplayValue : "", text: $list[index], axis: .vertical)
+                    TextField(item == "" ? optionalDisplay : "", text: $list[index], axis: .vertical)
                         .font(font)
                         .disabled(!isEditing)
                 }
             }
             .onDelete { deleteAction($0) }
+            .onMove { source, destination in
+                list.move(fromOffsets: source, toOffset: destination)
+            }
         } header: {
             HStack {
                 Text(headerText)
