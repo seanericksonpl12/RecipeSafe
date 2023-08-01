@@ -22,7 +22,7 @@ struct RecipeRequest: NetworkRequest {
     func decode(_ data: Data) throws -> Recipe {
         guard let str = String(data: data, encoding: .utf8) else { throw URLError(.cannotDecodeRawData) }
         guard var recipe = try self.soupify(html: str) else {
-            throw URLError(.badServerResponse)
+            throw NetworkError.failedToDecodeJSON("Could not decode JSON data")
         }
         recipe.url = URL(string: self.url)
         return recipe

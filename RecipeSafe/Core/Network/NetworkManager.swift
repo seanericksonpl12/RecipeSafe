@@ -59,57 +59,9 @@ final class NetworkManager: NetworkProtocol {
                 return executeRequest(request: newRequest, retries: 0)
             }
         } catch {
-            print("failed")
+            return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
         }
         return Fail(error: URLError(.badServerResponse)).eraseToAnyPublisher()
-    }
-    
-    // MARK: - Web Scraping
-    private func soupify(html: String) throws -> Recipe? {
-        let doc: Document = try SwiftSoup.parse(html)
-        let scripts = try doc.select(scriptTag).first()?.data()
-        guard let jsonString = scripts?.data(using: .utf8, allowLossyConversion: false) else { return nil }
-        
-        let json = try JSON(data: jsonString)
-        guard let dict = searchFor(keys: JSONKeys.allCases.map({$0.rawValue}),
-                                   excluding: ["review", "author"],
-                                   json: json)
-        else { return nil }
-        
-        return Recipe(json: dict)
-    }
-    
-    // MARK: - JSON Search
-    private func searchFor(keys: [String],
-                           excluding: [String] = [],
-                           json: JSON) -> [String: JSON]? {
-        
-        var rtrnDict = [String: JSON]()
-        var queue: [JSON] = []
-        queue.append(json)
-        
-        while(!queue.isEmpty && rtrnDict.count < keys.count) {
-            
-            let cur = queue.remove(at: 0)
-            let arr = cur.arrayValue
-            let dict = cur.dictionaryValue
-            
-            if !arr.isEmpty {
-                queue.append(contentsOf: arr)
-            }
-            else if !dict.isEmpty {
-                keys.forEach {
-                    if let val = dict[$0] { rtrnDict[$0] = val }
-                }
-                
-                dict.forEach {
-                    if !excluding.contains($0.key) {
-                        queue.append($0.value)
-                    }
-                }
-            }
-        }
-        return rtrnDict
     }
     
     private enum JSONKeys: String, CaseIterable {

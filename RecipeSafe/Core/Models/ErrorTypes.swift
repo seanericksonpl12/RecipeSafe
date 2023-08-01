@@ -8,5 +8,5 @@
 import Foundation
 
 enum NetworkError: LocalizedError {
-    case invalidURL(String), noResponse(String)
+    case invalidURL(String), noResponse(String), badResponse(String), failedToDecodeJSON(String)
 }
