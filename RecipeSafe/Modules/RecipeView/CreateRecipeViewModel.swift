@@ -7,18 +7,31 @@
 
 import Foundation
 import SwiftUI
-import PhotosUI
 
-
-@MainActor class CreateRecipeViewModel: ObservableObject {
+@MainActor class CreateRecipeViewModel: EditableRecipeModel {
     
+    // MARK: - Properties
     @Published var recipe: Recipe
-    @Published var editing: Bool = true
+    @Published var editingEnabled: Bool = true
     @Published var descriptionText = ""
-    @Published var addTitleAlert: Bool = false
-    @Published var photoItem: PhotosPickerItem?
-    @Published var photo: Image?
+    var alertSwitch: Bool = false
+    var dismiss: DismissAction?
     
+    
+    // MARK: - Computed
+    var saveAction: () -> Void {
+        { self.saveChanges() }
+    }
+    
+    var deleteAction: () -> Void {
+        {}
+    }
+    
+    var cancelAction: () -> Void {
+        { self.cancelEditing() }
+    }
+    
+    // MARK: - Init
     init() {
         self.recipe = Recipe(title: "", ingredients: [""])
         self.recipe.instructions = [""]
@@ -29,10 +42,9 @@ import PhotosUI
 // MARK: - Functions
 extension CreateRecipeViewModel {
     
-    func saveChanges(_ dismiss: DismissAction) {
+    func saveChanges() {
         if recipe.title == "" {
-            addTitleAlert = true
-            return
+            recipe.title = "recipe.title.new".localized
         }
         
         let context = PersistenceController.shared.container.viewContext
@@ -63,37 +75,10 @@ extension CreateRecipeViewModel {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
-        
-        dismiss.callAsFunction()
+        cancelEditing()
     }
     
-    func cancel(_ dismiss: DismissAction) {
-        dismiss.callAsFunction()
-    }
-    
-    func deleteFromIngr(offsets: IndexSet) {
-        self.recipe.ingredients.remove(atOffsets: offsets)
-    }
-    
-    func deleteFromInst(offsets: IndexSet) {
-        self.recipe.instructions.remove(at: offsets.first!)
-    }
-}
-
-extension CreateRecipeViewModel {
-    
-    func loadPhoto() {
-        photoItem?.loadTransferable(type: Data.self) { [weak self] result in
-            guard let self = self else { return }
-            if let data = try? result.get() {
-                if let uiImage = UIImage(data: data) {
-                    
-                    DispatchQueue.main.async {
-                        self.recipe.photoData = data
-                        self.photo = Image(uiImage: uiImage)
-                    }
-                }
-            }
-        }
+    func cancelEditing() {
+        dismiss?.callAsFunction()
     }
 }
