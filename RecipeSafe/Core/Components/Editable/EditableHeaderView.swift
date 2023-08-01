@@ -18,6 +18,7 @@ struct EditableHeaderView: View {
     
     var imgUrl: URL?
     var siteUrl: URL?
+    var photoData: Data?
     var optionalDisplay: String?
     
     var body: some View {
@@ -33,6 +34,13 @@ struct EditableHeaderView: View {
                     LoadingView()
                         .frame(maxWidth: 70, maxHeight: 70)
                 }
+            } else if let photoData, let uiImage = UIImage(data: photoData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: 70, maxHeight: 70)
+                    .clipShape(Circle())
+                    .padding(.leading)
             }
             TextField("", text: $headerText, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                 .font(.title)

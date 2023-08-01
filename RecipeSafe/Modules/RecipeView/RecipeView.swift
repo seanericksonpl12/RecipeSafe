@@ -25,7 +25,8 @@ struct RecipeView: View {
                                cancelAction: { viewModel.cancelEditing() },
                                deleteAction: { viewModel.toggleDelete() },
                                imgUrl: viewModel.recipe.img,
-                               siteUrl: viewModel.recipe.url)
+                               siteUrl: viewModel.recipe.url,
+                               photoData: viewModel.recipe.photoData)
             
             
             List {

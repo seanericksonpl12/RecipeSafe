@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct CreateRecipeView: View {
     
@@ -14,23 +15,50 @@ struct CreateRecipeView: View {
     
     var body: some View {
         VStack {
-            
             HStack {
+                Spacer()
+                Button("button.save".localized) {
+                    viewModel.saveChanges(dismiss)
+                }
+                .padding(.top)
+                .padding(.trailing)
+                Button("button.cancel".localized, role: .cancel) {
+                    viewModel.cancel(dismiss)
+                }
+                .padding(.trailing)
+                .padding(.top)
+            }
+            HStack {
+                PhotosPicker(selection: $viewModel.photoItem, matching: .images) {
+                    if let image = viewModel.photo {
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth: 70, maxHeight: 70)
+                            .clipShape(Circle())
+                            .padding(.leading)
+                    } else {
+                        Image(systemName: "plus.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth: 70, maxHeight: 70)
+                            .clipShape(Circle())
+                            .padding(.leading)
+                    }
+                }
+                .onChange(of: viewModel.photoItem) { _ in
+                    viewModel.loadPhoto()
+                }
+                
                 EditableHeaderView(headerText: $viewModel.recipe.title,
                                    isEditing: $viewModel.editing,
                                    imgUrl: viewModel.recipe.img,
                                    siteUrl: viewModel.recipe.url,
                                    optionalDisplay: "Title")
                 Spacer()
-                Button("button.save".localized) {
-                    viewModel.saveChanges(dismiss)
-                }
-                .padding()
-                Button("button.cancel".localized, role: .cancel) {
-                    viewModel.cancel(dismiss)
-                }
-                .padding(.trailing)
+                
             }
+            .padding(.top, -20)
             
             List {
                 

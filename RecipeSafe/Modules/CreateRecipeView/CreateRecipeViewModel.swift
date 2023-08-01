@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import PhotosUI
 
 
 @MainActor class CreateRecipeViewModel: ObservableObject {
@@ -15,6 +16,8 @@ import SwiftUI
     @Published var editing: Bool = true
     @Published var descriptionText = ""
     @Published var addTitleAlert: Bool = false
+    @Published var photoItem: PhotosPickerItem?
+    @Published var photo: Image?
     
     init() {
         self.recipe = Recipe(title: "", ingredients: [""])
@@ -39,6 +42,7 @@ extension CreateRecipeViewModel {
         newRecipe.cookTime = recipe.cookTime
         newRecipe.prepTime = recipe.prepTime
         newRecipe.desc = descriptionText
+        newRecipe.photoData = recipe.photoData
         if recipe.instructions.contains("") {
             recipe.instructions.removeAll(where: {$0 == ""})
         }
@@ -73,5 +77,23 @@ extension CreateRecipeViewModel {
     
     func deleteFromInst(offsets: IndexSet) {
         self.recipe.instructions.remove(at: offsets.first!)
+    }
+}
+
+extension CreateRecipeViewModel {
+    
+    func loadPhoto() {
+        photoItem?.loadTransferable(type: Data.self) { [weak self] result in
+            guard let self = self else { return }
+            if let data = try? result.get() {
+                if let uiImage = UIImage(data: data) {
+                    
+                    DispatchQueue.main.async {
+                        self.recipe.photoData = data
+                        self.photo = Image(uiImage: uiImage)
+                    }
+                }
+            }
+        }
     }
 }
