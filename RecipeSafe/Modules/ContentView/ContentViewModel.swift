@@ -22,11 +22,9 @@ import Combine
     
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
-    private var waitingRecipe = Recipe(title: "", ingredients: [])
+    private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
     private var network: NetworkManager = NetworkManager()
-    
-    var gpt: GPTSocket = GPTSocket()
     
     // MARK: - Computed Properties
     var searchList: (FetchedResults<RecipeItem>) -> [RecipeItem] {

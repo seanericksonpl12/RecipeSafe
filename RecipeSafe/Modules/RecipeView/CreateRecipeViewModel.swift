@@ -33,8 +33,9 @@ import SwiftUI
     
     // MARK: - Init
     init() {
-        self.recipe = Recipe(title: "", ingredients: [""])
+        self.recipe = Recipe()
         self.recipe.instructions = [""]
+        self.recipe.ingredients = [""]
     }
 }
 
