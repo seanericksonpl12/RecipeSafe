@@ -24,7 +24,8 @@ import Combine
     private var subscriptions = Set<AnyCancellable>()
     private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
-    private var network: NetworkManager = NetworkManager()
+    private let network: NetworkManager = NetworkManager()
+    private let dataManager: DataManager = DataManager()
     
     // MARK: - Computed Properties
     var searchList: (FetchedResults<RecipeItem>) -> [RecipeItem] {
@@ -67,19 +68,17 @@ extension ContentViewModel {
     private func handleNewRecipe(_ recipe: Recipe?) {
         self.viewState = .successfullyLoaded
         
-        let sharedData = PersistenceController.shared
-        
         guard var newRecipe = recipe else {
             displayBadSite = true
             return
         }
-        if let duplicate = sharedData.findDuplicates(newRecipe) {
+        if let duplicate = dataManager.findDuplicates(newRecipe) {
             self.duplicateFound = true
             waitingRecipe = newRecipe
             waitingDuplicate = duplicate
         } else {
             DispatchQueue.main.async {
-                newRecipe.dataEntity = sharedData.saveItem(recipe: newRecipe)
+                newRecipe.dataEntity = self.dataManager.saveItem(newRecipe)
                 self.navPath.append(newRecipe)
             }
         }
@@ -88,11 +87,10 @@ extension ContentViewModel {
     
     // MARK: - Core Data Functions
     func overwriteRecipe(deletingDup: Bool = false) {
-        let sharedData = PersistenceController.shared
         if let dup = waitingDuplicate, deletingDup {
-            sharedData.container.viewContext.delete(dup)
+            dataManager.deleteItem(dup)
         }
-        DispatchQueue.main.async { self.waitingRecipe.dataEntity = sharedData.saveItem(recipe: self.waitingRecipe) }
+        DispatchQueue.main.async { self.waitingRecipe.dataEntity = self.dataManager.saveItem(self.waitingRecipe) }
         self.navPath.append(waitingRecipe)
         self.waitingDuplicate = nil
     }
@@ -102,17 +100,8 @@ extension ContentViewModel {
         self.duplicateFound = false
     }
     
-    func deleteItem(offset: IndexSet,
-                    list: FetchedResults<RecipeItem>,
-                    context: NSManagedObjectContext) {
-        offset
-            .map { list[$0] }
-            .forEach { context.delete($0) }
-        do {
-            try context.save()
-        } catch {
-            print("viewContext error.")
-        }
+    func deleteItem(offset: IndexSet, list: FetchedResults<RecipeItem>) {
+       dataManager.deleteItem(offset: offset, list: list)
     }
 }
 
