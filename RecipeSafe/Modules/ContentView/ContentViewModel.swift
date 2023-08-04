@@ -24,11 +24,18 @@ import Combine
     private var subscriptions = Set<AnyCancellable>()
     private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
-    private let network: NetworkManager = NetworkManager()
-    private let dataManager: DataManager = DataManager()
+    private var network: NetworkManager
+    private var dataManager: DataManager
+    
+    // MARK: - Optional Init
+    init(dataManager: DataManager = DataManager(),
+         networkManager: NetworkManager = NetworkManager()) {
+        self.dataManager = dataManager
+        self.network = networkManager
+    }
     
     // MARK: - Computed Properties
-    var searchList: (FetchedResults<RecipeItem>) -> [RecipeItem] {
+    var searchList: (any RandomAccessCollection<RecipeItem>) -> [RecipeItem] {
         { [self] list in
             if searchText.isEmpty {
                 return Array(list)
@@ -65,13 +72,9 @@ extension ContentViewModel {
     }
     
     // MARK: - Recipe Handling
-    private func handleNewRecipe(_ recipe: Recipe?) {
+    private func handleNewRecipe(_ recipe: Recipe) {
         self.viewState = .successfullyLoaded
-        
-        guard var newRecipe = recipe else {
-            displayBadSite = true
-            return
-        }
+        var newRecipe = recipe
         if let duplicate = dataManager.findDuplicates(newRecipe) {
             self.duplicateFound = true
             waitingRecipe = newRecipe

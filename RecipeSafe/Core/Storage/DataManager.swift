@@ -20,11 +20,9 @@ class DataManager {
     convenience init() {
         self.init(viewContext: PersistenceController.shared.container.viewContext)
     }
-}
-
-// MARK: - Recipe Functions
-extension DataManager {
     
+    
+    // MARK: - Recipe Functions
     func saveItem(_ recipe: Recipe) -> RecipeItem? {
         let newRecipe = RecipeItem(context: self.viewContext)
         newRecipe.id = recipe.id
