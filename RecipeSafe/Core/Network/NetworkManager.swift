@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class NetworkManager: NetworkProtocol {
+class NetworkManager: NetworkProtocol {
     
     var session: URLSession
     
