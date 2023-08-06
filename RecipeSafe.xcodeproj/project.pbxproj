@@ -46,7 +46,6 @@
 		926687722A608C9200117A59 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926687712A608C9200117A59 /* Preview Assets.xcassets */; };
 		926687742A608C9200117A59 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926687732A608C9200117A59 /* Persistence.swift */; };
 		926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 926687752A608C9200117A59 /* RecipeSafe.xcdatamodeld */; };
-		926687812A608C9300117A59 /* RecipeSafeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926687802A608C9300117A59 /* RecipeSafeTests.swift */; };
 		9266878B2A608C9300117A59 /* RecipeSafeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266878A2A608C9300117A59 /* RecipeSafeUITests.swift */; };
 		9266878D2A608C9300117A59 /* RecipeSafeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266878C2A608C9300117A59 /* RecipeSafeUITestsLaunchTests.swift */; };
 		9266879B2A608E3D00117A59 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 9266879A2A608E3D00117A59 /* SwiftSoup */; };
@@ -141,7 +140,6 @@
 		926687732A608C9200117A59 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		926687762A608C9200117A59 /* RecipeSafe.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RecipeSafe.xcdatamodel; sourceTree = "<group>"; };
 		9266877C2A608C9300117A59 /* RecipeSafeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeSafeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		926687802A608C9300117A59 /* RecipeSafeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSafeTests.swift; sourceTree = "<group>"; };
 		926687862A608C9300117A59 /* RecipeSafeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeSafeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9266878A2A608C9300117A59 /* RecipeSafeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSafeUITests.swift; sourceTree = "<group>"; };
 		9266878C2A608C9300117A59 /* RecipeSafeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSafeUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -454,7 +452,6 @@
 				9201F9982A7C6F8900A6021A /* Mock Classes */,
 				9201F9892A7B045200A6021A /* Core */,
 				9201F9882A7B044500A6021A /* Modules */,
-				926687802A608C9300117A59 /* RecipeSafeTests.swift */,
 			);
 			path = RecipeSafeTests;
 			sourceTree = "<group>";
@@ -723,7 +720,6 @@
 				9201F99D2A7D426000A6021A /* MockDataManager.swift in Sources */,
 				9201F98B2A7B049100A6021A /* ContentViewModelTests.swift in Sources */,
 				9211021C2A7D560F00F34E5A /* NetworkProtocolTests.swift in Sources */,
-				926687812A608C9300117A59 /* RecipeSafeTests.swift in Sources */,
 				9201F98D2A7B049F00A6021A /* RecipeViewModelTests.swift in Sources */,
 				9235E08E2A7EC4B6000B05EF /* DataManagerTests.swift in Sources */,
 				9201F99B2A7C843600A6021A /* MockNetworkManager.swift in Sources */,

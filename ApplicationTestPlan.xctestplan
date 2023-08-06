@@ -17,6 +17,9 @@
   },
   "testTargets" : [
     {
+      "skippedTests" : [
+        "RecipeSafeTests"
+      ],
       "target" : {
         "containerPath" : "container:RecipeSafe.xcodeproj",
         "identifier" : "9266877B2A608C9300117A59",
