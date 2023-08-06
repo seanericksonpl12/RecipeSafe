@@ -12,6 +12,8 @@ import CoreData
 
 
 @MainActor class RecipeViewModel: EditableRecipeModel {
+    
+    var dataManager: DataManager = DataManager()
    
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = false

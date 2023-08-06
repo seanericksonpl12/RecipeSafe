@@ -47,8 +47,7 @@ struct ContentView: View {
                 }
                 .onDelete {
                     viewModel.deleteItem(offset: $0,
-                                         list: recipeList,
-                                         context: viewContext)
+                                         list: recipeList)
                 }
             }
             .navigationTitle("content.nav.title".localized)

@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import Combine
-import CoreData
 
 @MainActor protocol EditableRecipeModel: ObservableObject {
     
@@ -18,7 +17,7 @@ import CoreData
     var descriptionText: String { get set }
     var alertSwitch: Bool { get set }
     var dismiss: DismissAction? { get set }
-   
+    var dataManager: DataManager { get }
     
     // MARK: - Actions
     var saveAction: () -> Void { get }
@@ -48,29 +47,10 @@ extension EditableRecipeModel {
         withAnimation {
             self.editingEnabled = false
         }
-        self.recipe.dataEntity?.title = self.recipe.title
-        self.recipe.dataEntity?.desc = self.descriptionText
-        self.recipe.dataEntity?.photoData = self.recipe.photoData
         self.recipe.description = self.descriptionText
-        
-        let context = PersistenceController.shared.container.viewContext
         self.recipe.instructions.removeAll { $0 == "" }
         self.recipe.ingredients.removeAll { $0 == "" }
-        
-        self.recipe.dataEntity?.ingredients = []
-        self.recipe.dataEntity?.instructions = []
-        self.recipe.ingredients.forEach {
-            let i = Ingredient(context: context)
-            i.value = $0
-            self.recipe.dataEntity?.addToIngredients(i)
-        }
-        self.recipe.instructions.forEach {
-            let i = Instruction(context: context)
-            i.value = $0
-            self.recipe.dataEntity?.addToInstructions(i)
-        }
-        
-        try? context.save()
+        dataManager.updateDataEntity(recipe: self.recipe)
     }
     
     func cancelEditing() {
@@ -100,12 +80,8 @@ extension EditableRecipeModel {
     }
     
     func deleteSelf() {
-        if let entity = recipe.dataEntity {
-            let context = PersistenceController.shared.container.viewContext
-            context.delete(entity)
-            try? context.save()
-        }
-        
+        dataManager.deleteDataEntity(recipe: self.recipe)
+        self.recipe.dataEntity = nil
         dismiss?.callAsFunction()
     }
     
