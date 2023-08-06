@@ -17,10 +17,9 @@ import XCTest
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        self.viewModel = CreateRecipeViewModel()
         self.dataStack = PersistenceController(inMemory: true)
+        self.viewModel = CreateRecipeViewModel(dataManager: DataManager(viewContext: self.dataStack.container.viewContext))
         self.dataEntity = RecipeItem(context: self.dataStack.container.viewContext)
-        self.viewModel.dataManager = DataManager(viewContext: self.dataStack.container.viewContext)
         viewModel.recipe.dataEntity = self.dataEntity
     }
     
