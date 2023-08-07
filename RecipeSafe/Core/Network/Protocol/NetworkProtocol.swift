@@ -19,6 +19,7 @@ protocol NetworkProtocol {
                  retries: Int) -> AnyPublisher<String, Error>
 }
 
+// MARK: - Default Functions
 extension NetworkProtocol {
     
     func executeRequest<Request: NetworkRequest>(request: Request,

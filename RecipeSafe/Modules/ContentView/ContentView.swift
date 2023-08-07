@@ -67,7 +67,7 @@ struct ContentView: View {
                     
                 }
                 
-                // MARK: - Modifiers
+                // MARK: - UI Modifiers
                 .scrollContentBackground(.hidden)
                 .background {
                     Image("logo-background")
@@ -79,6 +79,8 @@ struct ContentView: View {
                 }
                 .navigationTitle("content.nav.title".localized)
                 .navigationBarTitleDisplayMode(.inline)
+                
+                // MARK: - Navigation
                 .navigationDestination(for: Recipe.self) { recipe in
                     RecipeView(viewModel: RecipeViewModel(recipe: recipe))
                         .navigationBarTitleDisplayMode(.inline)

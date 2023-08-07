@@ -10,20 +10,23 @@ import PhotosUI
 
 struct EditableHeaderView: View {
     
+    // MARK: - Wrapped Properties
     @Binding var recipe: Recipe
     @Binding var isEditing: Bool
+    @State private var photoItem: PhotosPickerItem?
     
+    // MARK: - Actions
     var saveAction: () -> Void = {}
     var cancelAction: () -> Void = {}
     var deleteAction: () -> Void = {}
     
     var optionalDisplay: String?
     
-    @State private var photoItem: PhotosPickerItem?
-    
+    // MARK: - Body
     var body: some View {
         HStack {
             Spacer()
+            // MARK: - Thumbnail Image
             PhotosPicker(selection: $photoItem, matching: .images) {
                 if let data = recipe.photoData, let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
@@ -56,6 +59,7 @@ struct EditableHeaderView: View {
             }
             .disabled(!isEditing)
             
+            // MARK: - Title
             TextField("", text: $recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                 .font(.title)
                 .fontWeight(.heavy)
@@ -70,6 +74,7 @@ struct EditableHeaderView: View {
                          deleteAction: deleteAction)
     }
     
+    // MARK: - Photo Selection
     private func pickPhoto() {
         photoItem?.loadTransferable(type: Data.self) { result in
             if let data = try? result.get() {

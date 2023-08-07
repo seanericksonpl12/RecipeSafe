@@ -9,8 +9,8 @@ import CoreData
 import SwiftUI
 
 struct PersistenceController {
+    // MARK: - Instances
     static let shared = PersistenceController()
-    
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
@@ -34,8 +34,10 @@ struct PersistenceController {
         return result
     }()
     
+    // MARK: - Container
     let container: NSPersistentContainer
     
+    // MARK: - Init
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "RecipeSafe")
         if inMemory {
