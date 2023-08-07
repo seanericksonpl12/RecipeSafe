@@ -16,8 +16,14 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         for i in 0..<10 {
             let newItem = RecipeItem(context: viewContext)
-            newItem.title = "test title"
-            newItem.ingredients = ["ingredient test for \(i)", "ingredient 2"]
+            newItem.title = "Recipe"
+            let i1 = Ingredient(context: viewContext)
+            let i2 = Ingredient(context: viewContext)
+            let in1 = Instruction(context: viewContext)
+            let in2 = Instruction(context: viewContext)
+            newItem.desc = "Description"
+            newItem.ingredients = [i1, i2]
+            newItem.instructions = [in1, in2]
         }
         do {
             try viewContext.save()

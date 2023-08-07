@@ -41,7 +41,6 @@
 		925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */; };
 		925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925DCBF42A65FBFC00B84A38 /* RecipeView.swift */; };
 		9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876A2A608C9200117A59 /* RecipeSafeApp.swift */; };
-		9266876D2A608C9200117A59 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876C2A608C9200117A59 /* ContentView.swift */; };
 		9266876F2A608C9200117A59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9266876E2A608C9200117A59 /* Assets.xcassets */; };
 		926687722A608C9200117A59 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 926687712A608C9200117A59 /* Preview Assets.xcassets */; };
 		926687742A608C9200117A59 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926687732A608C9200117A59 /* Persistence.swift */; };
@@ -58,6 +57,7 @@
 		926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A8E2A71FD9000457935 /* NetworkRequest.swift */; };
 		926A4A932A72B7AC00457935 /* RecipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A922A72B7AC00457935 /* RecipeRequest.swift */; };
 		92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */; };
+		929316FA2A816BF30089A55D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876C2A608C9200117A59 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -680,10 +680,10 @@
 			files = (
 				925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */,
 				920DA3652A70225E0086ADB5 /* EditableHeaderView.swift in Sources */,
+				929316FA2A816BF30089A55D /* ContentView.swift in Sources */,
 				9201F9852A7AF14800A6021A /* RecipeJSONParser.swift in Sources */,
 				9201F9802A795F9000A6021A /* EditableRecipeModel.swift in Sources */,
 				926687742A608C9200117A59 /* Persistence.swift in Sources */,
-				9266876D2A608C9200117A59 /* ContentView.swift in Sources */,
 				925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */,
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
 				9201F9872A7AF22C00A6021A /* JSONParser.swift in Sources */,
