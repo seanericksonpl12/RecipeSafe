@@ -19,11 +19,9 @@ struct EditableDescriptionView: View {
     var body: some View {
         Section {
             VStack {
-                TextField("", text: $description, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
-                    .multilineTextAlignment(.center)
-                    .font(.callout)
-                    .fontWeight(.light)
+                CustomTextField(text: $description, prompt: optionalDisplay ?? "")
                     .disabled(!isEditing)
+                
                 HStack {
                     Spacer()
                     if let prep = prepTime {
