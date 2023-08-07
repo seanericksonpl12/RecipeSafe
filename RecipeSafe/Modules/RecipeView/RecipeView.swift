@@ -10,7 +10,10 @@ import CoreData
 
 struct RecipeView<T: EditableRecipeModel>: View {
     
+    // MARK: - Environment Variables
     @Environment(\.dismiss) private var dismissView
+    
+    // MARK: - Observed Object
     @StateObject var viewModel: T
    
     // MARK: - Body

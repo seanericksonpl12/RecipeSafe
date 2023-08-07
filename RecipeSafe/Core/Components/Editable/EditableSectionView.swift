@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EditableSectionView: View {
+    // MARK: - Properties
     @Binding var list: [String]
     @Binding var isEditing: Bool
     
@@ -18,6 +19,7 @@ struct EditableSectionView: View {
     var addAction: () -> Void
     var optionalDisplay: String = ""
     
+    // MARK: - Body
     var body: some View {
         Section {
             ForEach(Array(list.enumerated()), id: \.offset) { index, item in

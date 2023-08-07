@@ -18,10 +18,9 @@ import CoreData
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        self.viewModel = RecipeViewModel(recipe: Recipe())
         self.dataStack = PersistenceController(inMemory: true)
+        self.viewModel = RecipeViewModel(recipe: Recipe(), dataManager: DataManager(viewContext: self.dataStack.container.viewContext))
         self.dataEntity = RecipeItem(context: self.dataStack.container.viewContext)
-        self.viewModel.dataManager = DataManager(viewContext: self.dataStack.container.viewContext)
         viewModel.recipe.dataEntity = self.dataEntity
     }
     

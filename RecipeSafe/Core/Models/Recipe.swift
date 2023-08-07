@@ -45,7 +45,7 @@ struct Recipe: Hashable, Decodable, Identifiable {
         self.dataEntity = dataItem
     }
     
-    // MARK: - Testing Init
+    // MARK: - Empty Init
     init() {
         self.title = ""
         self.ingredients = []
@@ -72,6 +72,7 @@ struct Recipe: Hashable, Decodable, Identifiable {
         self.cookTime = cookTime
     }
     
+    // MARK: - Coding Init
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.title = try container.decode(String.self, forKey: .title)

@@ -10,12 +10,17 @@ import SwiftUI
 
 @MainActor class CreateRecipeViewModel: EditableRecipeModel {
     
-    var dataManager: DataManager = DataManager()
     
-    // MARK: - Properties
+    
+    // MARK: - Published
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = true
     @Published var descriptionText = ""
+    
+    // MARK: - Private
+    private var dataManager: DataManager
+    
+    // MARK: - Properties
     var alertSwitch: Bool = false
     var dismiss: DismissAction?
     
@@ -33,7 +38,8 @@ import SwiftUI
     }
     
     // MARK: - Init
-    init() {
+    init(dataManager: DataManager = DataManager()) {
+        self.dataManager = dataManager
         self.recipe = Recipe()
         self.recipe.instructions = [""]
         self.recipe.ingredients = [""]
@@ -60,6 +66,12 @@ extension CreateRecipeViewModel {
     }
     
     func cancelEditing() {
+        dismiss?.callAsFunction()
+    }
+    
+    func deleteSelf() {
+        dataManager.deleteDataEntity(recipe: self.recipe)
+        self.recipe.dataEntity = nil
         dismiss?.callAsFunction()
     }
 }

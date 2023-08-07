@@ -101,6 +101,11 @@ class DataManager {
             .forEach {
                 self.viewContext.delete($0)
             }
+        do {
+            try self.viewContext.save()
+        } catch {
+            print(String(describing: error))
+        }
     }
     
     func findDuplicates(_ recipe: Recipe) -> RecipeItem? {

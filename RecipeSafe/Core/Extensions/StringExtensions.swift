@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Formatting
+// MARK: - HTML Formatting
 extension String {
     
     func htmlFormatted() -> String {

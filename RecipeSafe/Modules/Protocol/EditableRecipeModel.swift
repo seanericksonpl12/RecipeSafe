@@ -17,7 +17,6 @@ import Combine
     var descriptionText: String { get set }
     var alertSwitch: Bool { get set }
     var dismiss: DismissAction? { get set }
-    var dataManager: DataManager { get }
     
     // MARK: - Actions
     var saveAction: () -> Void { get }
@@ -41,16 +40,6 @@ extension EditableRecipeModel {
     // MARK: - Default Functions
     func setup(dismiss: DismissAction) {
         self.dismiss = dismiss
-    }
-    
-    func saveChanges() {
-        withAnimation {
-            self.editingEnabled = false
-        }
-        self.recipe.description = self.descriptionText
-        self.recipe.instructions.removeAll { $0 == "" }
-        self.recipe.ingredients.removeAll { $0 == "" }
-        dataManager.updateDataEntity(recipe: self.recipe)
     }
     
     func cancelEditing() {
@@ -77,12 +66,6 @@ extension EditableRecipeModel {
     
     func deleteFromInst(offsets: IndexSet) {
         self.recipe.instructions.remove(atOffsets: offsets)
-    }
-    
-    func deleteSelf() {
-        dataManager.deleteDataEntity(recipe: self.recipe)
-        self.recipe.dataEntity = nil
-        dismiss?.callAsFunction()
     }
     
     func toggleAlert() {

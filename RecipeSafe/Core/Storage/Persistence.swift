@@ -9,15 +9,21 @@ import CoreData
 import SwiftUI
 
 struct PersistenceController {
+    // MARK: - Instances
     static let shared = PersistenceController()
-    
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for i in 0..<10 {
             let newItem = RecipeItem(context: viewContext)
-            newItem.title = "test title"
-            newItem.ingredients = ["ingredient test for \(i)", "ingredient 2"]
+            newItem.title = "Recipe"
+            let i1 = Ingredient(context: viewContext)
+            let i2 = Ingredient(context: viewContext)
+            let in1 = Instruction(context: viewContext)
+            let in2 = Instruction(context: viewContext)
+            newItem.desc = "Description"
+            newItem.ingredients = [i1, i2]
+            newItem.instructions = [in1, in2]
         }
         do {
             try viewContext.save()
@@ -28,8 +34,10 @@ struct PersistenceController {
         return result
     }()
     
+    // MARK: - Container
     let container: NSPersistentContainer
     
+    // MARK: - Init
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "RecipeSafe")
         if inMemory {

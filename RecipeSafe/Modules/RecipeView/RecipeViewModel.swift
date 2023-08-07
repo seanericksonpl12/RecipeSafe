@@ -13,15 +13,20 @@ import CoreData
 
 @MainActor class RecipeViewModel: EditableRecipeModel {
     
-    var dataManager: DataManager = DataManager()
-   
+    
+    // MARK: - Published
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = false
     @Published var descriptionText: String = ""
     @Published var alertSwitch: Bool = false
     
+    // MARK: - Private
+    private var dataManager: DataManager
+    
+    // MARK: - Properties
     var dismiss: DismissAction?
     
+    // MARK: - Computed
     var saveAction: () -> Void {
         { self.saveChanges() }
     }
@@ -34,9 +39,31 @@ import CoreData
         { self.cancelEditing() }
     }
     
-    init(recipe: Recipe) {
+    // MARK: - Init
+    init(recipe: Recipe, dataManager: DataManager = DataManager()) {
         self.recipe = recipe
         self.descriptionText = recipe.description ?? ""
+        self.dataManager = dataManager
+    }
+}
+
+// MARK: - Functions
+extension RecipeViewModel {
+    
+    func saveChanges() {
+        withAnimation {
+            self.editingEnabled = false
+        }
+        self.recipe.description = self.descriptionText
+        self.recipe.instructions.removeAll { $0 == "" }
+        self.recipe.ingredients.removeAll { $0 == "" }
+        dataManager.updateDataEntity(recipe: self.recipe)
+    }
+    
+    func deleteSelf() {
+        dataManager.deleteDataEntity(recipe: self.recipe)
+        self.recipe.dataEntity = nil
+        dismiss?.callAsFunction()
     }
 }
 
