@@ -12,20 +12,15 @@ import UniformTypeIdentifiers
 
 class ShareViewController: UIViewController {
     
-    private let myURLStr: String = "RecipeSafe://ContentView"
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("will appear")
         
         guard let extensionObj = extensionContext?.inputItems.first as? NSExtensionItem, let itemProvider = extensionObj.attachments?.first else {
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             return
         }
 
-        if itemProvider.hasItemConformingToTypeIdentifier(UTType.text.identifier) {
-            handleText(provider: itemProvider)
-        } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+        if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
             handleURL(provider: itemProvider)
         } else {
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
@@ -43,11 +38,6 @@ class ShareViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    private func handleText(provider: NSItemProvider) {
-        print("item is text")
-        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
     @objc func openURL(_ url: URL) -> Bool {
