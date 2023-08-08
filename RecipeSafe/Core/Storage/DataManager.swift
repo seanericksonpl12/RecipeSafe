@@ -72,6 +72,8 @@ class DataManager {
     func updateDataEntity(recipe: Recipe) {
         recipe.dataEntity?.title = recipe.title
         recipe.dataEntity?.desc = recipe.description
+        recipe.dataEntity?.prepTime = recipe.prepTime
+        recipe.dataEntity?.cookTime = recipe.cookTime
         recipe.dataEntity?.ingredients = []
         recipe.dataEntity?.instructions = []
         if case .selected(let data) = recipe.img {

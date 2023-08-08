@@ -16,6 +16,8 @@ import SwiftUI
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = true
     @Published var descriptionText = ""
+    @Published var cookText = ""
+    @Published var prepText = ""
     
     // MARK: - Private
     private var dataManager: DataManager
@@ -61,6 +63,8 @@ extension CreateRecipeViewModel {
             recipe.ingredients.removeAll(where: {$0 == ""})
         }
         recipe.description = descriptionText
+        recipe.prepTime = prepText
+        recipe.cookTime = cookText
         let _ = dataManager.saveItem(self.recipe)
         cancelEditing()
     }
