@@ -48,7 +48,9 @@ extension EditableRecipeModel {
         }
         self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
         self.recipe.description = self.recipe.dataEntity?.desc
-        self.recipe.photoData = self.recipe.dataEntity?.photoData
+        if let data = self.recipe.dataEntity?.photoData {
+            self.recipe.img = .selected(data)
+        }
         self.descriptionText = self.recipe.description ?? self.descriptionText
         
         guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }

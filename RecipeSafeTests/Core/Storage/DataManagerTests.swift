@@ -24,7 +24,7 @@ final class DataManagerTests: XCTestCase {
                                  description: "Test Description",
                                  ingredients: ["i 1", "i 2"],
                                  instructions: ["in 1", "in 2"],
-                                 img: nil,
+                                 img: .none,
                                  url: nil,
                                  prepTime: "Test Prep",
                                  cookTime: "Test Cook")

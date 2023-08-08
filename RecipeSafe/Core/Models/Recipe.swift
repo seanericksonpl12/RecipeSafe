@@ -14,13 +14,12 @@ struct Recipe: Hashable, Decodable, Identifiable {
     var id: UUID = UUID()
     var title: String
     var ingredients: [String]
-    var img: URL?
+    var img: ImageData
     var url: URL?
     var description: String?
     var instructions: [String]
     var prepTime: String?
     var cookTime: String?
-    var photoData: Data?
     var dataEntity: RecipeItem?
     
     // MARK: - Core Data Init
@@ -39,10 +38,15 @@ struct Recipe: Hashable, Decodable, Identifiable {
         self.description = dataItem.desc
         self.cookTime = dataItem.cookTime
         self.prepTime = dataItem.prepTime
-        self.img = dataItem.imageUrl
         self.url = dataItem.url
-        self.photoData = dataItem.photoData
         self.dataEntity = dataItem
+        if let data = dataItem.photoData {
+            self.img = .selected(data)
+        } else if let imgUrl = dataItem.imageUrl {
+            self.img = .downloaded(imgUrl)
+        } else {
+            self.img = .none
+        }
     }
     
     // MARK: - Empty Init
@@ -50,6 +54,7 @@ struct Recipe: Hashable, Decodable, Identifiable {
         self.title = ""
         self.ingredients = []
         self.instructions = []
+        self.img = .none
     }
     
     // MARK: - General Init
@@ -57,7 +62,7 @@ struct Recipe: Hashable, Decodable, Identifiable {
          description: String?,
          ingredients: [String],
          instructions: [String],
-         img: URL?,
+         img: ImageData,
          url: URL?,
          prepTime: String?,
          cookTime: String?) {
@@ -79,12 +84,30 @@ struct Recipe: Hashable, Decodable, Identifiable {
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.ingredients = try container.decode(Array<String>.self, forKey: .ingredients)
         self.instructions = try container.decode(Array<String>.self, forKey: .instructions)
-        self.img = URL(string: try container.decodeIfPresent(String.self, forKey: .thumbnail) ?? "")
+        if let str = try container.decodeIfPresent(String.self, forKey: .thumbnail), let imgUrl = URL(string: str) {
+            self.img = .downloaded(imgUrl)
+        } else {
+            self.img = .none
+        }
         self.cookTime = try container.decodeIfPresent(String.self, forKey: .cook_time)
         self.prepTime = try container.decodeIfPresent(String.self, forKey: .prep_time)
     }
     
-    enum CodingKeys: String, CodingKey {
+    // MARK: - Protocol Functions
+    static func == (lhs: Recipe, rhs: Recipe) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(title)
+        hasher.combine(url)
+        hasher.combine(ingredients)
+        hasher.combine(instructions)
+    }
+    
+    // MARK: - Coding Keys
+    private enum CodingKeys: String, CodingKey {
         case title, description, ingredients, instructions
         case thumbnail = "thumbnail"
         case cook_time = "cook_time"
