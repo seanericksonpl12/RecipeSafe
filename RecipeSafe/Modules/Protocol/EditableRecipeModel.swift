@@ -48,16 +48,16 @@ extension EditableRecipeModel {
         withAnimation {
             self.editingEnabled = false
         }
+        
+        self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
+        self.recipe.description = self.recipe.dataEntity?.desc
+        if let data = self.recipe.dataEntity?.photoData {
+            self.recipe.img = .selected(data)
+        }
+        self.descriptionText = self.recipe.description ?? self.descriptionText
+        self.prepText = self.recipe.prepTime ?? self.prepText
+        self.cookText = self.recipe.cookTime ?? self.cookText
         DispatchQueue.main.async {
-            self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
-            self.recipe.description = self.recipe.dataEntity?.desc
-            if let data = self.recipe.dataEntity?.photoData {
-                self.recipe.img = .selected(data)
-            }
-            self.descriptionText = self.recipe.description ?? self.descriptionText
-            self.prepText = self.recipe.prepTime ?? self.prepText
-            self.cookText = self.recipe.cookTime ?? self.cookText
-            
             guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }
             guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
             ingredientArr = ingredientArr.filter { $0.value != nil }
