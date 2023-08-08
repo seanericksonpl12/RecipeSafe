@@ -15,6 +15,8 @@ import Combine
     var recipe: Recipe { get set }
     var editingEnabled: Bool { get set }
     var descriptionText: String { get set }
+    var cookText: String { get set }
+    var prepText: String { get set }
     var alertSwitch: Bool { get set }
     var dismiss: DismissAction? { get set }
     
@@ -46,20 +48,24 @@ extension EditableRecipeModel {
         withAnimation {
             self.editingEnabled = false
         }
-        self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
-        self.recipe.description = self.recipe.dataEntity?.desc
-        if let data = self.recipe.dataEntity?.photoData {
-            self.recipe.img = .selected(data)
+        DispatchQueue.main.async {
+            self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
+            self.recipe.description = self.recipe.dataEntity?.desc
+            if let data = self.recipe.dataEntity?.photoData {
+                self.recipe.img = .selected(data)
+            }
+            self.descriptionText = self.recipe.description ?? self.descriptionText
+            self.prepText = self.recipe.prepTime ?? self.prepText
+            self.cookText = self.recipe.cookTime ?? self.cookText
+            
+            guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }
+            guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
+            ingredientArr = ingredientArr.filter { $0.value != nil }
+            instructionArr = instructionArr.filter { $0.value != nil }
+            
+            self.recipe.ingredients = ingredientArr.map { $0.value! }
+            self.recipe.instructions = instructionArr.map { $0.value! }
         }
-        self.descriptionText = self.recipe.description ?? self.descriptionText
-        
-        guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }
-        guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
-        ingredientArr = ingredientArr.filter { $0.value != nil }
-        instructionArr = instructionArr.filter { $0.value != nil }
-        
-        self.recipe.ingredients = ingredientArr.map { $0.value! }
-        self.recipe.instructions = instructionArr.map { $0.value! }
     }
     
     func deleteFromIngr(offsets: IndexSet) {

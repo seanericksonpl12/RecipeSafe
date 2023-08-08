@@ -31,24 +31,26 @@ struct RecipeView<T: EditableRecipeModel>: View {
                 
                 EditableDescriptionView(isEditing: $viewModel.editingEnabled,
                                         description: $viewModel.descriptionText,
-                                        prepTime: viewModel.recipe.prepTime,
-                                        cookTime: viewModel.recipe.cookTime,
+                                        prepTime: $viewModel.prepText,
+                                        cookTime: $viewModel.cookText,
                                         optionalDisplay: "create.display.desc".localized)
-                
-                EditableSectionView(list: $viewModel.recipe.ingredients,
-                                    isEditing: $viewModel.editingEnabled,
-                                    headerText: "recipe.ingredients.title".localized,
-                                    deleteAction: { viewModel.deleteFromIngr(offsets: $0) },
-                                    addAction: { viewModel.recipe.ingredients.insert("", at: 0) },
-                                    optionalDisplay: "recipe.ingredients.new".localized)
-                
-                EditableSectionView(list: $viewModel.recipe.instructions,
-                                    isEditing: $viewModel.editingEnabled,
-                                    headerText: "recipe.instructions.title".localized,
-                                    numbered: true,
-                                    deleteAction: { viewModel.deleteFromInst(offsets: $0) },
-                                    addAction: { viewModel.recipe.instructions.append("") },
-                                    optionalDisplay: "recipe.instructions.new".localized)
+                if !viewModel.recipe.ingredients.isEmpty || viewModel.editingEnabled {
+                    EditableSectionView(list: $viewModel.recipe.ingredients,
+                                        isEditing: $viewModel.editingEnabled,
+                                        headerText: "recipe.ingredients.title".localized,
+                                        deleteAction: { viewModel.deleteFromIngr(offsets: $0) },
+                                        addAction: { viewModel.recipe.ingredients.insert("", at: 0) },
+                                        optionalDisplay: "recipe.ingredients.new".localized)
+                }
+                if !viewModel.recipe.instructions.isEmpty || viewModel.editingEnabled {
+                    EditableSectionView(list: $viewModel.recipe.instructions,
+                                        isEditing: $viewModel.editingEnabled,
+                                        headerText: "recipe.instructions.title".localized,
+                                        numbered: true,
+                                        deleteAction: { viewModel.deleteFromInst(offsets: $0) },
+                                        addAction: { viewModel.recipe.instructions.append("") },
+                                        optionalDisplay: "recipe.instructions.new".localized)
+                }
                 
             }
             .alert("recipe.alert.delete.title".localized, isPresented: $viewModel.alertSwitch) {

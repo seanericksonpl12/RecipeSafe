@@ -18,6 +18,8 @@ import CoreData
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = false
     @Published var descriptionText: String = ""
+    @Published var cookText: String = ""
+    @Published var prepText: String = ""
     @Published var alertSwitch: Bool = false
     
     // MARK: - Private
@@ -43,6 +45,8 @@ import CoreData
     init(recipe: Recipe, dataManager: DataManager = DataManager()) {
         self.recipe = recipe
         self.descriptionText = recipe.description ?? ""
+        self.prepText = recipe.prepTime ?? ""
+        self.cookText = recipe.cookTime ?? ""
         self.dataManager = dataManager
     }
 }
@@ -55,9 +59,13 @@ extension RecipeViewModel {
             self.editingEnabled = false
         }
         self.recipe.description = self.descriptionText
-        self.recipe.instructions.removeAll { $0 == "" }
-        self.recipe.ingredients.removeAll { $0 == "" }
-        dataManager.updateDataEntity(recipe: self.recipe)
+        self.recipe.cookTime = self.cookText
+        self.recipe.prepTime = self.prepText
+        DispatchQueue.main.async {
+            self.recipe.instructions.removeAll { $0 == "" }
+            self.recipe.ingredients.removeAll { $0 == "" }
+            self.dataManager.updateDataEntity(recipe: self.recipe)
+        }
     }
     
     func deleteSelf() {

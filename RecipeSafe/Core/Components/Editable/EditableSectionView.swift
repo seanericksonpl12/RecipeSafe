@@ -32,7 +32,7 @@ struct EditableSectionView: View {
                             Spacer()
                         }
                     }
-                    TextField(item == "" ? optionalDisplay : "", text: $list[list.firstIndex(of: item)!], axis: isEditing ? .horizontal : .vertical)
+                    TextField(item == "" ? optionalDisplay : "", text: $list[index], axis: isEditing ? .horizontal : .vertical)
                         .font(font)
                         .disabled(!isEditing)
                 }
