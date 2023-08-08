@@ -55,6 +55,7 @@ struct ContentView: View {
                         }
                     }
                     .onDelete {
+                        viewModel.navPath = .init()
                         viewModel.deleteItem(offset: $0,
                                              list: recipeList)
                     }
@@ -79,12 +80,6 @@ struct ContentView: View {
                 }
                 .navigationTitle("content.nav.title".localized)
                 .navigationBarTitleDisplayMode(.inline)
-                
-                // MARK: - Navigation
-                .navigationDestination(for: Recipe.self) { recipe in
-                    RecipeView(viewModel: RecipeViewModel(recipe: recipe))
-                        .navigationBarTitleDisplayMode(.inline)
-                }
                 
                 // MARK: - Toolbar
                 .toolbar {
@@ -122,6 +117,10 @@ struct ContentView: View {
                     Text("content.alert.copy.desc".localized)
                 }
             }
+            .navigationDestination(for: Recipe.self) { recipe in
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+                    .navigationBarTitleDisplayMode(.inline)
+            }
         }
         .searchable(text: $viewModel.searchText, prompt: "content.search.prompt".localized)
         .sheet(isPresented: $viewModel.customRecipeSheet) {
@@ -129,6 +128,7 @@ struct ContentView: View {
                 RecipeView(viewModel: CreateRecipeViewModel())
             }
         }
+        
         
     }
 }

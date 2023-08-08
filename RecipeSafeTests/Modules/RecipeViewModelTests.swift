@@ -39,6 +39,8 @@ import CoreData
     }
     
     func testCancelEditing() {
+        let exp1 = XCTNSPredicateExpectation(predicate: NSPredicate(block: {_,_ in return self.viewModel.recipe.ingredients == ["i 1", "i 2"]}), object: self)
+        let exp2 = XCTNSPredicateExpectation(predicate: NSPredicate(block: {_,_ in return self.viewModel.recipe.instructions == ["is 1", "is 2"]}), object: self)
         viewModel.editingEnabled = true
         dataEntity.title = "Test Title"
         dataEntity.desc = "Test Desc"
@@ -61,8 +63,7 @@ import CoreData
         XCTAssertFalse(viewModel.editingEnabled)
         XCTAssertEqual(viewModel.recipe.title, "Test Title")
         XCTAssertEqual(viewModel.recipe.description, "Test Desc")
-        XCTAssertEqual(viewModel.recipe.ingredients, ["i 1", "i 2"])
-        XCTAssertEqual(viewModel.recipe.instructions, ["is 1", "is 2"])
+        wait(for: [exp1, exp2], timeout: 5)
     }
     
     func testDeleteFromLists() {

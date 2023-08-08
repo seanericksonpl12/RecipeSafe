@@ -15,7 +15,7 @@ struct RecipeView<T: EditableRecipeModel>: View {
     
     // MARK: - Observed Object
     @StateObject var viewModel: T
-   
+    
     // MARK: - Body
     var body: some View {
         
@@ -26,6 +26,9 @@ struct RecipeView<T: EditableRecipeModel>: View {
                                cancelAction: viewModel.cancelAction,
                                deleteAction: viewModel.deleteAction,
                                optionalDisplay: "create.display.title".localized)
+            .onTapGesture {
+                hideKeyboard()
+            }
             
             List {
                 
@@ -34,6 +37,9 @@ struct RecipeView<T: EditableRecipeModel>: View {
                                         prepTime: $viewModel.prepText,
                                         cookTime: $viewModel.cookText,
                                         optionalDisplay: "create.display.desc".localized)
+                .onTapGesture {
+                    hideKeyboard()
+                }
                 if !viewModel.recipe.ingredients.isEmpty || viewModel.editingEnabled {
                     EditableSectionView(list: $viewModel.recipe.ingredients,
                                         isEditing: $viewModel.editingEnabled,
