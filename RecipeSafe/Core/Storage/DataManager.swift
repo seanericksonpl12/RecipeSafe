@@ -31,10 +31,17 @@ class DataManager {
         newRecipe.cookTime = recipe.cookTime
         newRecipe.prepTime = recipe.prepTime
         newRecipe.url = recipe.url
-        newRecipe.imageUrl = recipe.img
-        newRecipe.photoData = recipe.photoData
         newRecipe.ingredients = []
         newRecipe.instructions = []
+        switch recipe.img {
+        case .downloaded(let url):
+            newRecipe.imageUrl = url
+        case .selected(let data):
+            newRecipe.photoData = data
+        case .none:
+            newRecipe.photoData = nil
+            newRecipe.imageUrl = nil
+        }
         recipe.ingredients.forEach { item in
             let i = Ingredient(context: self.viewContext)
             i.value = item
@@ -65,9 +72,11 @@ class DataManager {
     func updateDataEntity(recipe: Recipe) {
         recipe.dataEntity?.title = recipe.title
         recipe.dataEntity?.desc = recipe.description
-        recipe.dataEntity?.photoData = recipe.photoData
         recipe.dataEntity?.ingredients = []
         recipe.dataEntity?.instructions = []
+        if case .selected(let data) = recipe.img {
+            recipe.dataEntity?.photoData = data
+        }
         recipe.ingredients.forEach {
             let i = Ingredient(context: self.viewContext)
             i.value = $0

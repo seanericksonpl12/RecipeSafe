@@ -139,8 +139,11 @@ extension RecipeJSONParser {
             throw NetworkError.recipeMissingItem("No Instructions")
         }
         
-        let img: URL? = json[RecipeKeys.imageUrl.rawValue]?
-            .url
+        var img: ImageData = .none
+        
+        if let imgUrl = json[RecipeKeys.imageUrl.rawValue]?.url {
+            img = .downloaded(imgUrl)
+        }
         
         let description = json[RecipeKeys.description.rawValue]?
             .stringValue

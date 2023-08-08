@@ -59,6 +59,8 @@
 		92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */; };
 		929316FA2A816BF30089A55D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876C2A608C9200117A59 /* ContentView.swift */; };
 		9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171A2A819FA30089A55D /* CustomTextField.swift */; };
+		9293171E2A81EB630089A55D /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171D2A81EB630089A55D /* ImageData.swift */; };
+		929317202A828E2D0089A55D /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171F2A828E2D0089A55D /* IconImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +160,8 @@
 		926A4A952A748AD100457935 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		9293171A2A819FA30089A55D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		9293171D2A81EB630089A55D /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
+		9293171F2A828E2D0089A55D /* IconImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -360,6 +364,7 @@
 				925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */,
 				920DA35A2A6F0B7E0086ADB5 /* ViewState.swift */,
 				926A4A922A72B7AC00457935 /* RecipeRequest.swift */,
+				9293171D2A81EB630089A55D /* ImageData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -511,6 +516,7 @@
 			isa = PBXGroup;
 			children = (
 				9293171A2A819FA30089A55D /* CustomTextField.swift */,
+				9293171F2A828E2D0089A55D /* IconImage.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -700,6 +706,7 @@
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
 				9201F9872A7AF22C00A6021A /* JSONParser.swift in Sources */,
 				920DA3592A6F053A0086ADB5 /* LoadingView.swift in Sources */,
+				929317202A828E2D0089A55D /* IconImage.swift in Sources */,
 				926687A42A60CA9E00117A59 /* ContentViewModel.swift in Sources */,
 				9247212C2A75B06500D879CA /* EmptyListView.swift in Sources */,
 				9201F97D2A7852AE00A6021A /* CreateRecipeViewModel.swift in Sources */,
@@ -712,6 +719,7 @@
 				926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */,
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
 				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
+				9293171E2A81EB630089A55D /* ImageData.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
 				920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */,

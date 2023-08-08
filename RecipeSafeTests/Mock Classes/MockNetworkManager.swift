@@ -19,7 +19,7 @@ class MockNetworkManager: NetworkManager {
                                 description: "Test Description",
                                 ingredients: ["i 1", "i 2"],
                                 instructions: ["in 1", "in 2"],
-                                img: nil,
+                                img: .none,
                                 url: nil,
                                 prepTime: "10 min",
                                 cookTime: "20 min")

@@ -26,40 +26,15 @@ struct EditableHeaderView: View {
     var body: some View {
         HStack {
             Spacer()
-            // MARK: - Thumbnail Image
+
             PhotosPicker(selection: $photoItem, matching: .images) {
-                if let data = recipe.photoData, let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: 70, maxHeight: 70)
-                        .clipShape(Circle())
-                        .padding(.leading)
-                } else if let url = recipe.img {
-                    AsyncImage(url: url) { img in
-                        img.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(maxWidth: 70, maxHeight: 70)
-                            .clipShape(Circle())
-                    } placeholder: {
-                        LoadingView()
-                            .frame(maxWidth: 70, maxHeight: 70)
-                    }
-                } else if isEditing {
-                    Image(systemName: "plus.circle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: 70, maxHeight: 70)
-                        .clipShape(Circle())
-                        .padding(.leading)
-                }
+                IconImage(isEditing: $isEditing, img: $recipe.img)
             }
             .onChange(of: photoItem) { _ in
                 pickPhoto()
             }
             .disabled(!isEditing)
             
-            // MARK: - Title
             TextField("", text: $recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                 .font(.title)
                 .fontWeight(.heavy)
@@ -79,7 +54,7 @@ struct EditableHeaderView: View {
         photoItem?.loadTransferable(type: Data.self) { result in
             if let data = try? result.get() {
                 DispatchQueue.main.async {
-                    self.recipe.photoData = data
+                    self.recipe.img = .selected(data)
                 }
             }
         }
