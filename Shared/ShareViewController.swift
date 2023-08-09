@@ -32,7 +32,23 @@ class ShareViewController: UIViewController {
         provider.loadItem(forTypeIdentifier: UTType.url.identifier) { (item, error) in
             if let error = error { print(error.localizedDescription) }
             
-            if let url = item as? NSURL, let urlString = url.absoluteString, let finalURL = URL(string: "RecipeSafe://".appending(urlString)) {
+            if let url = item as? NSURL {
+                guard let itemComponents = URLComponents(url: url as URL, resolvingAgainstBaseURL: true) else {
+                    return
+                }
+                if itemComponents.scheme != "https" {
+                    return
+                }
+                guard let urlStr = itemComponents.host?.appending(itemComponents.path) else {
+                    return
+                }
+                var urlComponents = URLComponents()
+                urlComponents.scheme = "RecipeSafe"
+                urlComponents.host = "open-recipe"
+                urlComponents.queryItems = [URLQueryItem(name: "url", value: urlStr)]
+                guard let finalURL = urlComponents.url else {
+                    return
+                }
                 self.extensionContext?.completeRequest(returningItems: nil) { _ in
                     _ = self.openURL(finalURL)
                 }

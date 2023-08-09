@@ -51,10 +51,37 @@ import Combine
 extension ContentViewModel {
     
     // MARK: - URL Handling
-    func onURLOpen(url: String) {
-        self.viewState = .loading
+    func onURLOpen(url: URL) {
         self.navPath = .init()
-        network.networkRequest(url: url).sink { [weak self] status in
+        guard url.scheme == "RecipeSafe" else {
+            self.displayBadSite = true
+            self.viewState = .failedToLoad
+            return
+        }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            self.displayBadSite = true
+            self.viewState = .failedToLoad
+            return
+        }
+        guard components.host == "open-recipe" else {
+            self.displayBadSite = true
+            self.viewState = .failedToLoad
+            return
+        }
+        guard let embeddedUrl = components.queryItems?.first(where: { $0.name == "url" })?.value else {
+            self.displayBadSite = true
+            self.viewState = .failedToLoad
+            return
+        }
+        let recipeComponents = URLComponents(string: "https://".appending(embeddedUrl))
+        guard let urlStr = recipeComponents?.url?.absoluteString else {
+            self.displayBadSite = true
+            self.viewState = .failedToLoad
+            return
+        }
+        self.viewState = .loading
+        
+        network.networkRequest(url: urlStr).sink { [weak self] status in
             guard let self = self else { return }
             switch status {
             case .finished:
@@ -66,6 +93,7 @@ extension ContentViewModel {
             }
         } receiveValue: { [weak self] recipe in
             guard let self = self else { return }
+            self.viewState = .successfullyLoaded
             self.handleNewRecipe(recipe)
         }
         .store(in: &subscriptions)
@@ -73,7 +101,6 @@ extension ContentViewModel {
     
     // MARK: - Recipe Handling
     private func handleNewRecipe(_ recipe: Recipe) {
-        self.viewState = .successfullyLoaded
         var newRecipe = recipe
         if let duplicate = dataManager.findDuplicates(newRecipe) {
             self.duplicateFound = true
@@ -82,6 +109,7 @@ extension ContentViewModel {
         } else {
             DispatchQueue.main.async {
                 newRecipe.dataEntity = self.dataManager.saveItem(newRecipe)
+                self.navPath = NavigationPath()
                 self.navPath.append(newRecipe)
             }
         }
@@ -104,7 +132,7 @@ extension ContentViewModel {
     }
     
     func deleteItem(offset: IndexSet, list: FetchedResults<RecipeItem>) {
-       dataManager.deleteItem(offset: offset, list: list)
+        dataManager.deleteItem(offset: offset, list: list)
     }
 }
 

@@ -33,9 +33,9 @@ struct EditableDescriptionView: View {
                     Spacer()
                     if !prepTime.isEmpty || isEditing {
                         CustomTextField(text: $prepTime,
-                                        prompt: "preptime",
+                                        prompt: "recipe.preptime.label".localized,
                                         promptAlign: .leading,
-                                        staticLabel: "Prep Time: ",
+                                        staticLabel: "recipe.preptime".localized,
                                         font: .footnote,
                                         fontWeight: .light,
                                         axis: .horizontal)
@@ -44,9 +44,9 @@ struct EditableDescriptionView: View {
                     Spacer()
                     if !cookTime.isEmpty || isEditing {
                         CustomTextField(text: $cookTime,
-                                        prompt: "cooktime",
+                                        prompt: "recipe.preptime.label".localized,
                                         promptAlign: .leading,
-                                        staticLabel: "Cook Time: ",
+                                        staticLabel: "recipe.cooktime".localized,
                                         font: .footnote,
                                         fontWeight: .light,
                                         axis: .horizontal)
