@@ -25,6 +25,7 @@
 "recipe.cooktime" = "Cook Time: ";
 "recipe.preptime" = "Prep Time: ";
 "recipe.title.new" = "New Recipe";
+"recipe.preptime.label" = "5 min";
 
 // MARK: - CreateRecipeView
 "create.display.title" = "Title";
