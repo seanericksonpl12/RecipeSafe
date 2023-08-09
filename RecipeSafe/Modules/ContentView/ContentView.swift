@@ -94,7 +94,7 @@ struct ContentView: View {
                 
                 // MARK: - URL Open
                 .onOpenURL { url in
-                    viewModel.onURLOpen(url: url.absoluteString)
+                    viewModel.onURLOpen(url: url)
                 }
                 
                 // MARK: - Alerts
