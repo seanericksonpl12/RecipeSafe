@@ -18,12 +18,14 @@ import Combine
     var cookText: String { get set }
     var prepText: String { get set }
     var alertSwitch: Bool { get set }
+    var groupSwitch: Bool { get set }
     var dismiss: DismissAction? { get set }
     
     // MARK: - Actions
     var saveAction: () -> Void { get }
     var deleteAction: () -> Void { get }
     var cancelAction: () -> Void { get }
+    var groupAction: () -> Void { get }
     
     
     // MARK: - Functions
@@ -33,6 +35,8 @@ import Combine
     func deleteFromIngr(offsets: IndexSet)
     func deleteFromInst(offsets: IndexSet)
     func deleteSelf()
+    func getGroups() -> [GroupItem]
+    func addToGroup(_ group: GroupItem)
     func setup(dismiss: DismissAction)
 }
 

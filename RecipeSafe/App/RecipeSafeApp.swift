@@ -13,8 +13,18 @@ struct RecipeSafeApp: App {
 
     var body: some Scene {
         WindowGroup {
+            TabView {
                 ContentView(viewModel: ContentViewModel())
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .tabItem {
+                        Label("All Recipes", systemImage: "circle.fill")
+                    }
+                GroupGridView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .tabItem {
+                        Label("Groups", systemImage: "circle")
+                    }
+            }
         }
     }
 }

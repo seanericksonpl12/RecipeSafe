@@ -132,4 +132,40 @@ class DataManager {
             return nil
         }
     }
+    
+    func getGroups() -> [GroupItem] {
+        do {
+            let request = try self.viewContext.fetch(NSFetchRequest(entityName: "GroupItem"))
+            guard let groups = request as? [GroupItem] else { print("casting fail"); throw URLError(.resourceUnavailable) }
+            print("groups: \(groups)")
+            return groups
+        } catch {
+            print("fail!!!!")
+            return []
+        }
+    }
+    
+    func addToGroup(recipe: Recipe, _ group: GroupItem) {
+        if let data = recipe.dataEntity {
+            group.addToRecipes(data)
+            do {
+                try viewContext.save()
+            } catch {
+                print(String(describing: error))
+                return
+            }
+        }
+    }
+    
+    func getRecipesOutsideGroup(for group: GroupItem) -> [RecipeItem] {
+        do {
+            let request = try self.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
+            guard let recipes = request as? [RecipeItem] else { print("casting fail"); throw URLError(.resourceUnavailable) }
+            
+            return recipes.filter { $0.group != group}
+        } catch {
+            print(String(describing: error))
+            return []
+        }
+    }
 }

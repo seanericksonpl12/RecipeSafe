@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="GroupItem" representedClassName="GroupItem" syncable="YES" codeGenerationType="class">
+        <attribute name="title" attributeType="String"/>
+        <relationship name="recipes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RecipeItem" inverseName="group" inverseEntity="RecipeItem"/>
+    </entity>
     <entity name="Ingredient" representedClassName="Ingredient" syncable="YES" codeGenerationType="class">
         <attribute name="value" optional="YES" attributeType="String"/>
         <relationship name="recipe" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RecipeItem" inverseName="ingredients" inverseEntity="RecipeItem"/>
@@ -17,6 +21,7 @@
         <attribute name="prepTime" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="url" optional="YES" attributeType="URI"/>
+        <relationship name="group" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GroupItem" inverseName="recipes" inverseEntity="GroupItem"/>
         <relationship name="ingredients" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Ingredient" inverseName="recipe" inverseEntity="Ingredient"/>
         <relationship name="instructions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Instruction" inverseName="recipe" inverseEntity="Instruction"/>
     </entity>

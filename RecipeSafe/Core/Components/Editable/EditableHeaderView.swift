@@ -19,6 +19,7 @@ struct EditableHeaderView: View {
     var saveAction: () -> Void = {}
     var cancelAction: () -> Void = {}
     var deleteAction: () -> Void = {}
+    var groupAction: () -> Void = {}
     
     var optionalDisplay: String?
     
@@ -46,7 +47,8 @@ struct EditableHeaderView: View {
                          url: recipe.url,
                          saveAction: saveAction,
                          cancelAction: cancelAction,
-                         deleteAction: deleteAction)
+                         deleteAction: deleteAction,
+                         groupAction: groupAction)
     }
     
     // MARK: - Photo Selection

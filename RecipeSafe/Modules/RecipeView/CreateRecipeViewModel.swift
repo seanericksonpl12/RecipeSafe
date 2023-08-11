@@ -24,6 +24,8 @@ import SwiftUI
     
     // MARK: - Properties
     var alertSwitch: Bool = false
+    var groupSwitch: Bool = false
+    
     var dismiss: DismissAction?
     
     // MARK: - Computed
@@ -37,6 +39,10 @@ import SwiftUI
     
     var cancelAction: () -> Void {
         { self.cancelEditing() }
+    }
+    
+    var groupAction: () -> Void {
+        {}
     }
     
     // MARK: - Init
@@ -77,5 +83,13 @@ extension CreateRecipeViewModel {
         dataManager.deleteDataEntity(recipe: self.recipe)
         self.recipe.dataEntity = nil
         dismiss?.callAsFunction()
+    }
+    
+    func getGroups() -> [GroupItem] {
+        dataManager.getGroups()
+    }
+    
+    func addToGroup(_ group: GroupItem) {
+        dataManager.addToGroup(recipe: self.recipe, group)
     }
 }

@@ -13,12 +13,14 @@ extension View {
                          url: URL?,
                          saveAction: @escaping () -> Void,
                          cancelAction: @escaping () -> Void,
-                         deleteAction: @escaping () -> Void) -> some View {
+                         deleteAction: @escaping () -> Void,
+                         groupAction: @escaping () -> Void) -> some View {
         
         modifier(EditableToolbar(isEditing: isEditing,
                                  saveAction: saveAction,
                                  cancelAction: cancelAction,
                                  deleteAction: deleteAction,
+                                 groupAction: groupAction,
                                  urlLink: url))
     }
 }

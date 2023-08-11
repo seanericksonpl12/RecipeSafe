@@ -56,11 +56,15 @@
 		926687B32A619ABE00117A59 /* Shared.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 926687A92A619ABE00117A59 /* Shared.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A8E2A71FD9000457935 /* NetworkRequest.swift */; };
 		926A4A932A72B7AC00457935 /* RecipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A922A72B7AC00457935 /* RecipeRequest.swift */; };
+		9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */; };
 		92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */; };
 		929316FA2A816BF30089A55D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876C2A608C9200117A59 /* ContentView.swift */; };
 		9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171A2A819FA30089A55D /* CustomTextField.swift */; };
 		9293171E2A81EB630089A55D /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171D2A81EB630089A55D /* ImageData.swift */; };
 		929317202A828E2D0089A55D /* IconImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171F2A828E2D0089A55D /* IconImage.swift */; };
+		9293177A2A85CA180089A55D /* GroupGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929317792A85CA180089A55D /* GroupGridView.swift */; };
+		9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293177B2A85CA240089A55D /* GroupGridViewModel.swift */; };
+		9293177F2A85CFE30089A55D /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293177E2A85CFE30089A55D /* GroupView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,10 +162,14 @@
 		926A4A8E2A71FD9000457935 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		926A4A922A72B7AC00457935 /* RecipeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRequest.swift; sourceTree = "<group>"; };
 		926A4A952A748AD100457935 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
+		9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		9293171A2A819FA30089A55D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		9293171D2A81EB630089A55D /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		9293171F2A828E2D0089A55D /* IconImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconImage.swift; sourceTree = "<group>"; };
+		929317792A85CA180089A55D /* GroupGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridView.swift; sourceTree = "<group>"; };
+		9293177B2A85CA240089A55D /* GroupGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModel.swift; sourceTree = "<group>"; };
+		9293177E2A85CFE30089A55D /* GroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,6 +328,8 @@
 			isa = PBXGroup;
 			children = (
 				9201F97E2A795F5A00A6021A /* Protocol */,
+				929317782A85C9FC0089A55D /* GroupGridView */,
+				9293177D2A85CFCE0089A55D /* GroupView */,
 				92924CD92A673B46000EC3B8 /* RecipeView */,
 				92924CD82A673B33000EC3B8 /* ContentView */,
 			);
@@ -521,6 +531,24 @@
 			path = Custom;
 			sourceTree = "<group>";
 		};
+		929317782A85C9FC0089A55D /* GroupGridView */ = {
+			isa = PBXGroup;
+			children = (
+				929317792A85CA180089A55D /* GroupGridView.swift */,
+				9293177B2A85CA240089A55D /* GroupGridViewModel.swift */,
+			);
+			path = GroupGridView;
+			sourceTree = "<group>";
+		};
+		9293177D2A85CFCE0089A55D /* GroupView */ = {
+			isa = PBXGroup;
+			children = (
+				9293177E2A85CFE30089A55D /* GroupView.swift */,
+				9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */,
+			);
+			path = GroupView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -713,14 +741,18 @@
 				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
 				920DA36B2A70270F0086ADB5 /* EditableToolbar.swift in Sources */,
 				926687A22A60A26600117A59 /* Recipe.swift in Sources */,
+				9293177F2A85CFE30089A55D /* GroupView.swift in Sources */,
+				9293177A2A85CA180089A55D /* GroupGridView.swift in Sources */,
 				926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */,
 				9201F9952A7C250000A6021A /* DataManager.swift in Sources */,
 				92535C232A7174F1003E30BD /* NetworkProtocol.swift in Sources */,
 				926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */,
+				9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */,
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
 				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
 				9293171E2A81EB630089A55D /* ImageData.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
+				9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */,
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
 				920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */,
 				920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */,
@@ -1049,7 +1081,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;
@@ -1075,7 +1107,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;
