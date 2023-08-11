@@ -87,8 +87,10 @@ extension ContentViewModel {
             case .finished:
                 break
             case .failure(let error):
-                self.displayBadSite = true
                 self.viewState = .failedToLoad
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.displayBadSite = true
+                }
                 print(error.localizedDescription)
             }
         } receiveValue: { [weak self] recipe in
@@ -107,7 +109,7 @@ extension ContentViewModel {
             waitingRecipe = newRecipe
             waitingDuplicate = duplicate
         } else {
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 newRecipe.dataEntity = self.dataManager.saveItem(newRecipe)
                 self.navPath = NavigationPath()
                 self.navPath.append(newRecipe)
