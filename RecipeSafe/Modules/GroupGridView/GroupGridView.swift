@@ -14,44 +14,71 @@ struct GroupGridView: View {
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var groups: FetchedResults<GroupItem>
     
+    @StateObject private var viewModel: GroupGridViewModel = GroupGridViewModel()
+    
     var body: some View {
         NavigationStack {
             GeometryReader { geo in
                 ScrollView {
-                    Button("add group") {
-                        let group = GroupItem(context: self.viewContext)
-                        group.title = "title"
-                    }
+                    
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: (geo.size.width / 3)))]) {
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(.blue, lineWidth: 4)
-                            .frame(width: (geo.size.width / 3), height: (geo.size.width / 3))
-                            .overlay {
-                                Image(systemName: "plus.circle")
-                                    .resizable()
-                                    .foregroundColor(.blue)
-                                    .padding()
-                            }
-                            .padding()
-                            .onTapGesture {
-                                let group = GroupItem(context: self.viewContext)
-                                group.title = "title"
-                                try? self.viewContext.save()
-                            }
-                        ForEach(Array(groups.enumerated()), id: \.offset) { index, item in
-                            NavigationLink {
-                                GroupView(viewModel: GroupViewModel(group: item))
-                                    .navigationTitle(item.title ?? "")
-                            } label: {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(.blue, lineWidth: 4)
-                                    .frame(width: (geo.size.width / 3), height: (geo.size.width / 3))
-                                    .overlay {
-                                        Text(item.title ?? "" )
-                                    }
-                                    .padding()
+                        if viewModel.editingEnabled {
+                            InsertGridButton(insertAction: { viewModel.addGroup() },
+                                             width: (geo.size.width / 3),
+                                             height: (geo.size.width / 3))
+                        }
+                        ForEach(groups) { item in
+                            if viewModel.editingEnabled {
+                                GridButton(isEditing: $viewModel.editingEnabled,
+                                           geoProxy: geo,
+                                           group: item,
+                                           deleteAction: { self.viewModel.toggleDeleteGroup(item) })
+                            } else {
+                                NavigationLink {
+                                    GroupView(viewModel: GroupViewModel(group: item))
+                                        .navigationTitle(item.title ?? "")
+                                } label: {
+                                    GridButton(isEditing: $viewModel.editingEnabled,
+                                               geoProxy: geo,
+                                               group: item,
+                                               deleteAction: {self.viewModel.toggleDeleteGroup(item)})
+                                }
                             }
                         }
+                    }
+                }
+                .scrollContentBackground(.hidden)
+                .background {
+                    Image("logo-background")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
+                        .ignoresSafeArea(.all)
+                        .opacity(0.3)
+                }
+            }
+            .toolbar {
+                ToolbarItem {
+                    Button(viewModel.editingEnabled ? "Done" : "Edit") {
+                        viewModel.toggleEdit()
+                    }
+                }
+            }
+            .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+            .popover(isPresented: $viewModel.addGroupSwitch) {
+                NavigationStack {
+                    NewGroupPopover(titleText: $viewModel.newGroupText,
+                                    selectedRecipes: $viewModel.selectedRecipes,
+                                    recipes: viewModel.getRecipes())
+                    .editableToolbar(isEditing: $viewModel.editingEnabled,
+                                     saveAction: {self.viewModel.saveNewGroup()},
+                                     cancelAction: {self.viewModel.cancelNewGroup()})
+                }
+            }
+            .alert("Delete this group?", isPresented: $viewModel.deleteGroupSwitch) {
+                Button("OK", role: .destructive) {
+                    if let item = viewModel.onDeckToDelete {
+                        viewModel.deleteGroup(item)
                     }
                 }
             }

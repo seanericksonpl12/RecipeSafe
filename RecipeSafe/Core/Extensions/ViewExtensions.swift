@@ -10,11 +10,11 @@ import SwiftUI
 
 extension View {
     func editableToolbar(isEditing: Binding<Bool>,
-                         url: URL?,
-                         saveAction: @escaping () -> Void,
-                         cancelAction: @escaping () -> Void,
-                         deleteAction: @escaping () -> Void,
-                         groupAction: @escaping () -> Void) -> some View {
+                         url: URL? = nil,
+                         saveAction: @escaping () -> Void = {},
+                         cancelAction: @escaping () -> Void = {},
+                         deleteAction: @escaping () -> Void = {},
+                         groupAction: @escaping () -> Void = {}) -> some View {
         
         modifier(EditableToolbar(isEditing: isEditing,
                                  saveAction: saveAction,

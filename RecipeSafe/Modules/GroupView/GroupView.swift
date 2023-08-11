@@ -27,16 +27,9 @@ struct GroupView: View {
             }
         }
         .popover(isPresented: $viewModel.addRecipeSwitch) {
-            
-                List(viewModel.getRecipes()) { recipe in
-                    Text(recipe.title ?? "")
+            List(viewModel.getRecipes()) { recipe in
+                Text(recipe.title ?? "")
             }
         }
     }
 }
-
-//struct GroupView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        GroupView()
-//    }
-//}

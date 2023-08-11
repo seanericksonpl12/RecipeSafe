@@ -57,6 +57,9 @@
 		926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A8E2A71FD9000457935 /* NetworkRequest.swift */; };
 		926A4A932A72B7AC00457935 /* RecipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A922A72B7AC00457935 /* RecipeRequest.swift */; };
 		9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */; };
+		9272DD1F2A867A7C00DD4549 /* GridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD1E2A867A7C00DD4549 /* GridButton.swift */; };
+		9272DD212A8691E600DD4549 /* InsertGridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD202A8691E600DD4549 /* InsertGridButton.swift */; };
+		9272DD232A86944000DD4549 /* NewGroupPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD222A86944000DD4549 /* NewGroupPopover.swift */; };
 		92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */; };
 		929316FA2A816BF30089A55D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876C2A608C9200117A59 /* ContentView.swift */; };
 		9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171A2A819FA30089A55D /* CustomTextField.swift */; };
@@ -163,6 +166,9 @@
 		926A4A922A72B7AC00457935 /* RecipeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRequest.swift; sourceTree = "<group>"; };
 		926A4A952A748AD100457935 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
+		9272DD1E2A867A7C00DD4549 /* GridButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridButton.swift; sourceTree = "<group>"; };
+		9272DD202A8691E600DD4549 /* InsertGridButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertGridButton.swift; sourceTree = "<group>"; };
+		9272DD222A86944000DD4549 /* NewGroupPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupPopover.swift; sourceTree = "<group>"; };
 		92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		9293171A2A819FA30089A55D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		9293171D2A81EB630089A55D /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
@@ -527,6 +533,9 @@
 			children = (
 				9293171A2A819FA30089A55D /* CustomTextField.swift */,
 				9293171F2A828E2D0089A55D /* IconImage.swift */,
+				9272DD1E2A867A7C00DD4549 /* GridButton.swift */,
+				9272DD202A8691E600DD4549 /* InsertGridButton.swift */,
+				9272DD222A86944000DD4549 /* NewGroupPopover.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -732,10 +741,12 @@
 				926687742A608C9200117A59 /* Persistence.swift in Sources */,
 				925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */,
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
+				9272DD1F2A867A7C00DD4549 /* GridButton.swift in Sources */,
 				9201F9872A7AF22C00A6021A /* JSONParser.swift in Sources */,
 				920DA3592A6F053A0086ADB5 /* LoadingView.swift in Sources */,
 				929317202A828E2D0089A55D /* IconImage.swift in Sources */,
 				926687A42A60CA9E00117A59 /* ContentViewModel.swift in Sources */,
+				9272DD212A8691E600DD4549 /* InsertGridButton.swift in Sources */,
 				9247212C2A75B06500D879CA /* EmptyListView.swift in Sources */,
 				9201F97D2A7852AE00A6021A /* CreateRecipeViewModel.swift in Sources */,
 				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
@@ -755,6 +766,7 @@
 				9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */,
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
 				920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */,
+				9272DD232A86944000DD4549 /* NewGroupPopover.swift in Sources */,
 				920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */,
 				9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */,
 				926A4A932A72B7AC00457935 /* RecipeRequest.swift in Sources */,
