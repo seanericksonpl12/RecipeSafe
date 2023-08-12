@@ -15,12 +15,12 @@ struct InsertGridButton: View {
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
-            .stroke(.blue, lineWidth: 4)
+            .stroke(.secondary, lineWidth: 4)
             .frame(width: width, height: height)
             .overlay {
                 Image(systemName: "plus.circle")
                     .resizable()
-                    .foregroundColor(.blue)
+                    .foregroundColor(.secondary)
                     .padding()
             }
             .padding()

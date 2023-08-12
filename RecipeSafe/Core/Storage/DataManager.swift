@@ -96,6 +96,17 @@ class DataManager {
         }
     }
     
+    func updateDataEntity(group: GroupModel) {
+        group.dataEntity.title = group.title
+        group.dataEntity.recipes = []
+        group.recipes.forEach { group.dataEntity.addToRecipes($0) }
+        do {
+            try self.viewContext.save()
+        } catch {
+            print(String(describing: error))
+        }
+    }
+    
     func deleteDataEntity(recipe: Recipe) {
         if let entity = recipe.dataEntity {
             self.viewContext.delete(entity)
@@ -107,7 +118,7 @@ class DataManager {
         }
     }
     
-    func deleteItem(offset: IndexSet, list: FetchedResults<RecipeItem>) {
+    func deleteItem<T: NSManagedObject>(offset: IndexSet, list: FetchedResults<T>) {
         offset.map { list[$0] }
             .forEach {
                 self.viewContext.delete($0)
@@ -133,18 +144,6 @@ class DataManager {
         }
     }
     
-    func getGroups() -> [GroupItem] {
-        do {
-            let request = try self.viewContext.fetch(NSFetchRequest(entityName: "GroupItem"))
-            guard let groups = request as? [GroupItem] else { print("casting fail"); throw URLError(.resourceUnavailable) }
-            print("groups: \(groups)")
-            return groups
-        } catch {
-            print("fail!!!!")
-            return []
-        }
-    }
-    
     func addToGroup(recipe: Recipe, _ group: GroupItem) {
         if let data = recipe.dataEntity {
             group.addToRecipes(data)
@@ -157,30 +156,6 @@ class DataManager {
         }
     }
     
-    func getRecipesOutsideGroup(for group: GroupItem?) -> [RecipeItem] {
-        do {
-            let request = try self.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
-            guard let recipes = request as? [RecipeItem] else { print("casting fail"); throw URLError(.resourceUnavailable) }
-            
-            return recipes.filter { $0.group != group}
-        } catch {
-            print(String(describing: error))
-            return []
-        }
-    }
-    
-    func getUngroupedRecipes() -> [RecipeItem] {
-        do {
-            let request = try self.viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
-            guard let recipes = request as? [RecipeItem] else { print("casting fail"); throw URLError(.resourceUnavailable) }
-            
-            return recipes.filter { $0.group == nil }
-        } catch {
-            print(String(describing: error))
-            return []
-        }
-    }
-    
     func addGroup(title: String, recipes: [RecipeItem]) {
         let group = GroupItem(context: self.viewContext)
         group.title = title
@@ -189,6 +164,17 @@ class DataManager {
             try viewContext.save()
         } catch {
             print(String(describing: error))
+        }
+    }
+    
+    func getItems<T: NSManagedObject>(filter: ((T) -> Bool)) -> [T] {
+        do {
+            let request = try self.viewContext.fetch(NSFetchRequest(entityName: T.description()))
+            guard let items = request as? [T] else { print("casting fail"); throw URLError(.resourceUnavailable) }
+            return items.filter(filter)
+        } catch {
+            print(String(describing: error))
+            return []
         }
     }
 }

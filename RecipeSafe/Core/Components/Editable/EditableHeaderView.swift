@@ -45,10 +45,11 @@ struct EditableHeaderView: View {
         }
         .editableToolbar(isEditing: $isEditing,
                          url: recipe.url,
+                         alternateLabel: "Add to Group",
                          saveAction: saveAction,
                          cancelAction: cancelAction,
                          deleteAction: deleteAction,
-                         groupAction: groupAction)
+                         alternateAction: groupAction)
     }
     
     // MARK: - Photo Selection

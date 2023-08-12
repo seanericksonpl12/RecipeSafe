@@ -80,7 +80,7 @@ extension RecipeViewModel {
     }
     
     func getGroups() -> [GroupItem] {
-        dataManager.getGroups()
+        dataManager.getItems(filter: { _ in true })
     }
     
     func addToGroup(_ group: GroupItem) {

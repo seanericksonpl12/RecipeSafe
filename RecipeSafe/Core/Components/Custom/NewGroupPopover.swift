@@ -9,11 +9,14 @@ import SwiftUI
 
 struct NewGroupPopover: View {
     
+    // MARK: - Binding
     @Binding var titleText: String
     @Binding var selectedRecipes: [RecipeItem]
     
+    // MARK: - Properties
     var recipes: [RecipeItem]
     
+    // MARK: - Body
     var body: some View {
         VStack {
             HStack {
@@ -30,7 +33,7 @@ struct NewGroupPopover: View {
                         HStack {
                             Text(recipe.title ?? "")
                             Spacer()
-                            Image(systemName: selectedRecipes.contains(recipe) ? "circle.fill" : "circle")
+                            Image(systemName: selectedRecipes.contains(recipe) ? "checkmark.circle.fill" : "circle")
                                 .padding(.trailing)
                         }
                         .onTapGesture {

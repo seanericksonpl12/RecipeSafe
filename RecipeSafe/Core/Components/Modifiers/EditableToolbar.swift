@@ -15,8 +15,9 @@ struct EditableToolbar: ViewModifier {
     var saveAction: () -> Void
     var cancelAction: () -> Void
     var deleteAction: () -> Void
-    var groupAction: () -> Void
+    var alternateAction: () -> Void
     var urlLink: URL?
+    var alternateText: String?
     
     func body(content: Content) -> some View {
         content
@@ -42,8 +43,10 @@ struct EditableToolbar: ViewModifier {
                                     isEditing = true
                                 }
                             }
-                            Button("Add to Group") {
-                                groupAction()
+                            if let text = alternateText {
+                                Button(text) {
+                                    alternateAction()
+                                }
                             }
                             if let url = urlLink {
                                 Link("button.link.safari".localized, destination: url)

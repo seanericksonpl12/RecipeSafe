@@ -19,8 +19,11 @@ struct GroupGridView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geo in
+                if groups.isEmpty && !viewModel.editingEnabled {
+                    EmptyListView()
+                        .frame(width: geo.size.width, height: geo.size.height)
+                }
                 ScrollView {
-                    
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: (geo.size.width / 3)))]) {
                         if viewModel.editingEnabled {
                             InsertGridButton(insertAction: { viewModel.addGroup() },
@@ -36,7 +39,6 @@ struct GroupGridView: View {
                             } else {
                                 NavigationLink {
                                     GroupView(viewModel: GroupViewModel(group: item))
-                                        .navigationTitle(item.title ?? "")
                                 } label: {
                                     GridButton(isEditing: $viewModel.editingEnabled,
                                                geoProxy: geo,
@@ -47,6 +49,7 @@ struct GroupGridView: View {
                         }
                     }
                 }
+                .scrollDisabled(groups.isEmpty && !viewModel.editingEnabled)
                 .scrollContentBackground(.hidden)
                 .background {
                     Image("logo-background")
@@ -71,6 +74,7 @@ struct GroupGridView: View {
                                     selectedRecipes: $viewModel.selectedRecipes,
                                     recipes: viewModel.getRecipes())
                     .editableToolbar(isEditing: $viewModel.editingEnabled,
+                                     alternateLabel: "",
                                      saveAction: {self.viewModel.saveNewGroup()},
                                      cancelAction: {self.viewModel.cancelNewGroup()})
                 }

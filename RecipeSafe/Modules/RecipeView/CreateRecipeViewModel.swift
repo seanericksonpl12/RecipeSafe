@@ -10,8 +10,6 @@ import SwiftUI
 
 @MainActor class CreateRecipeViewModel: EditableRecipeModel {
     
-    
-    
     // MARK: - Published
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = true
@@ -86,7 +84,7 @@ extension CreateRecipeViewModel {
     }
     
     func getGroups() -> [GroupItem] {
-        dataManager.getGroups()
+        dataManager.getItems(filter: { _ in true })
     }
     
     func addToGroup(_ group: GroupItem) {

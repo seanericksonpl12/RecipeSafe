@@ -16,11 +16,10 @@ import Combine
     @Published var deleteGroupSwitch: Bool = false
     @Published var newGroupText: String = ""
     @Published var selectedRecipes: [RecipeItem] = []
+    
     var onDeckToDelete: GroupItem?
     
     private var dataManager = DataManager()
-    
-    
 }
 
 extension GroupGridViewModel {
@@ -51,7 +50,7 @@ extension GroupGridViewModel {
     }
     
     func getRecipes() -> [RecipeItem] {
-        return dataManager.getUngroupedRecipes()
+        return dataManager.getItems(filter: { $0.group == nil })
     }
     
     func saveNewGroup() {
