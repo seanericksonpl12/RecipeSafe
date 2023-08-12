@@ -45,7 +45,7 @@ struct EditableHeaderView: View {
         }
         .editableToolbar(isEditing: $isEditing,
                          url: recipe.url,
-                         alternateLabel: "Add to Group",
+                         alternateLabel: "recipe.group.add".localized,
                          saveAction: saveAction,
                          cancelAction: cancelAction,
                          deleteAction: deleteAction,

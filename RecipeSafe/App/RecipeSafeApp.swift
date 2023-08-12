@@ -18,13 +18,13 @@ struct RecipeSafeApp: App {
                 ContentView(viewModel: ContentViewModel())
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .tabItem {
-                        Label("All Recipes", systemImage: "circle.fill")
+                        Label("app.all".localized, systemImage: "circle.fill")
                     }
                     .tag(1)
                 GroupGridView()
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .tabItem {
-                        Label("Groups", systemImage: "circle")
+                        Label("app.groups".localized, systemImage: "circle")
                     }
                     .tag(2)
             }

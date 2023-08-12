@@ -15,7 +15,7 @@ struct GroupModel: Hashable {
     
     init(dataEntity: GroupItem) {
         self.recipes = dataEntity.recipes?.array as? [RecipeItem] ?? []
-        self.title = dataEntity.title ?? "Group"
+        self.title = dataEntity.title ?? "group.default".localized
         self.dataEntity = dataEntity
     }
 }

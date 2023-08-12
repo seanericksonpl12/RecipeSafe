@@ -17,7 +17,7 @@ struct GroupView: View {
         NavigationStack {
             HStack {
                 Spacer()
-                TextField("", text: $viewModel.group.title, prompt: Text("Group Name"), axis: .vertical)
+                TextField("", text: $viewModel.group.title, prompt: Text("group.title.prompt".localized), axis: .vertical)
                     .font(.title)
                     .padding(.leading)
                     .padding(.top)
@@ -56,7 +56,7 @@ struct GroupView: View {
                         Spacer()
                     }
                 } header: {
-                    Text("Add Recipes to " + viewModel.group.title)
+                    Text("group.list.add".localized + viewModel.group.title)
                 }
             }
             
@@ -67,8 +67,8 @@ struct GroupView: View {
                              saveAction: { viewModel.saveAddedRecipes() },
                              recipes: viewModel.getRecipes())
         }
-        .alert("Delete this group?", isPresented: $viewModel.deleteGroupSwitch) {
-            Button("OK", role: .destructive) {
+        .alert("group.alert.delete".localized, isPresented: $viewModel.deleteGroupSwitch) {
+            Button("button.delete".localized, role: .destructive) {
                 viewModel.deleteSelf()
             }
         }

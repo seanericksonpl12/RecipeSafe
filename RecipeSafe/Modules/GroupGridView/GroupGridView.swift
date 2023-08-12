@@ -62,7 +62,7 @@ struct GroupGridView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    Button(viewModel.editingEnabled ? "Done" : "Edit") {
+                    Button(viewModel.editingEnabled ? "button.done".localized : "button.edit".localized) {
                         viewModel.toggleEdit()
                     }
                 }
@@ -79,8 +79,8 @@ struct GroupGridView: View {
                                      cancelAction: {self.viewModel.cancelNewGroup()})
                 }
             }
-            .alert("Delete this group?", isPresented: $viewModel.deleteGroupSwitch) {
-                Button("OK", role: .destructive) {
+            .alert("group.alert.delete".localized, isPresented: $viewModel.deleteGroupSwitch) {
+                Button("button.delete".localized, role: .destructive) {
                     if let item = viewModel.onDeckToDelete {
                         viewModel.deleteGroup(item)
                     }

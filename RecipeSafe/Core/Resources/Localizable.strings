@@ -6,6 +6,10 @@
   
 */
 
+// MARK: - App
+"app.all" = "All Recipes";
+"app.group" = "groups";
+
 // MARK: - ContentView
 "content.nav.title" = "Recipes";
 "content.toolbar.add" = "Add Item";
@@ -26,11 +30,22 @@
 "recipe.preptime" = "Prep Time: ";
 "recipe.title.new" = "New Recipe";
 "recipe.preptime.label" = "5 min";
+"recipe.group.add" = "Add to Group";
 
 // MARK: - CreateRecipeView
 "create.display.title" = "Title";
 "create.alert.title" = "Add a title before saving!";
 "create.display.desc" = "Description";
+
+
+// MARK: - GroupViews
+"group.title.prompt" = "Group Name";
+"group.list.add" = "Add Recipes to ";
+"group.alert.delete" = "Delete This Group?";
+"group.new.title" = "Title";
+"group.new.header" = "Add Recipes: ";
+"group.recipes.add" = "Add Recipes";
+"group.default" = "Group"
 
 
 // MARK: - EmptyListView
@@ -41,8 +56,12 @@
 "button.ok" = "OK";
 "button.cancel" = "Cancel";
 "button.save" = "Save";
+"button.done" = "Done";
 "button.savecopy" = "Save Copy";
 "button.overwrite" = "Overwrite";
 "button.delete" = "Delete";
 "button.edit" = "Edit";
 "button.link.safari" = "Open in Safari";
+
+// MARK: - Other
+"tool.search" = "Search"

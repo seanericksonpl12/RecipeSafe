@@ -21,7 +21,7 @@ struct NewGroupPopover: View {
         VStack {
             HStack {
                 Spacer()
-                TextField("", text: $titleText, prompt: Text("Title"))
+                TextField("", text: $titleText, prompt: Text("group.new.title".localized))
                     .font(.title)
                     .fontWeight(.heavy)
                     .padding(.leading)
@@ -45,7 +45,7 @@ struct NewGroupPopover: View {
                         }
                     }
                 } header : {
-                    Text("Add Recipes: ")
+                    Text("group.new.header".localized)
                 }
                 
             }

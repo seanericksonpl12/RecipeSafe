@@ -45,13 +45,13 @@ struct AddRecipePopover: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Text("Add Recipes")
+                    Text("group.recipes.add".localized)
                         .font(.title)
                         .fontWeight(.heavy)
                         .padding()
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Save") {
+                    Button("button.save".localized) {
                         saveAction()
                     }
                     .padding()
@@ -59,7 +59,7 @@ struct AddRecipePopover: View {
             }
             
         }
-        .searchable(text: $searchText, prompt: Text("Search"))
+        .searchable(text: $searchText, prompt: Text("tool.search".localized))
         
     }
 }
