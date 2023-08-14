@@ -17,6 +17,7 @@ import CoreData
     var dataStack: PersistenceController!
     var networkManager: MockNetworkManager!
     var dataManager: MockDataManager!
+    var url: URL!
     
     override func setUp() {
         super.setUp()
@@ -27,6 +28,7 @@ import CoreData
         self.networkManager = MockNetworkManager()
         self.viewModel = ContentViewModel(dataManager: dataManager, networkManager: networkManager)
         try? dataStack.container.viewContext.save()
+        self.url = URL(string: "RecipeSafe://open-recipe?url=www.allrecipes.com/recipe/149975/beer-brats/")
     }
     
     
@@ -59,7 +61,7 @@ import CoreData
     func testGoodUrl() {
         self.networkManager.returnValidInput = true
         XCTAssertNil(self.dataManager.recipe)
-        viewModel.onURLOpen(url: "")
+        viewModel.onURLOpen(url: url)
         XCTAssertEqual(viewModel.viewState, .successfullyLoaded)
         XCTAssertFalse(viewModel.displayBadSite)
         let expectation = XCTestExpectation()
@@ -74,15 +76,16 @@ import CoreData
     
     func testBadUrl() {
         self.networkManager.returnValidInput = false
-        viewModel.onURLOpen(url: "")
-        XCTAssertTrue(viewModel.displayBadSite)
+        viewModel.onURLOpen(url: url)
+        let ex = XCTNSPredicateExpectation(predicate: NSPredicate(block: {_,_ in self.viewModel.displayBadSite}), object: self)
+        wait(for: [ex], timeout: 5)
         XCTAssertEqual(viewModel.viewState, .failedToLoad)
     }
     
     func testDuplicate() {
         self.networkManager.returnValidInput = true
         self.dataManager.findDuplicate = true
-        viewModel.onURLOpen(url: "")
+        viewModel.onURLOpen(url: url)
         XCTAssertTrue(viewModel.duplicateFound)
     }
     
@@ -93,7 +96,7 @@ import CoreData
         let saveExpectation = XCTestExpectation()
         self.dataManager.deleteItemExpectation = expectation
         self.dataManager.saveItemExpectation = saveExpectation
-        viewModel.onURLOpen(url: "")
+        viewModel.onURLOpen(url: url)
         viewModel.overwriteRecipe(deletingDup: true)
         wait(for: [expectation, saveExpectation], timeout: 5)
         
@@ -106,7 +109,7 @@ import CoreData
         self.dataManager.findDuplicate = true
         let saveExpectation = XCTestExpectation()
         self.dataManager.saveItemExpectation = saveExpectation
-        viewModel.onURLOpen(url: "")
+        viewModel.onURLOpen(url: url)
         viewModel.overwriteRecipe(deletingDup: false)
         wait(for: [saveExpectation], timeout: 5)
         

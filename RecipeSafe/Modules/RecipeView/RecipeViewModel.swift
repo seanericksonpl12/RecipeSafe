@@ -21,6 +21,7 @@ import CoreData
     @Published var cookText: String = ""
     @Published var prepText: String = ""
     @Published var alertSwitch: Bool = false
+    @Published var groupSwitch: Bool = false
     
     // MARK: - Private
     private var dataManager: DataManager
@@ -39,6 +40,10 @@ import CoreData
     
     var cancelAction: () -> Void {
         { self.cancelEditing() }
+    }
+    
+    var groupAction: () -> Void {
+        { self.groupSwitch = true }
     }
     
     // MARK: - Init
@@ -72,6 +77,14 @@ extension RecipeViewModel {
         dataManager.deleteDataEntity(recipe: self.recipe)
         self.recipe.dataEntity = nil
         dismiss?.callAsFunction()
+    }
+    
+    func getGroups() -> [GroupItem] {
+        dataManager.getItems(filter: { _ in true })
+    }
+    
+    func addToGroup(_ group: GroupItem) {
+        dataManager.addToGroup(recipe: self.recipe, group)
     }
 }
 

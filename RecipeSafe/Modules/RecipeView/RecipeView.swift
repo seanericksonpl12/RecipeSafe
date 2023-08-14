@@ -25,6 +25,7 @@ struct RecipeView<T: EditableRecipeModel>: View {
                                saveAction: viewModel.saveAction,
                                cancelAction: viewModel.cancelAction,
                                deleteAction: viewModel.deleteAction,
+                               groupAction: viewModel.groupAction,
                                optionalDisplay: "create.display.title".localized)
             .onTapGesture {
                 hideKeyboard()
@@ -66,6 +67,15 @@ struct RecipeView<T: EditableRecipeModel>: View {
                 Button("button.cancel".localized, role: .cancel){}
             } message: {
                 Text("recipe.alert.delete.desc".localized)
+            }
+            .popover(isPresented: $viewModel.groupSwitch) {
+                List(viewModel.getGroups()) { group in
+                    Text(group.title ?? "")
+                        .onTapGesture {
+                            viewModel.addToGroup(group)
+                            viewModel.groupSwitch = false
+                        }
+                }
             }
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
             .onAppear {

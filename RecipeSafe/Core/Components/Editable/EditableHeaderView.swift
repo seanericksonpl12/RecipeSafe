@@ -19,6 +19,7 @@ struct EditableHeaderView: View {
     var saveAction: () -> Void = {}
     var cancelAction: () -> Void = {}
     var deleteAction: () -> Void = {}
+    var groupAction: () -> Void = {}
     
     var optionalDisplay: String?
     
@@ -44,9 +45,11 @@ struct EditableHeaderView: View {
         }
         .editableToolbar(isEditing: $isEditing,
                          url: recipe.url,
+                         alternateLabel: "recipe.group.add".localized,
                          saveAction: saveAction,
                          cancelAction: cancelAction,
-                         deleteAction: deleteAction)
+                         deleteAction: deleteAction,
+                         alternateAction: groupAction)
     }
     
     // MARK: - Photo Selection

@@ -17,7 +17,9 @@ class MockDataManager: DataManager {
     var deleteItemExpectation: XCTestExpectation?
     var findDuplicate: Bool = false
     var recipe: Recipe?
+    var group: GroupItem?
     var recipeToDelete: RecipeItem?
+    var groupToDelete: GroupItem?
     
     override init(viewContext: NSManagedObjectContext) {
         self.viewContext = viewContext
@@ -42,8 +44,30 @@ class MockDataManager: DataManager {
         }
     }
     
-    override func deleteItem(_ item: RecipeItem) {
-        self.recipeToDelete = item
+    override func deleteItem<T>(_ item: T) where T : NSManagedObject {
+        if let i = item as? RecipeItem {
+            self.recipeToDelete = i
+        } else if let g = item as? GroupItem {
+            self.groupToDelete = g
+        }
         deleteItemExpectation?.fulfill()
+    }
+    
+        // MARK: - GroupItem Functions
+    override func getItems<T>(filter: ((T) -> Bool)) -> [T] where T : NSManagedObject {
+        saveItemExpectation?.fulfill()
+        return []
+    }
+    
+    override func updateDataEntity(group: GroupModel) {
+        self.saveItemExpectation?.fulfill()
+    }
+    
+    override func addGroup(title: String, recipes: [RecipeItem]) {
+        let newGroup = NSEntityDescription.insertNewObject(forEntityName: "GroupItem", into: self.viewContext) as! GroupItem
+        newGroup.title = title
+        recipes.forEach { newGroup.addToRecipes($0) }
+        self.group = newGroup
+        self.saveItemExpectation?.fulfill()
     }
 }

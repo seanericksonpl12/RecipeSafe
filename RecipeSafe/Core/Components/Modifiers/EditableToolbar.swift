@@ -15,7 +15,9 @@ struct EditableToolbar: ViewModifier {
     var saveAction: () -> Void
     var cancelAction: () -> Void
     var deleteAction: () -> Void
+    var alternateAction: () -> Void
     var urlLink: URL?
+    var alternateText: String?
     
     func body(content: Content) -> some View {
         content
@@ -39,6 +41,11 @@ struct EditableToolbar: ViewModifier {
                             Button("button.edit".localized) {
                                 withAnimation {
                                     isEditing = true
+                                }
+                            }
+                            if let text = alternateText {
+                                Button(text) {
+                                    alternateAction()
                                 }
                             }
                             if let url = urlLink {

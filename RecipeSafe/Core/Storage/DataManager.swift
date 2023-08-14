@@ -60,7 +60,7 @@ class DataManager {
         return newRecipe
     }
     
-    func deleteItem(_ item: RecipeItem) {
+    func deleteItem<T: NSManagedObject>(_ item: T) {
         self.viewContext.delete(item)
         do {
             try self.viewContext.save()
@@ -96,6 +96,17 @@ class DataManager {
         }
     }
     
+    func updateDataEntity(group: GroupModel) {
+        group.dataEntity.title = group.title
+        group.dataEntity.recipes = []
+        group.recipes.forEach { group.dataEntity.addToRecipes($0) }
+        do {
+            try self.viewContext.save()
+        } catch {
+            print(String(describing: error))
+        }
+    }
+    
     func deleteDataEntity(recipe: Recipe) {
         if let entity = recipe.dataEntity {
             self.viewContext.delete(entity)
@@ -107,7 +118,7 @@ class DataManager {
         }
     }
     
-    func deleteItem(offset: IndexSet, list: FetchedResults<RecipeItem>) {
+    func deleteItem<T: NSManagedObject>(offset: IndexSet, list: FetchedResults<T>) {
         offset.map { list[$0] }
             .forEach {
                 self.viewContext.delete($0)
@@ -130,6 +141,40 @@ class DataManager {
         } catch {
             print(error.localizedDescription)
             return nil
+        }
+    }
+    
+    func addToGroup(recipe: Recipe, _ group: GroupItem) {
+        if let data = recipe.dataEntity {
+            group.addToRecipes(data)
+            do {
+                try viewContext.save()
+            } catch {
+                print(String(describing: error))
+                return
+            }
+        }
+    }
+    
+    func addGroup(title: String, recipes: [RecipeItem]) {
+        let group = GroupItem(context: self.viewContext)
+        group.title = title
+        recipes.forEach { group.addToRecipes($0) }
+        do {
+            try viewContext.save()
+        } catch {
+            print(String(describing: error))
+        }
+    }
+    
+    func getItems<T: NSManagedObject>(filter: ((T) -> Bool)) -> [T] {
+        do {
+            let request = try self.viewContext.fetch(NSFetchRequest(entityName: T.description()))
+            guard let items = request as? [T] else { print("casting fail"); throw URLError(.resourceUnavailable) }
+            return items.filter(filter)
+        } catch {
+            print(String(describing: error))
+            return []
         }
     }
 }
