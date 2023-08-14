@@ -9,20 +9,26 @@ import SwiftUI
 
 struct GroupGridView: View {
     
+    // MARK: - Core Data
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var groups: FetchedResults<GroupItem>
     
+    // MARK: - ViewModel
     @StateObject private var viewModel: GroupGridViewModel = GroupGridViewModel()
     
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             GeometryReader { geo in
+                // MARK: - Empty View
                 if groups.isEmpty && !viewModel.editingEnabled {
                     EmptyListView()
                         .frame(width: geo.size.width, height: geo.size.height)
                 }
+                
+                // MARK: - Grid
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: (geo.size.width / 3)))]) {
                         if viewModel.editingEnabled {
@@ -68,6 +74,8 @@ struct GroupGridView: View {
                 }
             }
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+            
+            // MARK: - Popups
             .popover(isPresented: $viewModel.addGroupSwitch) {
                 NavigationStack {
                     NewGroupPopover(titleText: $viewModel.newGroupText,
@@ -81,9 +89,7 @@ struct GroupGridView: View {
             }
             .alert("group.alert.delete".localized, isPresented: $viewModel.deleteGroupSwitch) {
                 Button("button.delete".localized, role: .destructive) {
-                    if let item = viewModel.onDeckToDelete {
-                        viewModel.deleteGroup(item)
-                    }
+                    viewModel.deleteOnDeck()
                 }
             }
         }

@@ -62,6 +62,7 @@
 		9272DD232A86944000DD4549 /* NewGroupPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD222A86944000DD4549 /* NewGroupPopover.swift */; };
 		9272DD252A86D1E800DD4549 /* GroupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD242A86D1E800DD4549 /* GroupModel.swift */; };
 		9272DD282A86F72400DD4549 /* AddRecipePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD272A86F72400DD4549 /* AddRecipePopover.swift */; };
+		9272DD2A2A871D4800DD4549 /* GroupViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD292A871D4800DD4549 /* GroupViewModelTests.swift */; };
 		92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */; };
 		929316FA2A816BF30089A55D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876C2A608C9200117A59 /* ContentView.swift */; };
 		9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171A2A819FA30089A55D /* CustomTextField.swift */; };
@@ -70,6 +71,7 @@
 		9293177A2A85CA180089A55D /* GroupGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929317792A85CA180089A55D /* GroupGridView.swift */; };
 		9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293177B2A85CA240089A55D /* GroupGridViewModel.swift */; };
 		9293177F2A85CFE30089A55D /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293177E2A85CFE30089A55D /* GroupView.swift */; };
+		929E1E762A87FF9D00A0596D /* GroupGridViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +175,7 @@
 		9272DD222A86944000DD4549 /* NewGroupPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupPopover.swift; sourceTree = "<group>"; };
 		9272DD242A86D1E800DD4549 /* GroupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
 		9272DD272A86F72400DD4549 /* AddRecipePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipePopover.swift; sourceTree = "<group>"; };
+		9272DD292A871D4800DD4549 /* GroupViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModelTests.swift; sourceTree = "<group>"; };
 		92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		9293171A2A819FA30089A55D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		9293171D2A81EB630089A55D /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
@@ -180,6 +183,7 @@
 		929317792A85CA180089A55D /* GroupGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridView.swift; sourceTree = "<group>"; };
 		9293177B2A85CA240089A55D /* GroupGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModel.swift; sourceTree = "<group>"; };
 		9293177E2A85CFE30089A55D /* GroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
+		929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +235,8 @@
 				9201F98A2A7B049100A6021A /* ContentViewModelTests.swift */,
 				9201F98C2A7B049F00A6021A /* RecipeViewModelTests.swift */,
 				9201F9962A7C50E600A6021A /* CreateRecipeViewModelTests.swift */,
+				9272DD292A871D4800DD4549 /* GroupViewModelTests.swift */,
+				929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -790,10 +796,12 @@
 				921102262A7EA6BD00F34E5A /* JSONParserTests.swift in Sources */,
 				9201F9972A7C50E600A6021A /* CreateRecipeViewModelTests.swift in Sources */,
 				9201F99D2A7D426000A6021A /* MockDataManager.swift in Sources */,
+				9272DD2A2A871D4800DD4549 /* GroupViewModelTests.swift in Sources */,
 				9201F98B2A7B049100A6021A /* ContentViewModelTests.swift in Sources */,
 				9211021C2A7D560F00F34E5A /* NetworkProtocolTests.swift in Sources */,
 				9201F98D2A7B049F00A6021A /* RecipeViewModelTests.swift in Sources */,
 				9235E08E2A7EC4B6000B05EF /* DataManagerTests.swift in Sources */,
+				929E1E762A87FF9D00A0596D /* GroupGridViewModelTests.swift in Sources */,
 				9201F99B2A7C843600A6021A /* MockNetworkManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,20 +10,25 @@ import SwiftUI
 
 @MainActor class GroupViewModel: ObservableObject {
     
+    // MARK: - Wrappers
     @Published var group: GroupModel
     @Published var addRecipeSwitch: Bool = false
     @Published var deleteGroupSwitch: Bool = false
     @Published var editingEnabled: Bool = false
     @Published var selectedRecipes: [RecipeItem] = []
     
-    private var dataManager: DataManager = DataManager()
+    // MARK: - Private Properties
+    private var dataManager: DataManager
     private var dismiss: DismissAction?
     
-    init(group: GroupItem) {
+    // MARK: - Init
+    init(group: GroupItem, dataManager: DataManager = DataManager()) {
         self.group = GroupModel(dataEntity: group)
+        self.dataManager = dataManager
     }
 }
 
+// MARK: - Functions
 extension GroupViewModel {
     
     func getRecipes() -> [RecipeItem] {

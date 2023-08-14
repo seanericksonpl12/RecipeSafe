@@ -24,7 +24,7 @@ struct RecipeSafeApp: App {
                 GroupGridView()
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .tabItem {
-                        Label("app.groups".localized, systemImage: "circle")
+                        Label("app.group".localized, systemImage: "circle")
                     }
                     .tag(2)
             }

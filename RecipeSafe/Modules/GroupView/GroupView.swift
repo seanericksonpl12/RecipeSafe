@@ -10,11 +10,13 @@ import SwiftUI
 struct GroupView: View {
     
     @Environment(\.dismiss) var dismissAction
-    
     @StateObject var viewModel: GroupViewModel
     
+    // MARK: - Body
     var body: some View {
         NavigationStack {
+            
+            // MARK: - Header
             HStack {
                 Spacer()
                 TextField("", text: $viewModel.group.title, prompt: Text("group.title.prompt".localized), axis: .vertical)
@@ -29,6 +31,8 @@ struct GroupView: View {
                              saveAction: { viewModel.saveChanges() },
                              cancelAction: { viewModel.cancelChanges() },
                              deleteAction: {viewModel.toggleDelete() })
+            
+            // MARK: - Recipes
             List {
                 ForEach(viewModel.group.recipes) { recipe in
                     if let recipeModel = Recipe(dataItem: recipe) {
@@ -62,6 +66,8 @@ struct GroupView: View {
             
         }
         .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+        
+        // MARK: - Popups
         .popover(isPresented: $viewModel.addRecipeSwitch) {
             AddRecipePopover(selectedRecipes: $viewModel.selectedRecipes,
                              saveAction: { viewModel.saveAddedRecipes() },

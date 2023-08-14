@@ -11,17 +11,24 @@ import Combine
 
 @MainActor class GroupGridViewModel: ObservableObject {
     
+    // MARK: - Wrappers
     @Published var editingEnabled: Bool = false
     @Published var addGroupSwitch: Bool = false
     @Published var deleteGroupSwitch: Bool = false
     @Published var newGroupText: String = ""
     @Published var selectedRecipes: [RecipeItem] = []
     
-    var onDeckToDelete: GroupItem?
+    // MARK: - Private Properties
+    private var onDeckToDelete: GroupItem?
+    private var dataManager: DataManager
     
-    private var dataManager = DataManager()
+    // MARK: - Init
+    init(dataManager: DataManager = DataManager()) {
+        self.dataManager = dataManager
+    }
 }
 
+// MARK: - Functions
 extension GroupGridViewModel {
     
     func toggleEdit() {
@@ -29,9 +36,6 @@ extension GroupGridViewModel {
             self.editingEnabled.toggle()
         }
     }
-}
-
-extension GroupGridViewModel {
     
     func addGroup() {
         self.newGroupText = ""
@@ -47,6 +51,12 @@ extension GroupGridViewModel {
     
     func deleteGroup(_ group: GroupItem) {
         dataManager.deleteItem(group)
+    }
+    
+    func deleteOnDeck() {
+        if let item = self.onDeckToDelete {
+            self.deleteGroup(item)
+        }
     }
     
     func getRecipes() -> [RecipeItem] {

@@ -45,7 +45,7 @@
 "group.new.title" = "Title";
 "group.new.header" = "Add Recipes: ";
 "group.recipes.add" = "Add Recipes";
-"group.default" = "Group"
+"group.default" = "Group";
 
 
 // MARK: - EmptyListView
@@ -64,4 +64,4 @@
 "button.link.safari" = "Open in Safari";
 
 // MARK: - Other
-"tool.search" = "Search"
+"tool.search" = "Search";
