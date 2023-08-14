@@ -28,6 +28,11 @@ struct RecipeSafeApp: App {
                     }
                     .tag(2)
             }
+            .onAppear {
+                let tabBar = UITabBarAppearance()
+                tabBar.configureWithDefaultBackground()
+                UITabBar.appearance().scrollEdgeAppearance = tabBar
+            }
             .onOpenURL { _ in
                 self.tabSelection = 1
             }
