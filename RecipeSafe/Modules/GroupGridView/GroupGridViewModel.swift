@@ -26,6 +26,7 @@ import Combine
     
     // MARK: - Stored Properties
     var selectionAction: (GroupItem) -> Void = { _ in }
+    var cancelAction: () -> Void = {}
     var newRecipe: Recipe?
     
     // MARK: - Init
@@ -40,10 +41,21 @@ extension GroupGridViewModel {
     
     func setupActions() {
         self.selectionAction = { group in
-            guard let recipe = self.newRecipe else { return }
-            self.dataManager.addToGroup(recipe: recipe, group)
             self.newRecipeSwitch = false
-            self.navPath.append(group)
+            guard let recipe = self.newRecipe else { return }
+            
+            self.dataManager.addToGroup(recipe: recipe, group)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.navPath.append(group)
+            }
+        }
+        
+        self.cancelAction = {
+            self.newRecipeSwitch = false
+            guard let recipe = self.newRecipe else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.navPath.append(recipe)
+            }
         }
     }
 }
@@ -100,6 +112,7 @@ extension GroupGridViewModel {
 extension GroupGridViewModel {
     
     func handleNewRecipe(_ recipe: Recipe) {
+        self.navPath = .init()
         self.newRecipeSwitch = true
         self.newRecipe = recipe
     }

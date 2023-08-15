@@ -15,6 +15,7 @@ struct NewGroupPopover: View {
     
     // MARK: - Properties
     var recipes: [RecipeItem]
+    var allowSelection: Bool = true
     
     // MARK: - Body
     var body: some View {
@@ -37,10 +38,12 @@ struct NewGroupPopover: View {
                                 .padding(.trailing)
                         }
                         .onTapGesture {
-                            if selectedRecipes.contains(recipe) {
-                                selectedRecipes.removeAll(where: {$0 == recipe})
-                            } else {
-                                selectedRecipes.append(recipe)
+                            if allowSelection {
+                                if selectedRecipes.contains(recipe) {
+                                    selectedRecipes.removeAll(where: {$0 == recipe})
+                                } else {
+                                    selectedRecipes.append(recipe)
+                                }
                             }
                         }
                     }
