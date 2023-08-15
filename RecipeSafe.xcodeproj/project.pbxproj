@@ -73,8 +73,9 @@
 		9293177F2A85CFE30089A55D /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293177E2A85CFE30089A55D /* GroupView.swift */; };
 		929E1E762A87FF9D00A0596D /* GroupGridViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */; };
 		92E705FC2A8A881600ACA24C /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FB2A8A881600ACA24C /* AppViewModel.swift */; };
-		92E705FE2A8A9A8600ACA24C /* SelectGroupsPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FD2A8A9A8600ACA24C /* SelectGroupsPopover.swift */; };
+		92E705FE2A8A9A8600ACA24C /* SelectGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FD2A8A9A8600ACA24C /* SelectGroupsView.swift */; };
 		92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */; };
+		92E706032A8BBA9B00ACA24C /* SelectGroupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E706022A8BBA9B00ACA24C /* SelectGroupsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,8 +189,9 @@
 		9293177E2A85CFE30089A55D /* GroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
 		929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModelTests.swift; sourceTree = "<group>"; };
 		92E705FB2A8A881600ACA24C /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
-		92E705FD2A8A9A8600ACA24C /* SelectGroupsPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGroupsPopover.swift; sourceTree = "<group>"; };
+		92E705FD2A8A9A8600ACA24C /* SelectGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGroupsView.swift; sourceTree = "<group>"; };
 		92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGridButton.swift; sourceTree = "<group>"; };
+		92E706022A8BBA9B00ACA24C /* SelectGroupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGroupsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,6 +352,7 @@
 			isa = PBXGroup;
 			children = (
 				9201F97E2A795F5A00A6021A /* Protocol */,
+				92E706012A8BB9B300ACA24C /* SelectGroupsView */,
 				929317782A85C9FC0089A55D /* GroupGridView */,
 				9293177D2A85CFCE0089A55D /* GroupView */,
 				92924CD92A673B46000EC3B8 /* RecipeView */,
@@ -556,7 +559,6 @@
 				92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */,
 				9272DD222A86944000DD4549 /* NewGroupPopover.swift */,
 				9272DD272A86F72400DD4549 /* AddRecipePopover.swift */,
-				92E705FD2A8A9A8600ACA24C /* SelectGroupsPopover.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -577,6 +579,15 @@
 				9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */,
 			);
 			path = GroupView;
+			sourceTree = "<group>";
+		};
+		92E706012A8BB9B300ACA24C /* SelectGroupsView */ = {
+			isa = PBXGroup;
+			children = (
+				92E705FD2A8A9A8600ACA24C /* SelectGroupsView.swift */,
+				92E706022A8BBA9B00ACA24C /* SelectGroupsViewModel.swift */,
+			);
+			path = SelectGroupsView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -755,6 +766,7 @@
 			files = (
 				925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */,
 				920DA3652A70225E0086ADB5 /* EditableHeaderView.swift in Sources */,
+				92E706032A8BBA9B00ACA24C /* SelectGroupsViewModel.swift in Sources */,
 				929316FA2A816BF30089A55D /* ContentView.swift in Sources */,
 				9201F9852A7AF14800A6021A /* RecipeJSONParser.swift in Sources */,
 				9201F9802A795F9000A6021A /* EditableRecipeModel.swift in Sources */,
@@ -791,7 +803,7 @@
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
 				920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */,
 				9272DD232A86944000DD4549 /* NewGroupPopover.swift in Sources */,
-				92E705FE2A8A9A8600ACA24C /* SelectGroupsPopover.swift in Sources */,
+				92E705FE2A8A9A8600ACA24C /* SelectGroupsView.swift in Sources */,
 				9272DD252A86D1E800DD4549 /* GroupModel.swift in Sources */,
 				920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */,
 				9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */,
@@ -979,7 +991,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RecipeSafe/RecipeSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
@@ -1014,7 +1026,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RecipeSafe/RecipeSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
@@ -1121,7 +1133,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;
@@ -1147,7 +1159,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;

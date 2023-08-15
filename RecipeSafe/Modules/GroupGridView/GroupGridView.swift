@@ -57,6 +57,8 @@ struct GroupGridView: View {
                     .padding(.leading)
                     .padding(.trailing)
                 }
+                
+                // MARK: - Background
                 .scrollDisabled(groups.isEmpty && !viewModel.editingEnabled)
                 .scrollContentBackground(.hidden)
                 .background {
@@ -68,6 +70,8 @@ struct GroupGridView: View {
                         .opacity(groups.isEmpty ? 0.0 : 0.3)
                 }
             }
+            
+            // MARK: - Toolbar
             .toolbar {
                 ToolbarItem {
                     Button(viewModel.editingEnabled ? "button.done".localized : "button.edit".localized) {
@@ -75,9 +79,16 @@ struct GroupGridView: View {
                     }
                 }
             }
+            
+            // MARK: - Navigation
             .navigationDestination(for: GroupItem.self) { group in
                 GroupView(viewModel: GroupViewModel(group: group, newRecipe: viewModel.newRecipe))
             }
+            .navigationDestination(for: Recipe.self) { recipe in
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+            }
+            
+            // MARK: - Environment
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
             
             // MARK: - Popups
@@ -93,8 +104,12 @@ struct GroupGridView: View {
                 }
             }
             .popover(isPresented: $viewModel.newRecipeSwitch) {
-                SelectGroupsPopover(selectionAction: viewModel.selectionAction, cancelAction: { viewModel.newRecipeSwitch = false })
+                if let recipe = viewModel.newRecipe?.dataEntity {
+                    SelectGroupsView(viewModel: SelectGroupsViewModel(selectionAction: viewModel.selectionAction,
+                                                                      cancelAction: viewModel.cancelAction,
+                                                                      newRecipe: recipe))
                     .environment(\.managedObjectContext, self.viewContext)
+                }
             }
             .alert("group.alert.delete".localized, isPresented: $viewModel.deleteGroupSwitch) {
                 Button("button.delete".localized, role: .destructive) {

@@ -42,7 +42,7 @@ import SwiftUI
 extension GroupViewModel {
     
     func getRecipes() -> [RecipeItem] {
-        self.dataManager.getItems(filter: { $0.group != self.group.dataEntity } )
+        self.dataManager.getItems(filter: { $0.group == nil } )
     }
     
     func toggleDelete() {

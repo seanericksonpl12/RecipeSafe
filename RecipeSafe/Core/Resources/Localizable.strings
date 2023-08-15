@@ -8,7 +8,7 @@
 
 // MARK: - App
 "app.all" = "All Recipes";
-"app.group" = "groups";
+"app.group" = "Groups";
 
 // MARK: - ContentView
 "content.nav.title" = "Recipes";
@@ -46,6 +46,7 @@
 "group.new.header" = "Add Recipes: ";
 "group.recipes.add" = "Add Recipes";
 "group.default" = "Group";
+"group.new.add" = "Add to a Group?";
 
 
 // MARK: - EmptyListView

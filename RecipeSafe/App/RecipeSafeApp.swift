@@ -31,13 +31,13 @@ struct RecipeSafeApp: App {
             ContentView(viewModel: viewModel.contentViewModel)
                 .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
                 .tabItem {
-                    Label("app.all".localized, systemImage: "circle.fill")
+                    Label("app.all".localized, systemImage: "line.3.horizontal")
                 }
                 .tag(1)
             GroupGridView(viewModel: viewModel.groupViewModel)
                 .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
                 .tabItem {
-                    Label("app.group".localized, systemImage: "circle")
+                    Label("app.group".localized, systemImage: "circlebadge.2")
                 }
                 .tag(2)
         }
