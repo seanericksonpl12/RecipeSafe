@@ -22,21 +22,10 @@ struct ContentView: View {
     // MARK: - Body
     var body: some View {
         
-        switch viewModel.viewState {
-        case .loading:
-            LoadingView()
-        case .successfullyLoaded, .started, .failedToLoad:
-            listView
-        }
-    }
-    
-    // MARK: - List View
-    var listView: some View {
-        
         NavigationStack(path: $viewModel.navPath) {
             
             if recipeList.isEmpty {
-                EmptyListView()
+                EmptyListView(description: "empty.desc.1".localized)
                     .padding()
             }
             
@@ -91,31 +80,6 @@ struct ContentView: View {
                         }
                     }
                 }
-                
-                // MARK: - URL Open
-                .onOpenURL { url in
-                    viewModel.onURLOpen(url: url)
-                }
-                
-                // MARK: - Alerts
-                .alert("content.alert.fail.title".localized, isPresented: $viewModel.displayBadSite) {
-                    Button("button.ok".localized) { viewModel.displayBadSite = false }
-                } message: {
-                    Text("content.alert.fail.desc".localized)
-                }
-                .alert("content.alert.copy.title".localized, isPresented: $viewModel.duplicateFound) {
-                    Button("button.overwrite".localized) {
-                        viewModel.overwriteRecipe(deletingDup: true)
-                    }
-                    Button("button.savecopy".localized) {
-                        viewModel.overwriteRecipe()
-                    }
-                    Button("button.cancel".localized) {
-                        viewModel.cancelOverwrite()
-                    }
-                } message: {
-                    Text("content.alert.copy.desc".localized)
-                }
             }
             .navigationDestination(for: Recipe.self) { recipe in
                 RecipeView(viewModel: RecipeViewModel(recipe: recipe))
@@ -128,8 +92,6 @@ struct ContentView: View {
                 RecipeView(viewModel: CreateRecipeViewModel())
             }
         }
-        
-        
     }
 }
 

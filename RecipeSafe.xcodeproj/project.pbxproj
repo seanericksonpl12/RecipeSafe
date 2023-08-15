@@ -72,6 +72,9 @@
 		9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293177B2A85CA240089A55D /* GroupGridViewModel.swift */; };
 		9293177F2A85CFE30089A55D /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293177E2A85CFE30089A55D /* GroupView.swift */; };
 		929E1E762A87FF9D00A0596D /* GroupGridViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */; };
+		92E705FC2A8A881600ACA24C /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FB2A8A881600ACA24C /* AppViewModel.swift */; };
+		92E705FE2A8A9A8600ACA24C /* SelectGroupsPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FD2A8A9A8600ACA24C /* SelectGroupsPopover.swift */; };
+		92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -184,6 +187,9 @@
 		9293177B2A85CA240089A55D /* GroupGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModel.swift; sourceTree = "<group>"; };
 		9293177E2A85CFE30089A55D /* GroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
 		929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModelTests.swift; sourceTree = "<group>"; };
+		92E705FB2A8A881600ACA24C /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		92E705FD2A8A9A8600ACA24C /* SelectGroupsPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGroupsPopover.swift; sourceTree = "<group>"; };
+		92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGridButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -356,6 +362,7 @@
 			isa = PBXGroup;
 			children = (
 				9266876A2A608C9200117A59 /* RecipeSafeApp.swift */,
+				92E705FB2A8A881600ACA24C /* AppViewModel.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -546,8 +553,10 @@
 				9293171F2A828E2D0089A55D /* IconImage.swift */,
 				9272DD1E2A867A7C00DD4549 /* GridButton.swift */,
 				9272DD202A8691E600DD4549 /* InsertGridButton.swift */,
+				92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */,
 				9272DD222A86944000DD4549 /* NewGroupPopover.swift */,
 				9272DD272A86F72400DD4549 /* AddRecipePopover.swift */,
+				92E705FD2A8A9A8600ACA24C /* SelectGroupsPopover.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -753,6 +762,7 @@
 				9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */,
 				926687742A608C9200117A59 /* Persistence.swift in Sources */,
 				925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */,
+				92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */,
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
 				9272DD1F2A867A7C00DD4549 /* GridButton.swift in Sources */,
 				9201F9872A7AF22C00A6021A /* JSONParser.swift in Sources */,
@@ -773,6 +783,7 @@
 				926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */,
 				9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */,
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
+				92E705FC2A8A881600ACA24C /* AppViewModel.swift in Sources */,
 				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
 				9293171E2A81EB630089A55D /* ImageData.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
@@ -780,6 +791,7 @@
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
 				920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */,
 				9272DD232A86944000DD4549 /* NewGroupPopover.swift in Sources */,
+				92E705FE2A8A9A8600ACA24C /* SelectGroupsPopover.swift in Sources */,
 				9272DD252A86D1E800DD4549 /* GroupModel.swift in Sources */,
 				920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */,
 				9266876B2A608C9200117A59 /* RecipeSafeApp.swift in Sources */,

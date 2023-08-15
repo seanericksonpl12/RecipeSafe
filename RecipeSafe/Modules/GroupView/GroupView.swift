@@ -14,7 +14,6 @@ struct GroupView: View {
     
     // MARK: - Body
     var body: some View {
-        NavigationStack {
             
             // MARK: - Header
             HStack {
@@ -63,9 +62,12 @@ struct GroupView: View {
                     Text("group.list.add".localized + viewModel.group.title)
                 }
             }
-            
-        }
         .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+        .navigationDestination(isPresented: $viewModel.goToNewRecipe) {
+            if let recipe = viewModel.newRecipe {
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+            }
+        }
         
         // MARK: - Popups
         .popover(isPresented: $viewModel.addRecipeSwitch) {
