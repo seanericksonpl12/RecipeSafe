@@ -76,6 +76,7 @@
 		92E705FE2A8A9A8600ACA24C /* SelectGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FD2A8A9A8600ACA24C /* SelectGroupsView.swift */; };
 		92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */; };
 		92E706032A8BBA9B00ACA24C /* SelectGroupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E706022A8BBA9B00ACA24C /* SelectGroupsViewModel.swift */; };
+		92E706052A8C05B800ACA24C /* AppViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E706042A8C05B800ACA24C /* AppViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,6 +193,7 @@
 		92E705FD2A8A9A8600ACA24C /* SelectGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGroupsView.swift; sourceTree = "<group>"; };
 		92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGridButton.swift; sourceTree = "<group>"; };
 		92E706022A8BBA9B00ACA24C /* SelectGroupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGroupsViewModel.swift; sourceTree = "<group>"; };
+		92E706042A8C05B800ACA24C /* AppViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +247,7 @@
 				9201F9962A7C50E600A6021A /* CreateRecipeViewModelTests.swift */,
 				9272DD292A871D4800DD4549 /* GroupViewModelTests.swift */,
 				929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */,
+				92E706042A8C05B800ACA24C /* AppViewModelTests.swift */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -820,6 +823,7 @@
 				921102262A7EA6BD00F34E5A /* JSONParserTests.swift in Sources */,
 				9201F9972A7C50E600A6021A /* CreateRecipeViewModelTests.swift in Sources */,
 				9201F99D2A7D426000A6021A /* MockDataManager.swift in Sources */,
+				92E706052A8C05B800ACA24C /* AppViewModelTests.swift in Sources */,
 				9272DD2A2A871D4800DD4549 /* GroupViewModelTests.swift in Sources */,
 				9201F98B2A7B049100A6021A /* ContentViewModelTests.swift in Sources */,
 				9211021C2A7D560F00F34E5A /* NetworkProtocolTests.swift in Sources */,
