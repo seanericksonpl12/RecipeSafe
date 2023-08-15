@@ -30,7 +30,7 @@ final class NetworkManagerTests: XCTestCase {
     }
     
     func testGoodUrl() {
-        let url = "RecipeSafe://https://therecipecritic.com/easy-shrimp-tacos/"
+        let url = URL(string: "RecipeSafe://open-recipe?url=www.therecipecritic.com/easy-shrimp-tacos/")!
         var recievedRecipe: Recipe?
         network.networkRequest(url: url).sink { status in
             switch status{
@@ -44,11 +44,11 @@ final class NetworkManagerTests: XCTestCase {
             self.exp.fulfill()
         }.store(in: &cancellables)
         wait(for: [exp, finishedExp], timeout: 5)
-        XCTAssertEqual(recievedRecipe?.url?.absoluteString, "https://therecipecritic.com/easy-shrimp-tacos/")
+        XCTAssertEqual(recievedRecipe?.url?.absoluteString, "https://www.therecipecritic.com/easy-shrimp-tacos/")
     }
     
     func testBadUrl() {
-        let url = "RecipeSafe://https://someurlthatisnotvalidanddoesnotactuallyexit.com"
+        let url =  URL(string: "RecipeSafe://open-recipe?url=www.someurlthatisnotvalidanddoesnotactuallyexit.com")!
         network.networkRequest(url: url).sink { status in
             switch status{
             case .finished:

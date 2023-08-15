@@ -30,6 +30,13 @@ import SwiftUI
     private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
     
+    // MARK: - Init
+    init(networkManager: NetworkManager = NetworkManager(),
+         dataManager: DataManager = DataManager()) {
+        self.network = networkManager
+        self.dataManager = dataManager
+    }
+    
 }
 
 // MARK: - URL Open

@@ -13,7 +13,7 @@ class MockNetworkManager: NetworkManager {
     
     var returnValidInput: Bool = false
     
-    override func networkRequest(url: String) -> AnyPublisher<Recipe, Error> {
+    override func networkRequest(url: URL) -> AnyPublisher<Recipe, Error> {
         if returnValidInput {
             let recipe = Recipe(title: "Test Title",
                                 description: "Test Description",
