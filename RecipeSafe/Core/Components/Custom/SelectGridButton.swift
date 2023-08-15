@@ -1,18 +1,18 @@
 //
-//  GridButton.swift
+//  SelectGridButton.swift
 //  RecipeSafe
 //
-//  Created by Sean Erickson on 8/11/23.
+//  Created by Sean Erickson on 8/14/23.
 //
 
 import SwiftUI
 
-struct GridButton: View {
+struct SelectGridButton: View {
     
-    @Binding var isEditing: Bool
+    @State private var selected: Bool = false
     var geoProxy: GeometryProxy
     var group: GroupItem
-    var deleteAction: () -> Void
+    var selectAction: () -> Void
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
@@ -20,21 +20,20 @@ struct GridButton: View {
             .background(.background)
             .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
             .overlay {
-                if isEditing {
                     VStack {
                         HStack {
                             Spacer()
                             Button {
-                                deleteAction()
+                                selectAction()
+                                self.selected.toggle()
                             } label: {
-                                Image(systemName: "minus.circle")
-                                    .foregroundColor(.red)
+                                Image(systemName: self.selected ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(.primary)
                             }
                             .padding()
                         }
                         Spacer()
                     }
-                }
                 Text(group.title ?? "" )
                     .foregroundColor(.secondary)
             }

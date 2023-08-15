@@ -121,6 +121,11 @@ class DataManager {
     func deleteItem<T: NSManagedObject>(offset: IndexSet, list: FetchedResults<T>) {
         offset.map { list[$0] }
             .forEach {
+                if let item = $0 as? GroupItem {
+                    if let recipes = item.recipes?.array as? [RecipeItem] {
+                        recipes.forEach { $0.group = nil }
+                    }
+                }
                 self.viewContext.delete($0)
             }
         do {

@@ -12,9 +12,11 @@ import Combine
 @MainActor class GroupGridViewModel: ObservableObject {
     
     // MARK: - Wrappers
+    @Published var navPath: NavigationPath = .init()
     @Published var editingEnabled: Bool = false
     @Published var addGroupSwitch: Bool = false
     @Published var deleteGroupSwitch: Bool = false
+    @Published var newRecipeSwitch: Bool = false
     @Published var newGroupText: String = ""
     @Published var selectedRecipes: [RecipeItem] = []
     
@@ -22,13 +24,31 @@ import Combine
     private var onDeckToDelete: GroupItem?
     private var dataManager: DataManager
     
+    // MARK: - Stored Properties
+    var selectionAction: (GroupItem) -> Void = { _ in }
+    var newRecipe: Recipe?
+    
     // MARK: - Init
     init(dataManager: DataManager = DataManager()) {
         self.dataManager = dataManager
+        self.setupActions()
     }
 }
 
-// MARK: - Functions
+// MARK: - Setup
+extension GroupGridViewModel {
+    
+    func setupActions() {
+        self.selectionAction = { group in
+            guard let recipe = self.newRecipe else { return }
+            self.dataManager.addToGroup(recipe: recipe, group)
+            self.newRecipeSwitch = false
+            self.navPath.append(group)
+        }
+    }
+}
+
+// MARK: - View Functions
 extension GroupGridViewModel {
     
     func toggleEdit() {
@@ -39,6 +59,7 @@ extension GroupGridViewModel {
     
     func addGroup() {
         self.newGroupText = ""
+        self.selectedRecipes = []
         withAnimation {
             addGroupSwitch = true
         }
@@ -72,5 +93,14 @@ extension GroupGridViewModel {
         addGroupSwitch = false
         newGroupText = ""
         selectedRecipes = []
+    }
+}
+
+// MARK: - New Recipe Handling
+extension GroupGridViewModel {
+    
+    func handleNewRecipe(_ recipe: Recipe) {
+        self.newRecipeSwitch = true
+        self.newRecipe = recipe
     }
 }

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct EmptyListView: View {
+    
+    var description: String
+    
     var body: some View {
         VStack {
             Spacer()
@@ -16,21 +19,16 @@ struct EmptyListView: View {
                 .fontWeight(.heavy)
                 .foregroundColor(.gray)
                 .padding()
-            Text("empty.desc".localized)
+            Text(description)
                 .font(.caption)
                 .foregroundColor(.gray)
             Image("logo-clear")
                 .resizable()
+                .scaledToFill()
                 .frame(maxWidth: 150, maxHeight: 150)
                 .opacity(0.5)
                 .padding(.top, 50)
             Spacer()
         }
-    }
-}
-
-struct EmptyListView_Previews: PreviewProvider {
-    static var previews: some View {
-        EmptyListView()
     }
 }

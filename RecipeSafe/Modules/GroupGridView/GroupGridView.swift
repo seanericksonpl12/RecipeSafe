@@ -16,25 +16,25 @@ struct GroupGridView: View {
         animation: .easeIn) private var groups: FetchedResults<GroupItem>
     
     // MARK: - ViewModel
-    @StateObject private var viewModel: GroupGridViewModel = GroupGridViewModel()
+    @StateObject var viewModel: GroupGridViewModel
     
     // MARK: - Body
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $viewModel.navPath) {
             GeometryReader { geo in
                 // MARK: - Empty View
                 if groups.isEmpty && !viewModel.editingEnabled {
-                    EmptyListView()
+                    EmptyListView(description: "empty.desc.2".localized)
                         .frame(width: geo.size.width, height: geo.size.height)
                 }
                 
                 // MARK: - Grid
                 ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: (geo.size.width / 3)))]) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: (CGFloat(geo.size.width) / 2.75)))]) {
                         if viewModel.editingEnabled {
                             InsertGridButton(insertAction: { viewModel.addGroup() },
-                                             width: (geo.size.width / 3),
-                                             height: (geo.size.width / 3))
+                                             width: (geo.size.width / 2.75),
+                                             height: (geo.size.width / 2.75))
                         }
                         ForEach(groups) { item in
                             if viewModel.editingEnabled {
@@ -54,6 +54,8 @@ struct GroupGridView: View {
                             }
                         }
                     }
+                    .padding(.leading)
+                    .padding(.trailing)
                 }
                 .scrollDisabled(groups.isEmpty && !viewModel.editingEnabled)
                 .scrollContentBackground(.hidden)
@@ -63,7 +65,7 @@ struct GroupGridView: View {
                         .scaledToFill()
                         .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
                         .ignoresSafeArea(.all)
-                        .opacity(0.3)
+                        .opacity(groups.isEmpty ? 0.0 : 0.3)
                 }
             }
             .toolbar {
@@ -72,6 +74,9 @@ struct GroupGridView: View {
                         viewModel.toggleEdit()
                     }
                 }
+            }
+            .navigationDestination(for: GroupItem.self) { group in
+                GroupView(viewModel: GroupViewModel(group: group, newRecipe: viewModel.newRecipe))
             }
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
             
@@ -87,17 +92,15 @@ struct GroupGridView: View {
                                      cancelAction: {self.viewModel.cancelNewGroup()})
                 }
             }
+            .popover(isPresented: $viewModel.newRecipeSwitch) {
+                SelectGroupsPopover(selectionAction: viewModel.selectionAction, cancelAction: { viewModel.newRecipeSwitch = false })
+                    .environment(\.managedObjectContext, self.viewContext)
+            }
             .alert("group.alert.delete".localized, isPresented: $viewModel.deleteGroupSwitch) {
                 Button("button.delete".localized, role: .destructive) {
                     viewModel.deleteOnDeck()
                 }
             }
         }
-    }
-}
-
-struct GroupGridView_Previews: PreviewProvider {
-    static var previews: some View {
-        GroupGridView()
     }
 }

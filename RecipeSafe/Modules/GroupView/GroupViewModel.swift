@@ -16,15 +16,25 @@ import SwiftUI
     @Published var deleteGroupSwitch: Bool = false
     @Published var editingEnabled: Bool = false
     @Published var selectedRecipes: [RecipeItem] = []
+    @Published var goToNewRecipe: Bool
     
     // MARK: - Private Properties
     private var dataManager: DataManager
     private var dismiss: DismissAction?
     
+    // MARK: - Stored Properties
+    private(set) var newRecipe: Recipe?
+    
     // MARK: - Init
-    init(group: GroupItem, dataManager: DataManager = DataManager()) {
+    init(group: GroupItem, newRecipe: Recipe? = nil, dataManager: DataManager = DataManager()) {
         self.group = GroupModel(dataEntity: group)
         self.dataManager = dataManager
+        if newRecipe != nil {
+            self.goToNewRecipe = true
+            self.newRecipe = newRecipe
+        } else {
+            self.goToNewRecipe = false
+        }
     }
 }
 
@@ -66,6 +76,9 @@ extension GroupViewModel {
     }
     
     func removeRecipe(at offsets: IndexSet) {
+        offsets.forEach {
+            self.group.recipes[$0].group = nil
+        }
         self.group.recipes.remove(atOffsets: offsets)
         self.saveChanges()
     }

@@ -50,7 +50,8 @@
 
 // MARK: - EmptyListView
 "empty.title" = "Looks Empty...";
-"empty.desc" = "Open a recipe from safari, or create your own!";
+"empty.desc.1" = "Open a recipe from safari, or create your own!";
+"empty.desc.2" = "Add a new group with the edit button!";
 
 // MARK: - Buttons
 "button.ok" = "OK";
