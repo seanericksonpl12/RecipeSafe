@@ -45,11 +45,11 @@ struct EditableHeaderView: View {
         }
         .editableToolbar(isEditing: $isEditing,
                          url: recipe.url,
-                         alternateLabel: "recipe.group.add".localized,
+                         alternateLabel: recipe.dataEntity?.group == nil ? "recipe.group.add".localized : nil,
                          saveAction: saveAction,
                          cancelAction: cancelAction,
                          deleteAction: deleteAction,
-                         alternateAction: groupAction)
+                         alternateAction: recipe.dataEntity?.group == nil ? groupAction : {} )
     }
     
     // MARK: - Photo Selection
