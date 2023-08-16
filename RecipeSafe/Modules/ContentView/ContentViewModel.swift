@@ -42,6 +42,7 @@ import Combine
 extension ContentViewModel {
     
     func handleNewRecipe(_ recipe: Recipe) {
+        self.navPath = .init()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.navPath.append(recipe)
         }
