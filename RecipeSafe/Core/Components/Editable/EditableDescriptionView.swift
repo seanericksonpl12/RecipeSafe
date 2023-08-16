@@ -9,13 +9,16 @@ import SwiftUI
 
 struct EditableDescriptionView: View {
     
+    // MARK: - Wrapped
     @Binding var isEditing: Bool
     @Binding var description: String
     @Binding var prepTime: String
     @Binding var cookTime: String
     
+    // MARK: - Properties
     var optionalDisplay: String?
     
+    // MARK: - Body
     var body: some View {
         Section {
             VStack {

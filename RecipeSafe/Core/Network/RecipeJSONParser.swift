@@ -11,14 +11,16 @@ import SwiftyJSON
 
 class RecipeJSONParser: JSONParser {
     
+    // MARK: - Properties
     var data: Data
-    
     private let scriptTag: String = "script[type=application/ld+json]"
     
+    // MARK: - Init
     init(data: Data) {
         self.data = data
     }
     
+    // MARK: - Parse Function
     func parse<Recipe>() throws -> Recipe {
         guard let html = String(data: data, encoding: .utf8) else {
             throw URLError(.cannotDecodeRawData)
@@ -30,6 +32,7 @@ class RecipeJSONParser: JSONParser {
     }
 }
 
+// MARK: - Private Helpers
 extension RecipeJSONParser {
     
     // MARK: - Webscraping

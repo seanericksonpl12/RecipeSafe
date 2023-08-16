@@ -11,7 +11,7 @@ import Combine
 
 @MainActor class GroupGridViewModel: ObservableObject {
     
-    // MARK: - Wrappers
+    // MARK: - Wrapped
     @Published var navPath: NavigationPath = .init()
     @Published var editingEnabled: Bool = false
     @Published var addGroupSwitch: Bool = false

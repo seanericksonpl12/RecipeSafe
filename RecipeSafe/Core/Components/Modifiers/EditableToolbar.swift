@@ -10,8 +10,10 @@ import SwiftUI
 
 struct EditableToolbar: ViewModifier {
     
+    // MARK: - Wrapped
     @Binding var isEditing: Bool
     
+    // MARK: - Properties
     var saveAction: () -> Void
     var cancelAction: () -> Void
     var deleteAction: () -> Void
@@ -19,6 +21,7 @@ struct EditableToolbar: ViewModifier {
     var urlLink: URL?
     var alternateText: String?
     
+    // MARK: - Body
     func body(content: Content) -> some View {
         content
             .toolbar {

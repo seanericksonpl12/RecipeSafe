@@ -9,10 +9,12 @@ import SwiftUI
 
 struct InsertGridButton: View {
     
+    // MARK: - Properties
     var insertAction: () -> Void
     var width: CGFloat
     var height: CGFloat
     
+    // MARK: - Body
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .stroke(.secondary, lineWidth: 4)

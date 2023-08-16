@@ -9,13 +9,16 @@ import SwiftUI
 
 struct SelectGroupsView: View {
     
+    // MARK: - Environment
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var groups: FetchedResults<GroupItem>
     
+    // MARK: - ViewModel
     @StateObject var viewModel: SelectGroupsViewModel
     
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             GeometryReader { geo in

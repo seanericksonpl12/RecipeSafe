@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct EditableSectionView: View {
-    // MARK: - Properties
+    // MARK: - Wrapped
     @Binding var list: [String]
     @Binding var isEditing: Bool
     
+    // MARK: - Properties
     var headerText: String
     var numbered: Bool = false
     var font: Font = .callout

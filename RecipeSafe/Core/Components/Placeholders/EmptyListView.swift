@@ -9,8 +9,10 @@ import SwiftUI
 
 struct EmptyListView: View {
     
+    // MARK: - Properties
     var description: String
     
+    // MARK: - Body
     var body: some View {
         VStack {
             Spacer()
