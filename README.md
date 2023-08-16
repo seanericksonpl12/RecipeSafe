@@ -8,6 +8,11 @@ RecipeSafe is an iOS application to store recipes from external websites and kee
 </p>
 <br/>
 
+### Available on AppStore Now!
+<a href="https://apps.apple.com/us/app/recipe-safe/id6459505261">Recipe-Safe</a>
+<br/>
+<br/>
+
 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExejA3ZHhyM3R4MDdoc3l2cWw0OGJycWlkam9vNWJhZTUxcjZscThibiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qEncZLap2WC4inyrG8/giphy.gif" width="222" height="480" style="margin: 200px 200px 200px 200px;"></img>
 <img
 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXZucjJ5NzM5NHN2OG9mY3AxNDhqMWhrbmZuMHNybTJqMDBxY3p4dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BWtH7rZ8yZd7AsoP88/giphy.gif" width="222" height="480" style="margin: 200px 200px 200px 200px;"></img>
