@@ -21,6 +21,7 @@ struct EditableHeaderView: View {
     var deleteAction: () -> Void = {}
     var groupAction: () -> Void = {}
     
+    // MARK: - Properties
     var optionalDisplay: String?
     
     // MARK: - Body

@@ -361,7 +361,6 @@
 			isa = PBXGroup;
 			children = (
 				9268BDC42A8C739600366964 /* TutorialView */,
-				9201F97E2A795F5A00A6021A /* Protocol */,
 				92E706012A8BB9B300ACA24C /* SelectGroupsView */,
 				929317782A85C9FC0089A55D /* GroupGridView */,
 				9293177D2A85CFCE0089A55D /* GroupView */,
@@ -540,6 +539,41 @@
 			path = TutorialView;
 			sourceTree = "<group>";
 		};
+		9268BDCB2A8D1EC000366964 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				9272DD1E2A867A7C00DD4549 /* GridButton.swift */,
+				92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */,
+				9272DD202A8691E600DD4549 /* InsertGridButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		9268BDCC2A8D1ECB00366964 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				9293171A2A819FA30089A55D /* CustomTextField.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		9268BDCD2A8D1ED500366964 /* Popovers */ = {
+			isa = PBXGroup;
+			children = (
+				9272DD222A86944000DD4549 /* NewGroupPopover.swift */,
+				9272DD272A86F72400DD4549 /* AddRecipePopover.swift */,
+			);
+			path = Popovers;
+			sourceTree = "<group>";
+		};
+		9268BDCE2A8D1EEA00366964 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				9293171F2A828E2D0089A55D /* IconImage.swift */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		926A4A8D2A71FD6A00457935 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -562,6 +596,7 @@
 		92924CD92A673B46000EC3B8 /* RecipeView */ = {
 			isa = PBXGroup;
 			children = (
+				9201F97E2A795F5A00A6021A /* Protocol */,
 				925DCBF42A65FBFC00B84A38 /* RecipeView.swift */,
 				92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */,
 				9201F97C2A7852AE00A6021A /* CreateRecipeViewModel.swift */,
@@ -572,13 +607,10 @@
 		929316FB2A818B610089A55D /* Custom */ = {
 			isa = PBXGroup;
 			children = (
-				9293171A2A819FA30089A55D /* CustomTextField.swift */,
-				9293171F2A828E2D0089A55D /* IconImage.swift */,
-				9272DD1E2A867A7C00DD4549 /* GridButton.swift */,
-				9272DD202A8691E600DD4549 /* InsertGridButton.swift */,
-				92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */,
-				9272DD222A86944000DD4549 /* NewGroupPopover.swift */,
-				9272DD272A86F72400DD4549 /* AddRecipePopover.swift */,
+				9268BDCE2A8D1EEA00366964 /* Images */,
+				9268BDCD2A8D1ED500366964 /* Popovers */,
+				9268BDCB2A8D1EC000366964 /* Buttons */,
+				9268BDCC2A8D1ECB00366964 /* Other */,
 			);
 			path = Custom;
 			sourceTree = "<group>";

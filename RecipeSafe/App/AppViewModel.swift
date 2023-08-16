@@ -11,7 +11,7 @@ import SwiftUI
 
 @MainActor class AppViewModel: ObservableObject {
     
-    // MARK: - Published
+    // MARK: - Wrapped
     @Published var tabSelection: Int = 1
     @Published var displayBadSite: Bool = false
     @Published var duplicateFound: Bool = false

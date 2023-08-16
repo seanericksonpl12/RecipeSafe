@@ -14,7 +14,7 @@ import CoreData
 @MainActor class RecipeViewModel: EditableRecipeModel {
     
     
-    // MARK: - Published
+    // MARK: - Wrapped
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = false
     @Published var descriptionText: String = ""

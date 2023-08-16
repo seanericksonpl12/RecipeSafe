@@ -69,6 +69,7 @@ extension String {
     }
 }
 
+// MARK: - Time Formatted
 extension String {
     func timeFormatted() -> String {
         if self.hasPrefix("PT") {

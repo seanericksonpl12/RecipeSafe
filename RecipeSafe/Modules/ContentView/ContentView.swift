@@ -10,13 +10,13 @@ import CoreData
 
 struct ContentView: View {
     
-    // MARK: - Environment Variables
+    // MARK: - Environment
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
     
-    // MARK: - Observed Object
+    // MARK: - ViewModel
     @StateObject var viewModel: ContentViewModel
     
     // MARK: - Body
@@ -81,6 +81,8 @@ struct ContentView: View {
                     }
                 }
             }
+            
+            // MARK: - Navigation
             .navigationDestination(for: Recipe.self) { recipe in
                 RecipeView(viewModel: RecipeViewModel(recipe: recipe))
                     .navigationBarTitleDisplayMode(.inline)

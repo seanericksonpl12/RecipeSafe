@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor class GroupViewModel: ObservableObject {
     
-    // MARK: - Wrappers
+    // MARK: - Wrapped
     @Published var group: GroupModel
     @Published var addRecipeSwitch: Bool = false
     @Published var deleteGroupSwitch: Bool = false

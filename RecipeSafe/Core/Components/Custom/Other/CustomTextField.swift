@@ -9,9 +9,11 @@ import SwiftUI
 
 struct CustomTextField: View {
     
+    // MARK: - Wrapped
     @Binding var text: String
     @FocusState private var focused: Bool
     
+    // MARK: - Properties
     let prompt: String
     let promptAlign: Alignment
     let staticLabel: String?
@@ -19,6 +21,7 @@ struct CustomTextField: View {
     let fontWeight: Font.Weight
     let axis: Axis
     
+    // MARK: - Body
     var body: some View {
         HStack {
             if let text = staticLabel {

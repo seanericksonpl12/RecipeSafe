@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GroupGridView: View {
     
-    // MARK: - Core Data
+    // MARK: - Environment
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],

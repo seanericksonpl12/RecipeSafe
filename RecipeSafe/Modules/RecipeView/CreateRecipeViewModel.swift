@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor class CreateRecipeViewModel: EditableRecipeModel {
     
-    // MARK: - Published
+    // MARK: - Wrapped
     @Published var recipe: Recipe
     @Published var editingEnabled: Bool = true
     @Published var descriptionText = ""

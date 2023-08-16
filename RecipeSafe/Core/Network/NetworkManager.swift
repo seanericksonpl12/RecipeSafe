@@ -10,8 +10,10 @@ import Combine
 
 class NetworkManager: NetworkProtocol {
     
+    // MARK: - Properties
     var session: URLSession
     
+    // MARK: - Inits
     init(configuration: URLSessionConfiguration) {
         self.session = URLSession(configuration: configuration)
     }
@@ -20,6 +22,7 @@ class NetworkManager: NetworkProtocol {
         self.init(configuration: .default)
     }
     
+    // MARK: - Make Request
     func networkRequest(url: URL) -> AnyPublisher<Recipe, Error> {
         
         guard url.scheme == "RecipeSafe" else {

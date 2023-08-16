@@ -9,11 +9,15 @@ import SwiftUI
 
 struct SelectGridButton: View {
     
+    // MARK: - Wrapped
     @State private var selected: Bool = false
+    
+    // MARK: - Properties
     var geoProxy: GeometryProxy
     var group: GroupItem
     var selectAction: () -> Void
     
+    // MARK: - Body
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .stroke(Color.secondary, lineWidth: 4)

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+// MARK: - Editable Toolbar
 extension View {
     func editableToolbar(isEditing: Binding<Bool>,
                          url: URL? = nil,
@@ -27,6 +28,7 @@ extension View {
     }
 }
 
+// MARK: - Hide Keyboard
 #if canImport(UIKit)
 extension View {
     func hideKeyboard() {

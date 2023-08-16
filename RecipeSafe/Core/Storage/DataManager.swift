@@ -11,8 +11,10 @@ import SwiftUI
 
 class DataManager {
     
+    // MARK: - Properties
     private var viewContext: NSManagedObjectContext
     
+    // MARK: - Inits
     init(viewContext: NSManagedObjectContext) {
         self.viewContext = viewContext
     }
@@ -20,9 +22,10 @@ class DataManager {
     convenience init() {
         self.init(viewContext: PersistenceController.shared.container.viewContext)
     }
+}
     
-    
-    // MARK: - Recipe Functions
+// MARK: - Recipe Functions
+extension DataManager {
     func saveItem(_ recipe: Recipe) -> RecipeItem? {
         let newRecipe = RecipeItem(context: self.viewContext)
         newRecipe.id = recipe.id
@@ -96,17 +99,6 @@ class DataManager {
         }
     }
     
-    func updateDataEntity(group: GroupModel) {
-        group.dataEntity.title = group.title
-        group.dataEntity.recipes = []
-        group.recipes.forEach { group.dataEntity.addToRecipes($0) }
-        do {
-            try self.viewContext.save()
-        } catch {
-            print(String(describing: error))
-        }
-    }
-    
     func deleteDataEntity(recipe: Recipe) {
         if let entity = recipe.dataEntity {
             self.viewContext.delete(entity)
@@ -144,8 +136,23 @@ class DataManager {
             return recipes.first { $0.url == url }
             
         } catch {
-            print(error.localizedDescription)
+            print(String(describing: error))
             return nil
+        }
+    }
+}
+
+// MARK: - Group Functions
+extension DataManager {
+    
+    func updateDataEntity(group: GroupModel) {
+        group.dataEntity.title = group.title
+        group.dataEntity.recipes = []
+        group.recipes.forEach { group.dataEntity.addToRecipes($0) }
+        do {
+            try self.viewContext.save()
+        } catch {
+            print(String(describing: error))
         }
     }
     

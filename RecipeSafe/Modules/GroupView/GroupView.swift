@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GroupView: View {
     
+    // MARK: - Environment
     @Environment(\.dismiss) var dismissAction
     @StateObject var viewModel: GroupViewModel
     
@@ -47,19 +48,21 @@ struct GroupView: View {
                 .onMove { start, end in
                     viewModel.moveRecipes(from: start, to: end)
                 }
-                Section {
-                    HStack {
-                        Spacer()
-                        Button {
-                            viewModel.addRecipeSwitch = true
-                        } label: {
-                            Image(systemName: "plus.circle")
-                                .foregroundColor(.primary)
+                if !viewModel.getRecipes().isEmpty {
+                    Section {
+                        HStack {
+                            Spacer()
+                            Button {
+                                viewModel.addRecipeSwitch = true
+                            } label: {
+                                Image(systemName: "plus.circle")
+                                    .foregroundColor(.primary)
+                            }
+                            Spacer()
                         }
-                        Spacer()
+                    } header: {
+                        Text("group.list.add".localized + viewModel.group.title)
                     }
-                } header: {
-                    Text("group.list.add".localized + viewModel.group.title)
                 }
             }
         .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))

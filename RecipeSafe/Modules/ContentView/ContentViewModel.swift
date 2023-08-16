@@ -12,7 +12,7 @@ import Combine
 
 @MainActor class ContentViewModel: ObservableObject {
     
-    // MARK: - Published
+    // MARK: - Wrapped
     @Published var navPath: NavigationPath = .init()
     @Published var searchText: String = ""
     @Published var customRecipeSheet: Bool = false
