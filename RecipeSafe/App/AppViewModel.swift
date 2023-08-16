@@ -15,6 +15,7 @@ import SwiftUI
     @Published var tabSelection: Int = 1
     @Published var displayBadSite: Bool = false
     @Published var duplicateFound: Bool = false
+    @Published var launchTutorial: Bool = false
     @Published var contentViewModel: ContentViewModel = ContentViewModel()
     @Published var groupViewModel: GroupGridViewModel = GroupGridViewModel()
     @Published var viewState: ViewState = .started
@@ -35,6 +36,7 @@ import SwiftUI
          dataManager: DataManager = DataManager()) {
         self.network = networkManager
         self.dataManager = dataManager
+        self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
     }
     
 }
