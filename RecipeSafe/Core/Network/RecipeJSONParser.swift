@@ -96,7 +96,7 @@ extension RecipeJSONParser {
                 json[RecipeKeys.ingredient.rawValue]?
             .arrayValue
             .map({
-                $0.stringValue.htmlFormatted()
+                $0.stringValue.recipeFormatted()
             })
                 
         else { throw NetworkError.recipeMissingItem("No Ingredients") }
@@ -105,7 +105,7 @@ extension RecipeJSONParser {
                 json[RecipeKeys.instructions.rawValue]?
             .arrayValue
             .map({
-                $0[RecipeKeys.instructionValue.rawValue].stringValue.htmlFormatted()
+                $0[RecipeKeys.instructionValue.rawValue].stringValue.recipeFormatted()
             })
                 
         else { throw NetworkError.recipeMissingItem("No Instructions") }
@@ -115,7 +115,7 @@ extension RecipeJSONParser {
             json[RecipeKeys.instructions.rawValue]?
                 .arrayValue
                 .map({
-                    $0.stringValue.htmlFormatted()
+                    $0.stringValue.recipeFormatted()
                 }) ?? []
             instructions = instructions.filter({$0 != ""})
         }
@@ -129,7 +129,7 @@ extension RecipeJSONParser {
                 })
                 .forEach {
                     $0.forEach {
-                        let instruction = $0[RecipeKeys.instructionValue.rawValue].stringValue.htmlFormatted()
+                        let instruction = $0[RecipeKeys.instructionValue.rawValue].stringValue.recipeFormatted()
                         instructions.append(instruction)
                     }
                 }
@@ -152,12 +152,12 @@ extension RecipeJSONParser {
         let prep = json[RecipeKeys.prepTime.rawValue]?
             .stringValue
             .htmlFormatted()
-            .replacingOccurrences(of: "PT", with: "")
+            .timeFormatted()
         
         let cook = json[RecipeKeys.cookTime.rawValue]?
             .stringValue
             .htmlFormatted()
-            .replacingOccurrences(of: "PT", with: "")
+            .timeFormatted()
         
         if title == "" || ingrd.isEmpty || instructions.isEmpty  {
             throw NetworkError.recipeMissingItem("One or more properties are empty")
