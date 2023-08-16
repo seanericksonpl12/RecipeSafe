@@ -10,6 +10,11 @@
 "app.all" = "All Recipes";
 "app.group" = "Groups";
 
+// MARK: - TutorialView
+"tutorial.title" = "Adding Recipes";
+"tutorial.pageone" = "To add an online recipe, start by finding the recipe on Safari or Chrome, and tap the share icon.";
+"tutorial.pagetwo" = "Tap on the Recipe-Safe icon, and watch it open in the app!";
+
 // MARK: - ContentView
 "content.nav.title" = "Recipes";
 "content.toolbar.add" = "Add Item";
@@ -59,6 +64,7 @@
 "button.cancel" = "Cancel";
 "button.save" = "Save";
 "button.done" = "Done";
+"button.next" = "Next";
 "button.savecopy" = "Save Copy";
 "button.overwrite" = "Overwrite";
 "button.delete" = "Delete";

@@ -62,6 +62,9 @@ struct RecipeSafeApp: App {
         } message: {
             Text("content.alert.copy.desc".localized)
         }
+        .popover(isPresented: $viewModel.launchTutorial) {
+            TutorialView(viewModel: TutorialViewModel(dismiss: $viewModel.launchTutorial))
+        }
         .onAppear {
             let tabBar = UITabBarAppearance()
             tabBar.configureWithDefaultBackground()

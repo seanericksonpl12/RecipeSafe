@@ -54,6 +54,9 @@
 		926687A42A60CA9E00117A59 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926687A32A60CA9E00117A59 /* ContentViewModel.swift */; };
 		926687AC2A619ABE00117A59 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926687AB2A619ABE00117A59 /* ShareViewController.swift */; };
 		926687B32A619ABE00117A59 /* Shared.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 926687A92A619ABE00117A59 /* Shared.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9268BDC62A8C73AB00366964 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9268BDC52A8C73AB00366964 /* TutorialView.swift */; };
+		9268BDC82A8C749F00366964 /* TutorialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9268BDC72A8C749F00366964 /* TutorialViewModel.swift */; };
+		9268BDCA2A8D18C700366964 /* UserDefaultsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9268BDC92A8D18C700366964 /* UserDefaultsExtensions.swift */; };
 		926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A8E2A71FD9000457935 /* NetworkRequest.swift */; };
 		926A4A932A72B7AC00457935 /* RecipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A922A72B7AC00457935 /* RecipeRequest.swift */; };
 		9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */; };
@@ -171,6 +174,9 @@
 		926687B82A619F5A00117A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		926687B92A61A67100117A59 /* RecipeSafe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RecipeSafe.entitlements; sourceTree = "<group>"; };
 		926687BA2A61A6B100117A59 /* Shared.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Shared.entitlements; sourceTree = "<group>"; };
+		9268BDC52A8C73AB00366964 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		9268BDC72A8C749F00366964 /* TutorialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewModel.swift; sourceTree = "<group>"; };
+		9268BDC92A8D18C700366964 /* UserDefaultsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtensions.swift; sourceTree = "<group>"; };
 		926A4A8E2A71FD9000457935 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		926A4A922A72B7AC00457935 /* RecipeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRequest.swift; sourceTree = "<group>"; };
 		926A4A952A748AD100457935 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
@@ -354,6 +360,7 @@
 		925DCBE82A61D71500B84A38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				9268BDC42A8C739600366964 /* TutorialView */,
 				9201F97E2A795F5A00A6021A /* Protocol */,
 				92E706012A8BB9B300ACA24C /* SelectGroupsView */,
 				929317782A85C9FC0089A55D /* GroupGridView */,
@@ -424,6 +431,7 @@
 			children = (
 				920DA3562A6EED7E0086ADB5 /* StringExtensions.swift */,
 				920DA3672A70269F0086ADB5 /* ViewExtensions.swift */,
+				9268BDC92A8D18C700366964 /* UserDefaultsExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -521,6 +529,15 @@
 				926687B02A619ABE00117A59 /* Info.plist */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		9268BDC42A8C739600366964 /* TutorialView */ = {
+			isa = PBXGroup;
+			children = (
+				9268BDC52A8C73AB00366964 /* TutorialView.swift */,
+				9268BDC72A8C749F00366964 /* TutorialViewModel.swift */,
+			);
+			path = TutorialView;
 			sourceTree = "<group>";
 		};
 		926A4A8D2A71FD6A00457935 /* Protocol */ = {
@@ -780,6 +797,7 @@
 				92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */,
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
 				9272DD1F2A867A7C00DD4549 /* GridButton.swift in Sources */,
+				9268BDCA2A8D18C700366964 /* UserDefaultsExtensions.swift in Sources */,
 				9201F9872A7AF22C00A6021A /* JSONParser.swift in Sources */,
 				920DA3592A6F053A0086ADB5 /* LoadingView.swift in Sources */,
 				929317202A828E2D0089A55D /* IconImage.swift in Sources */,
@@ -795,6 +813,7 @@
 				926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */,
 				9201F9952A7C250000A6021A /* DataManager.swift in Sources */,
 				92535C232A7174F1003E30BD /* NetworkProtocol.swift in Sources */,
+				9268BDC82A8C749F00366964 /* TutorialViewModel.swift in Sources */,
 				926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */,
 				9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */,
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
@@ -805,6 +824,7 @@
 				9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */,
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,
 				920DA3632A701BF10086ADB5 /* EditableSectionView.swift in Sources */,
+				9268BDC62A8C73AB00366964 /* TutorialView.swift in Sources */,
 				9272DD232A86944000DD4549 /* NewGroupPopover.swift in Sources */,
 				92E705FE2A8A9A8600ACA24C /* SelectGroupsView.swift in Sources */,
 				9272DD252A86D1E800DD4549 /* GroupModel.swift in Sources */,
@@ -995,7 +1015,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RecipeSafe/RecipeSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
@@ -1030,7 +1050,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RecipeSafe/RecipeSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
@@ -1143,7 +1163,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;
@@ -1169,7 +1189,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;
