@@ -69,12 +69,10 @@ struct RecipeView<T: EditableRecipeModel>: View {
                 Text("recipe.alert.delete.desc".localized)
             }
             .popover(isPresented: $viewModel.groupSwitch) {
-                List(viewModel.getGroups()) { group in
-                    Text(group.title ?? "")
-                        .onTapGesture {
-                            viewModel.addToGroup(group)
-                            viewModel.groupSwitch = false
-                        }
+                if let recipeItem = viewModel.recipe.dataEntity {
+                    SelectGroupsView(viewModel: SelectGroupsViewModel(selectionAction: { viewModel.addToGroup($0); viewModel.groupSwitch = false },
+                                                                      cancelAction: { viewModel.groupSwitch = false },
+                                                                      newRecipe: recipeItem))
                 }
             }
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
