@@ -1,0 +1,75 @@
+/* 
+  Localizable.strings
+  RecipeSafe
+
+  Created by Sean Erickson on 7/29/23.
+  
+*/
+
+// MARK: - App
+"app.all" = "All Recipes";
+"app.group" = "Groups";
+
+// MARK: - TutorialView
+"tutorial.title" = "Adding Recipes";
+"tutorial.pageone" = "To add an online recipe, start by finding the recipe on Safari or Chrome, and tap the share icon.";
+"tutorial.pagetwo" = "Tap on the Recipe-Safe icon, and watch it open in the app!";
+
+// MARK: - ContentView
+"content.nav.title" = "Recipes";
+"content.toolbar.add" = "Add Item";
+"content.alert.fail.title" = "Couldn't Curate Recipe";
+"content.alert.fail.desc" = "Please try a different site or create your own recipe";
+"content.alert.copy.title" = "Recipe Already Exists";
+"content.alert.copy.desc" = "Would you like to overwrite it or save a new copy?";
+"content.search.prompt" = "Find a Recipe";
+
+// MARK: - RecipeView
+"recipe.ingredients.title" = "Ingredients";
+"recipe.ingredients.new" = "new ingredient";
+"recipe.instructions.title" = "Instructions";
+"recipe.instructions.new" = "new instruction";
+"recipe.alert.delete.title" = "Delete This Recipe";
+"recipe.alert.delete.desc" = "Are you sure you want to delete this recipe?";
+"recipe.cooktime" = "Cook Time: ";
+"recipe.preptime" = "Prep Time: ";
+"recipe.title.new" = "New Recipe";
+"recipe.preptime.label" = "5 min";
+"recipe.group.add" = "Add to Group";
+
+// MARK: - CreateRecipeView
+"create.display.title" = "Title";
+"create.alert.title" = "Add a title before saving!";
+"create.display.desc" = "Description";
+
+
+// MARK: - GroupViews
+"group.title.prompt" = "Group Name";
+"group.list.add" = "Add Recipes to ";
+"group.alert.delete" = "Delete This Group?";
+"group.new.title" = "Title";
+"group.new.header" = "Add Recipes: ";
+"group.recipes.add" = "Add Recipes";
+"group.default" = "Group";
+"group.new.add" = "Add to a Group?";
+
+
+// MARK: - EmptyListView
+"empty.title" = "Looks Empty...";
+"empty.desc.1" = "Open a recipe from safari, or create your own!";
+"empty.desc.2" = "Add a new group with the edit button!";
+
+// MARK: - Buttons
+"button.ok" = "OK";
+"button.cancel" = "Cancel";
+"button.save" = "Save";
+"button.done" = "Done";
+"button.next" = "Next";
+"button.savecopy" = "Save Copy";
+"button.overwrite" = "Overwrite";
+"button.delete" = "Delete";
+"button.edit" = "Edit";
+"button.link.safari" = "Open in Safari";
+
+// MARK: - Other
+"tool.search" = "Search";

@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "8104097B-5EB6-4057-BAC3-2B82D084AE7D",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:RecipeSafe.xcodeproj",
+      "identifier" : "926687662A608C9200117A59",
+      "name" : "RecipeSafe"
+    }
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "RecipeSafeTests"
+      ],
+      "target" : {
+        "containerPath" : "container:RecipeSafe.xcodeproj",
+        "identifier" : "9266877B2A608C9300117A59",
+        "name" : "RecipeSafeTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -7,39 +7,43 @@
 
 import Foundation
 import Combine
-import SwiftSoup
-import SwiftyJSON
 
-class NetworkManager {
-    public static let main: NetworkManager = NetworkManager()
+class NetworkManager: NetworkProtocol {
     
-    func networkRequest(url: String) throws -> AnyPublisher<Recipe, Error> {
-        guard let url = URL(string: url) else { throw URLError(.badURL) }
-        
-        return URLSession.shared.dataTaskPublisher(for: url)
-            .map(\.data)
-            .tryMap {
-                guard let str = String(data: $0, encoding: .utf8) else { throw URLError(.cannotDecodeRawData) }
-                return str
-            }
-            .tryMap { [weak self] in
-                guard let self = self else { return Recipe(ingredients: []) }
-                return try self.soupify(html: $0)
-            }
-            .eraseToAnyPublisher()
-            
+    // MARK: - Properties
+    var session: URLSession
+    
+    // MARK: - Inits
+    init(configuration: URLSessionConfiguration) {
+        self.session = URLSession(configuration: configuration)
     }
     
-    func soupify(html: String) throws -> Recipe {
-        let doc: Document = try SwiftSoup.parse(html)
-        let scripts = try doc.select("script[type=application/ld+json]").first()?.data()
-        guard let jsonString = scripts?.data(using: .utf8, allowLossyConversion: false) else { return Recipe(ingredients: []) }
+    convenience init() {
+        self.init(configuration: .default)
+    }
+    
+    // MARK: - Make Request
+    func networkRequest(url: URL) -> AnyPublisher<Recipe, Error> {
         
+        guard url.scheme == "RecipeSafe" else {
+            return Fail(error: NetworkError.invalidURL("Bad URL scheme")).eraseToAnyPublisher()
+        }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            return Fail(error: NetworkError.invalidURL("Could not create components")).eraseToAnyPublisher()
+        }
+        guard components.host == "open-recipe" else {
+            return Fail(error: NetworkError.invalidURL("Bad URL host")).eraseToAnyPublisher()
+        }
+        guard let embeddedUrl = components.queryItems?.first(where: { $0.name == "url" })?.value else {
+            return Fail(error: NetworkError.invalidURL("Bad URL queries")).eraseToAnyPublisher()
+        }
+        let recipeComponents = URLComponents(string: "https://".appending(embeddedUrl))
+        guard let urlStr = recipeComponents?.url?.absoluteString else {
+            return Fail(error: NetworkError.invalidURL("Could not resolve url")).eraseToAnyPublisher()
+        }
         
-        let json = try JSON(data: jsonString)
-        
-        let ingrd =  json["@graph"][7].filter { $0.0.contains("recipeIngredient")}[0].1.arrayValue.map { $0.stringValue }
-        return Recipe(ingredients: ingrd)
-        
+        let slicedURL = urlStr.replacing("RecipeSafe://", with: "")
+        let request = RecipeRequest(url: slicedURL)
+        return executeRequest(request: request, retries: 0)
     }
 }

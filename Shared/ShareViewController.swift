@@ -12,20 +12,15 @@ import UniformTypeIdentifiers
 
 class ShareViewController: UIViewController {
     
-    private let myURLStr: String = "RecipeSafe://ContentView"
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("will appear")
         
         guard let extensionObj = extensionContext?.inputItems.first as? NSExtensionItem, let itemProvider = extensionObj.attachments?.first else {
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             return
         }
 
-        if itemProvider.hasItemConformingToTypeIdentifier(UTType.text.identifier) {
-            handleText(provider: itemProvider)
-        } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+        if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
             handleURL(provider: itemProvider)
         } else {
             self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
@@ -37,17 +32,28 @@ class ShareViewController: UIViewController {
         provider.loadItem(forTypeIdentifier: UTType.url.identifier) { (item, error) in
             if let error = error { print(error.localizedDescription) }
             
-            if let url = item as? NSURL, let urlString = url.absoluteString, let finalURL = URL(string: "RecipeSafe://".appending(urlString)) {
+            if let url = item as? NSURL {
+                guard let itemComponents = URLComponents(url: url as URL, resolvingAgainstBaseURL: true) else {
+                    return
+                }
+                if itemComponents.scheme != "https" {
+                    return
+                }
+                guard let urlStr = itemComponents.host?.appending(itemComponents.path) else {
+                    return
+                }
+                var urlComponents = URLComponents()
+                urlComponents.scheme = "RecipeSafe"
+                urlComponents.host = "open-recipe"
+                urlComponents.queryItems = [URLQueryItem(name: "url", value: urlStr)]
+                guard let finalURL = urlComponents.url else {
+                    return
+                }
                 self.extensionContext?.completeRequest(returningItems: nil) { _ in
                     _ = self.openURL(finalURL)
                 }
             }
         }
-    }
-    
-    private func handleText(provider: NSItemProvider) {
-        print("item is text")
-        self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
     
     @objc func openURL(_ url: URL) -> Bool {
