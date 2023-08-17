@@ -12,8 +12,10 @@
 
 // MARK: - TutorialView
 "tutorial.title" = "Adding Recipes";
-"tutorial.pageone" = "To add an online recipe, start by finding the recipe on Safari or Chrome, and tap the share icon.";
-"tutorial.pagetwo" = "Tap on the Recipe-Safe icon, and watch it open in the app!";
+"tutorial.page.1" = "To add an online recipe, start by finding the recipe on Safari or Chrome, and tap the share icon.";
+"tutorial.page.2" = "If Recipe-Safe doesn't appear in the list of apps, select the more icon.";
+"tutorial.page.3" = "Scroll down to suggestions and find Recipe-Safe. You may need to restart the Safari app if Recipe-Safe doesn't appear. Tap the edit button to add Recipe-Safe to favorites!";
+"tutorial.page.4" = "The Recipe-Safe icon should now show up here when you tap the share button. Just tap the icon and watch it open in the app!";
 
 // MARK: - ContentView
 "content.nav.title" = "Recipes";
