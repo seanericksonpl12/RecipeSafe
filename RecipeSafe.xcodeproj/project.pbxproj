@@ -57,6 +57,7 @@
 		9268BDC62A8C73AB00366964 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9268BDC52A8C73AB00366964 /* TutorialView.swift */; };
 		9268BDC82A8C749F00366964 /* TutorialViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9268BDC72A8C749F00366964 /* TutorialViewModel.swift */; };
 		9268BDCA2A8D18C700366964 /* UserDefaultsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9268BDC92A8D18C700366964 /* UserDefaultsExtensions.swift */; };
+		9268BDD02A8E51B300366964 /* TutorialPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9268BDCF2A8E51B300366964 /* TutorialPageView.swift */; };
 		926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A8E2A71FD9000457935 /* NetworkRequest.swift */; };
 		926A4A932A72B7AC00457935 /* RecipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A922A72B7AC00457935 /* RecipeRequest.swift */; };
 		9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */; };
@@ -177,6 +178,7 @@
 		9268BDC52A8C73AB00366964 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		9268BDC72A8C749F00366964 /* TutorialViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialViewModel.swift; sourceTree = "<group>"; };
 		9268BDC92A8D18C700366964 /* UserDefaultsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtensions.swift; sourceTree = "<group>"; };
+		9268BDCF2A8E51B300366964 /* TutorialPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialPageView.swift; sourceTree = "<group>"; };
 		926A4A8E2A71FD9000457935 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		926A4A922A72B7AC00457935 /* RecipeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRequest.swift; sourceTree = "<group>"; };
 		926A4A952A748AD100457935 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 			children = (
 				9268BDC52A8C73AB00366964 /* TutorialView.swift */,
 				9268BDC72A8C749F00366964 /* TutorialViewModel.swift */,
+				9268BDCF2A8E51B300366964 /* TutorialPageView.swift */,
 			);
 			path = TutorialView;
 			sourceTree = "<group>";
@@ -829,6 +832,7 @@
 				92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */,
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
 				9272DD1F2A867A7C00DD4549 /* GridButton.swift in Sources */,
+				9268BDD02A8E51B300366964 /* TutorialPageView.swift in Sources */,
 				9268BDCA2A8D18C700366964 /* UserDefaultsExtensions.swift in Sources */,
 				9201F9872A7AF22C00A6021A /* JSONParser.swift in Sources */,
 				920DA3592A6F053A0086ADB5 /* LoadingView.swift in Sources */,
@@ -1047,7 +1051,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RecipeSafe/RecipeSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
@@ -1061,7 +1065,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.seane.RecipeSafe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1082,7 +1086,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RecipeSafe/RecipeSafe.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
@@ -1096,7 +1100,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.seane.RecipeSafe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1195,7 +1199,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;
@@ -1206,7 +1210,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.seane.RecipeSafe.Shared;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1221,7 +1225,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Shared/Shared.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shared/Info.plist;
@@ -1232,7 +1236,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.seane.RecipeSafe.Shared;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
