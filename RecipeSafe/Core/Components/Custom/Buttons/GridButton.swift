@@ -20,7 +20,7 @@ struct GridButton: View {
     // MARK: - Body
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
-            .stroke(Color.secondary, lineWidth: 4)
+            .stroke(.gray, lineWidth: 4)
             .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
             .background {
                 if let url = group.imgUrl {
@@ -38,7 +38,7 @@ struct GridButton: View {
                                 .scaledToFill()
                                 .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
-                                .opacity(0.5)
+                                .opacity(isEditing ? 0.5 : 1)
                                 .allowsHitTesting(false)
                                 .zIndex(0)
                         @unknown default:
@@ -67,8 +67,24 @@ struct GridButton: View {
                         Spacer()
                     }
                 }
-                Text(group.title ?? "" )
-                    .foregroundColor(.secondary)
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text(group.title ?? "" )
+                            .lineLimit(1)
+                            .fontWeight(.heavy)
+                            .foregroundColor(.black)
+                            .padding(EdgeInsets(top: 2, leading: 10, bottom: 0, trailing: 10))
+                            .background {
+                                LeftTabbedRoundedRectangle(radius: 7, leftRadius: 11)
+                                    .fill(.gray)
+                                    .padding(EdgeInsets(top: 0, leading: 2, bottom: -3, trailing: 0))
+                                    .zIndex(-1)
+                            }
+                        Spacer()
+                    }
+                    .padding(.bottom, 5)
+                }
             }
             .padding()
     }
