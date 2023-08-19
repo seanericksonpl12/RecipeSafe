@@ -46,7 +46,7 @@ struct GridButton: View {
                         }
                     }
                 } else {
-                    Color(.secondarySystemFill)
+                    ColorSet.color(Int(group.color))
                         .clipShape(RoundedRectangle(cornerRadius: 15))
                 }
                    

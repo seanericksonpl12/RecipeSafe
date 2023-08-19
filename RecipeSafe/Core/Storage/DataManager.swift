@@ -173,6 +173,17 @@ extension DataManager {
         let group = GroupItem(context: self.viewContext)
         group.title = title
         group.imgUrl = recipes.first(where: { $0.imageUrl != nil })?.imageUrl
+        let groups: [GroupItem] = self.getItems(filter: { _ in true})
+        var colors: [Int16 : Bool] = [1:false,2:false,3:false,4:false,5:false,6:false]
+        groups.forEach {
+            if $0.imgUrl == nil {
+                colors[$0.color] = true
+            }
+        }
+        if let newColor = colors.first(where: { $0.value == false })?.key {
+            group.color = newColor
+        } else { group.color = Int16.random(in: 1..<7) }
+        
         recipes.forEach { group.addToRecipes($0) }
         do {
             try viewContext.save()
