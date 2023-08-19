@@ -148,6 +148,7 @@ extension DataManager {
     func updateDataEntity(group: GroupModel) {
         group.dataEntity.title = group.title
         group.dataEntity.recipes = []
+        group.dataEntity.imgUrl = group.imgUrl
         group.recipes.forEach { group.dataEntity.addToRecipes($0) }
         do {
             try self.viewContext.save()
@@ -171,6 +172,7 @@ extension DataManager {
     func addGroup(title: String, recipes: [RecipeItem]) {
         let group = GroupItem(context: self.viewContext)
         group.title = title
+        group.imgUrl = recipes.first(where: { $0.imageUrl != nil })?.imageUrl
         recipes.forEach { group.addToRecipes($0) }
         do {
             try viewContext.save()
