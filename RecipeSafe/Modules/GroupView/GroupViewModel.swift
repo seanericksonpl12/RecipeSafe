@@ -80,7 +80,7 @@ extension GroupViewModel {
             self.group.recipes[$0].group = nil
         }
         self.group.recipes.remove(atOffsets: offsets)
-        self.saveChanges()
+        self.dataManager.updateDataEntity(group: group)
     }
     
     func moveRecipes(from start: IndexSet, to end: Int) {

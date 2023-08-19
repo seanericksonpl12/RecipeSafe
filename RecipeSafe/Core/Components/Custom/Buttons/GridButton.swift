@@ -21,8 +21,36 @@ struct GridButton: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
             .stroke(Color.secondary, lineWidth: 4)
-            .background(.background)
             .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
+            .background {
+                if let url = group.imgUrl {
+                    CachedAsyncImage(url: url) { phase in
+                        switch phase {
+                        case.empty:
+                            Color(.secondarySystemFill)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                        case .failure(_):
+                            Color(.secondarySystemFill)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                        case .success(let img):
+                            img
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                .opacity(0.5)
+                                .allowsHitTesting(false)
+                                .zIndex(0)
+                        @unknown default:
+                            Color(.secondarySystemFill)
+                        }
+                    }
+                } else {
+                    Color(.secondarySystemFill)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                }
+                   
+            }
             .overlay {
                 if isEditing {
                     VStack {
