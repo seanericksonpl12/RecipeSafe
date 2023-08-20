@@ -20,7 +20,7 @@ struct GridButton: View {
     // MARK: - Body
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
-            .stroke(.gray, lineWidth: 4)
+            .stroke(Color(.systemGray4), lineWidth: 4)
             .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
             .background {
                 if let url = group.imgUrl {
@@ -72,12 +72,12 @@ struct GridButton: View {
                     HStack {
                         Text(group.title ?? "" )
                             .lineLimit(1)
-                            .fontWeight(.heavy)
-                            .foregroundColor(.black)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color(uiColor: .label))
                             .padding(EdgeInsets(top: 2, leading: 10, bottom: 0, trailing: 10))
                             .background {
                                 LeftTabbedRoundedRectangle(radius: 7, leftRadius: 11)
-                                    .fill(.gray)
+                                    .fill(Color(.systemGray4))
                                     .padding(EdgeInsets(top: 0, leading: 2, bottom: -3, trailing: 0))
                                     .zIndex(-1)
                             }
