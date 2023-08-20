@@ -15,14 +15,14 @@ struct TabbedList<Content: View>: View {
     // MARK: - Properties
     var textFieldTitle: Binding<String>
     var editing: Binding<Bool>
-    var textFieldPrompt: Text?
+    var textFieldPrompt: String?
     var content: Content
     
     // MARK: - Private
     @State private var charLimit: Int = 100
     
     // MARK: - Init
-    init(textFieldTitle: Binding<String>, editing: Binding<Bool>, textFieldPrompt: Text?, @ViewBuilder _ content: () -> Content) {
+    init(textFieldTitle: Binding<String>, editing: Binding<Bool>, textFieldPrompt: String?, @ViewBuilder _ content: () -> Content) {
         self.textFieldTitle = textFieldTitle
         self.editing = editing
         self.textFieldPrompt = textFieldPrompt
@@ -38,7 +38,7 @@ struct TabbedList<Content: View>: View {
                 if textFieldTitle.wrappedValue != " " || editing.wrappedValue {
                     VStack {
                         HStack {
-                            TextField("", text: textFieldTitle, prompt: textFieldPrompt, axis: .horizontal)
+                            TextField("", text: textFieldTitle, prompt: Text(textFieldPrompt ?? ""), axis: .horizontal)
                                 .font(.title)
                                 .fontWeight(.heavy)
                                 .disabled(!editing.wrappedValue)
@@ -64,7 +64,9 @@ struct TabbedList<Content: View>: View {
                 if textFieldTitle.wrappedValue != " " || editing.wrappedValue {
                     VStack {
                         HStack {
-                            Text(textFieldTitle.wrappedValue.prefix(charLimit))
+                            Text(textFieldTitle.wrappedValue == "" ? textFieldPrompt ??
+                                 String(textFieldTitle.wrappedValue.prefix(charLimit)) :
+                                    String(textFieldTitle.wrappedValue.prefix(charLimit)))
                                 .font(.title)
                                 .fontWeight(.heavy)
                                 .disabled(true)
@@ -86,7 +88,6 @@ struct TabbedList<Content: View>: View {
                                     GeometryReader { proxy in
                                         Color.clear
                                             .onChange(of: textFieldTitle.wrappedValue) { text in
-                                                print(text)
                                                 if proxy.size.width >= geo.size.width * 0.9 {
                                                     charLimit = textFieldTitle.wrappedValue.count - 1
                                                 }

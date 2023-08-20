@@ -15,6 +15,7 @@ import Foundation
     @Published var newGroupSwitch: Bool = false
     @Published var newGroupText: String = ""
     @Published var selectedRecipes: [RecipeItem] = []
+    @Published var newGroupColor: Int16?
     
     // MARK: - Stored Properties
     var selectionAction: (GroupItem) -> Void
@@ -42,11 +43,12 @@ import Foundation
 extension SelectGroupsViewModel {
     
     func addNewGroup() {
+        self.newGroupColor = dataManager.getNewColor()
         self.newGroupSwitch.toggle()
     }
     
     func saveNewGroup() {
-        dataManager.addGroup(title: newGroupText, recipes: selectedRecipes)
+        dataManager.addGroup(title: newGroupText, recipes: selectedRecipes, color: self.newGroupColor)
         newGroupSwitch = false
         let groups: [GroupItem] = dataManager.getItems(filter: { group in
             if let recipes = group.recipes?.array as? [RecipeItem] {
@@ -55,7 +57,7 @@ extension SelectGroupsViewModel {
             return false
         })
         newGroupText = ""
-        
+        newGroupColor = nil
         guard let group = groups.first else { return }
         selectionAction(group)
     }
@@ -63,5 +65,6 @@ extension SelectGroupsViewModel {
     func cancelNewGroup() {
         self.newGroupText = ""
         self.newGroupSwitch = false
+        self.newGroupColor = nil
     }
 }

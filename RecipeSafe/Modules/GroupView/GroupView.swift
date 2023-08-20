@@ -27,7 +27,7 @@ struct GroupView: View {
         // MARK: - Recipes
         TabbedList(textFieldTitle: $viewModel.group.title,
                    editing: $viewModel.editingEnabled,
-                   textFieldPrompt: Text("group.title.prompt".localized)) {
+                   textFieldPrompt: "group.title.prompt".localized) {
             
             ForEach(viewModel.group.recipes) { recipe in
                 if let recipeModel = Recipe(dataItem: recipe) {
