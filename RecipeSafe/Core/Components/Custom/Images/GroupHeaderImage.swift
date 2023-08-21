@@ -16,44 +16,40 @@ struct GroupHeaderImage: View {
             CachedAsyncImage(url: url) { phase in
                 switch phase {
                 case.empty:
-                    Image("logo-background")
-                        .resizable()
+                    ColorSet.color(group.dataEntity.color)
                         .scaledToFill()
                         .ignoresSafeArea()
-                        .opacity(0.5)
+                        .opacity(0.75)
                         .allowsHitTesting(false)
                         .zIndex(0)
                 case .failure(_):
-                    Image("logo-background")
-                        .resizable()
+                    ColorSet.color(group.dataEntity.color)
                         .scaledToFill()
                         .ignoresSafeArea()
-                        .opacity(0.5)
+                        .opacity(0.75)
                         .allowsHitTesting(false)
                         .zIndex(0)
                 case .success(let img):
                     img
                         .frame(maxHeight: 40)
-                        .opacity(0.5)
+                        .opacity(0.85)
                         .allowsHitTesting(false)
                         .zIndex(0)
                 @unknown default:
-                    Image("logo-background")
-                        .resizable()
+                    ColorSet.color(group.dataEntity.color)
                         .scaledToFill()
                         .ignoresSafeArea()
-                        .opacity(0.5)
+                        .opacity(0.75)
                         .allowsHitTesting(false)
                         .zIndex(0)
                 }
             }
         }
         else {
-            Image("logo-background")
-                .resizable()
+            ColorSet.color(group.dataEntity.color)
                 .scaledToFill()
                 .ignoresSafeArea()
-                .opacity(0.5)
+                .opacity(0.75)
                 .allowsHitTesting(false)
                 .zIndex(0)
         }

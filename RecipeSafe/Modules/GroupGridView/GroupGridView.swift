@@ -96,7 +96,8 @@ struct GroupGridView: View {
                 NavigationStack {
                     NewGroupPopover(titleText: $viewModel.newGroupText,
                                     selectedRecipes: $viewModel.selectedRecipes,
-                                    recipes: viewModel.getRecipes())
+                                    recipes: viewModel.getRecipes(),
+                                    color: ColorSet.color(viewModel.newGroupColor))
                     .editableToolbar(isEditing: $viewModel.editingEnabled,
                                      alternateLabel: "",
                                      saveAction: {self.viewModel.saveNewGroup()},

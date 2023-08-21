@@ -19,6 +19,7 @@ import Combine
     @Published var newRecipeSwitch: Bool = false
     @Published var newGroupText: String = ""
     @Published var selectedRecipes: [RecipeItem] = []
+    @Published var newGroupColor: Int16?
     
     // MARK: - Private Properties
     private var onDeckToDelete: GroupItem?
@@ -72,6 +73,7 @@ extension GroupGridViewModel {
     func addGroup() {
         self.newGroupText = ""
         self.selectedRecipes = []
+        self.newGroupColor = dataManager.getNewColor()
         withAnimation {
             addGroupSwitch = true
         }
@@ -97,13 +99,14 @@ extension GroupGridViewModel {
     }
     
     func saveNewGroup() {
-        dataManager.addGroup(title: newGroupText, recipes: selectedRecipes)
+        dataManager.addGroup(title: newGroupText, recipes: selectedRecipes, color: self.newGroupColor)
         addGroupSwitch = false
     }
     
     func cancelNewGroup() {
         addGroupSwitch = false
         newGroupText = ""
+        newGroupColor = nil
         selectedRecipes = []
     }
 }

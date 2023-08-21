@@ -149,6 +149,9 @@ extension DataManager {
         group.dataEntity.title = group.title
         group.dataEntity.recipes = []
         group.dataEntity.imgUrl = group.imgUrl
+        if group.dataEntity.color == 0 {
+            group.dataEntity.color = getNewColor()
+        }
         group.recipes.forEach { group.dataEntity.addToRecipes($0) }
         do {
             try self.viewContext.save()
@@ -160,6 +163,9 @@ extension DataManager {
     func addToGroup(recipe: Recipe, _ group: GroupItem) {
         if let data = recipe.dataEntity {
             group.addToRecipes(data)
+            if let recipes = group.recipes?.array as? [RecipeItem] {
+                group.imgUrl = recipes.first(where: {$0.imageUrl != nil })?.imageUrl
+            }
             do {
                 try viewContext.save()
             } catch {
@@ -169,10 +175,13 @@ extension DataManager {
         }
     }
     
-    func addGroup(title: String, recipes: [RecipeItem]) {
+    func addGroup(title: String, recipes: [RecipeItem], color: Int16? = nil) {
         let group = GroupItem(context: self.viewContext)
         group.title = title
         group.imgUrl = recipes.first(where: { $0.imageUrl != nil })?.imageUrl
+        if let color = color {
+            group.color = color
+        } else { group.color = getNewColor() }
         recipes.forEach { group.addToRecipes($0) }
         do {
             try viewContext.save()
@@ -190,5 +199,18 @@ extension DataManager {
             print(String(describing: error))
             return []
         }
+    }
+    
+    func getNewColor() -> Int16 {
+        let groups: [GroupItem] = self.getItems(filter: { _ in true})
+        var colors: [Int16 : Bool] = [1:false,2:false,3:false,4:false,5:false,6:false]
+        groups.forEach {
+            if $0.imgUrl == nil {
+                colors[$0.color] = true
+            }
+        }
+        if let newColor = colors.first(where: { $0.value == false })?.key {
+            return newColor
+        } else { return Int16.random(in: 1..<7) }
     }
 }
