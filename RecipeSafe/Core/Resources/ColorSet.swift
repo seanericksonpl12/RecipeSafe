@@ -17,11 +17,11 @@ struct ColorSet {
     static let pink = Color("Pink")
     
     static func random() -> Color {
-        let randInt = Int.random(in: 1..<7)
+        let randInt = Int16.random(in: 1..<7)
         return ColorSet.color(randInt)
     }
     
-    static func color(_ num: Int?) -> Color {
+    static func color(_ num: Int16?) -> Color {
         switch num {
         case 1:
             return ColorSet.tan

@@ -47,6 +47,9 @@ struct NewGroupPopover: View {
                             }
                         }
                     }
+                    if recipes.isEmpty {
+                        EmptyGroupView()
+                    }
                 } header : {
                     Text("group.new.header".localized)
                 }

@@ -61,7 +61,7 @@ struct SelectGroupsView: View {
                         NewGroupPopover(titleText: $viewModel.newGroupText,
                                         selectedRecipes: $viewModel.selectedRecipes,
                                         recipes: [viewModel.newRecipe],
-                                        allowSelection: false, color: ColorSet.color(Int(viewModel.newGroupColor ?? 0)))
+                                        allowSelection: false, color: ColorSet.color(viewModel.newGroupColor))
                         .editableToolbar(isEditing: $viewModel.editBinding,
                                          alternateLabel: "",
                                          saveAction: { self.viewModel.saveNewGroup()},

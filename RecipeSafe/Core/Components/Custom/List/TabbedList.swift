@@ -83,7 +83,7 @@ struct TabbedList<Content: View>: View {
                                 }
                                 .background {
                                     InverseRoundedRectangle(radius: 15)
-                                        .fill(colorScheme == .light ? Color(uiColor: .secondarySystemBackground) : .black)
+                                        .fill(colorScheme == .light ? Color(uiColor: .secondarySystemBackground) : Color(uiColor: .systemBackground))
                                         .zIndex(0)
                                     GeometryReader { proxy in
                                         Color.clear

@@ -149,6 +149,9 @@ extension DataManager {
         group.dataEntity.title = group.title
         group.dataEntity.recipes = []
         group.dataEntity.imgUrl = group.imgUrl
+        if group.dataEntity.color == 0 {
+            group.dataEntity.color = getNewColor()
+        }
         group.recipes.forEach { group.dataEntity.addToRecipes($0) }
         do {
             try self.viewContext.save()

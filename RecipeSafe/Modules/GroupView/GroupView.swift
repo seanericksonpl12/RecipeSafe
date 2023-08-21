@@ -58,6 +58,8 @@ struct GroupView: View {
                 } header: {
                     Text("group.list.add".localized + viewModel.group.title)
                 }
+            } else if viewModel.group.recipes.isEmpty {
+                EmptyGroupView()
             }
         }
         .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))

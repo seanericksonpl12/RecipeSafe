@@ -27,10 +27,10 @@ struct GridButton: View {
                     CachedAsyncImage(url: url) { phase in
                         switch phase {
                         case.empty:
-                            Color(.secondarySystemFill)
+                            ColorSet.color(group.color)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                         case .failure(_):
-                            Color(.secondarySystemFill)
+                            ColorSet.color(group.color)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                         case .success(let img):
                             img
@@ -42,11 +42,12 @@ struct GridButton: View {
                                 .allowsHitTesting(false)
                                 .zIndex(0)
                         @unknown default:
-                            Color(.secondarySystemFill)
+                            ColorSet.color(group.color)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
                         }
                     }
                 } else {
-                    ColorSet.color(Int(group.color))
+                    ColorSet.color(group.color)
                         .clipShape(RoundedRectangle(cornerRadius: 15))
                 }
                    

@@ -16,14 +16,14 @@ struct GroupHeaderImage: View {
             CachedAsyncImage(url: url) { phase in
                 switch phase {
                 case.empty:
-                    ColorSet.color(Int(group.dataEntity.color))
+                    ColorSet.color(group.dataEntity.color)
                         .scaledToFill()
                         .ignoresSafeArea()
                         .opacity(0.75)
                         .allowsHitTesting(false)
                         .zIndex(0)
                 case .failure(_):
-                    ColorSet.color(Int(group.dataEntity.color))
+                    ColorSet.color(group.dataEntity.color)
                         .scaledToFill()
                         .ignoresSafeArea()
                         .opacity(0.75)
@@ -36,7 +36,7 @@ struct GroupHeaderImage: View {
                         .allowsHitTesting(false)
                         .zIndex(0)
                 @unknown default:
-                    ColorSet.color(Int(group.dataEntity.color))
+                    ColorSet.color(group.dataEntity.color)
                         .scaledToFill()
                         .ignoresSafeArea()
                         .opacity(0.75)
@@ -46,7 +46,7 @@ struct GroupHeaderImage: View {
             }
         }
         else {
-            ColorSet.color(Int(group.dataEntity.color))
+            ColorSet.color(group.dataEntity.color)
                 .scaledToFill()
                 .ignoresSafeArea()
                 .opacity(0.75)

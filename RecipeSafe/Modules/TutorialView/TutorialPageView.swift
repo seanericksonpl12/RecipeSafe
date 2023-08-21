@@ -31,8 +31,7 @@ struct TutorialPageView: View {
                         .scaledToFit()
                         .cornerRadius(10)
                         .padding(.bottom)
-                }
-                Section {
+                
                     HStack {
                         Spacer()
                         Text(text)
@@ -41,7 +40,9 @@ struct TutorialPageView: View {
                     }
                 }
             }
-            .scrollDisabled(true)
+            .listRowSeparator(.hidden)
+            .padding(.bottom, 60)
+            
             HStack {
                 Spacer()
                 Button {
@@ -58,8 +59,8 @@ struct TutorialPageView: View {
                 }
                 Spacer()
             }
-            .padding(.bottom, 70)
-            .frame(maxHeight: 40, alignment: .bottom)
+            .padding(.bottom, 50)
+            .frame(maxHeight: 30, alignment: .bottom)
         }
     }
 }
