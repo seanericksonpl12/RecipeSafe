@@ -39,7 +39,6 @@ struct GridButton: View {
                                 .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .opacity(isEditing ? 0.5 : 1)
-                                .allowsHitTesting(false)
                                 .zIndex(0)
                         @unknown default:
                             ColorSet.color(group.color)
