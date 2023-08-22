@@ -74,6 +74,8 @@
 		927689672A914340002C1525 /* LeftTabbedRoundedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927689662A914340002C1525 /* LeftTabbedRoundedRectangle.swift */; };
 		9276896D2A9166D0002C1525 /* ColorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9276896C2A9166D0002C1525 /* ColorSet.swift */; };
 		9276896F2A93C735002C1525 /* EmptyGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9276896E2A93C735002C1525 /* EmptyGroupView.swift */; };
+		927689722A94F34F002C1525 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927689712A94F34F002C1525 /* WebView.swift */; };
+		927689742A94F531002C1525 /* WebKitDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927689732A94F531002C1525 /* WebKitDelegate.swift */; };
 		92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */; };
 		929316FA2A816BF30089A55D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9266876C2A608C9200117A59 /* ContentView.swift */; };
 		9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9293171A2A819FA30089A55D /* CustomTextField.swift */; };
@@ -203,6 +205,8 @@
 		927689662A914340002C1525 /* LeftTabbedRoundedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftTabbedRoundedRectangle.swift; sourceTree = "<group>"; };
 		9276896C2A9166D0002C1525 /* ColorSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSet.swift; sourceTree = "<group>"; };
 		9276896E2A93C735002C1525 /* EmptyGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyGroupView.swift; sourceTree = "<group>"; };
+		927689712A94F34F002C1525 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		927689732A94F531002C1525 /* WebKitDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebKitDelegate.swift; sourceTree = "<group>"; };
 		92924CDA2A673B60000EC3B8 /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		9293171A2A819FA30089A55D /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		9293171D2A81EB630089A55D /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
@@ -377,6 +381,7 @@
 		925DCBE82A61D71500B84A38 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				927689702A94F1FE002C1525 /* WebView */,
 				9268BDC42A8C739600366964 /* TutorialView */,
 				92E706012A8BB9B300ACA24C /* SelectGroupsView */,
 				929317782A85C9FC0089A55D /* GroupGridView */,
@@ -439,6 +444,7 @@
 				926A4A8D2A71FD6A00457935 /* Protocol */,
 				9266879C2A608F6400117A59 /* NetworkManager.swift */,
 				9201F9842A7AF14800A6021A /* RecipeJSONParser.swift */,
+				927689732A94F531002C1525 /* WebKitDelegate.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -620,6 +626,14 @@
 				927689602A8FEE69002C1525 /* TabbedList.swift */,
 			);
 			path = List;
+			sourceTree = "<group>";
+		};
+		927689702A94F1FE002C1525 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				927689712A94F34F002C1525 /* WebView.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 		92924CD82A673B33000EC3B8 /* ContentView */ = {
@@ -862,6 +876,7 @@
 				929316FA2A816BF30089A55D /* ContentView.swift in Sources */,
 				9201F9852A7AF14800A6021A /* RecipeJSONParser.swift in Sources */,
 				9201F9802A795F9000A6021A /* EditableRecipeModel.swift in Sources */,
+				927689742A94F531002C1525 /* WebKitDelegate.swift in Sources */,
 				9272DD282A86F72400DD4549 /* AddRecipePopover.swift in Sources */,
 				9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */,
 				926687742A608C9200117A59 /* Persistence.swift in Sources */,
@@ -897,6 +912,7 @@
 				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
 				9293171E2A81EB630089A55D /* ImageData.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
+				927689722A94F34F002C1525 /* WebView.swift in Sources */,
 				9276896D2A9166D0002C1525 /* ColorSet.swift in Sources */,
 				9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */,
 				92924CDB2A673B60000EC3B8 /* RecipeViewModel.swift in Sources */,

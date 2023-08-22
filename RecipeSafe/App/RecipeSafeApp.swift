@@ -40,6 +40,11 @@ struct RecipeSafeApp: App {
                     Label("app.group".localized, systemImage: "circlebadge.2")
                 }
                 .tag(2)
+            WebView()
+                .tabItem {
+                    Label("Search", systemImage: "safari")
+                }
+                .tag(3)
         }
         .onOpenURL { url in
             self.viewModel.onURLOpen(url: url)
