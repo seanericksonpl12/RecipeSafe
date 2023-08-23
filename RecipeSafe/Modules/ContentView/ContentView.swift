@@ -65,7 +65,7 @@ struct ContentView: View {
                         .scaledToFill()
                         .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
                         .ignoresSafeArea(.all)
-                        .opacity(recipeList.isEmpty ? 0 : 0.3)
+                        .opacity(recipeList.isEmpty ? 0 : 0.25)
                 }
                 .navigationTitle("content.nav.title".localized)
                 .navigationBarTitleDisplayMode(.inline)
