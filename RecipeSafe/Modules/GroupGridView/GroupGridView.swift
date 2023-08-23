@@ -67,7 +67,7 @@ struct GroupGridView: View {
                         .scaledToFill()
                         .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
                         .ignoresSafeArea(.all)
-                        .opacity(groups.isEmpty ? 0.0 : 0.3)
+                        .opacity(groups.isEmpty ? 0.0 : 0.25)
                 }
             }
             
