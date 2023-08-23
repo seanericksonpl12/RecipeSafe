@@ -10,14 +10,32 @@ import WebKit
 
 struct WebView: View {
     
-    var webDelegate: WebKitDelegate = WebKitDelegate()
+    @StateObject var webDelegate: WebKitDelegate = WebKitDelegate()
+    @State var searchText: String = ""
     
     var body: some View {
-        VStack {
-            Text(String(webDelegate.estimatedProgress))
-            WebUIView(url: URL(string: "https://www.google.com")!, delegate: webDelegate)
-            Text("footer here")
-        }
+            VStack {
+                HStack {
+                    Button {
+                        webDelegate.goBack()
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                    }
+                    .padding()
+                    Spacer()
+                    
+                    Spacer()
+                    Button {
+                        webDelegate.openURL()
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .padding()
+                }
+                .background(Color.secondary)
+                WebUIView(url: URL(string: "https://www.google.com")!, delegate: webDelegate)
+                Text("footer here")
+            }
     }
 }
 

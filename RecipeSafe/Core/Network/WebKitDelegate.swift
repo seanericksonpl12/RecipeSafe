@@ -9,34 +9,40 @@ import UIKit
 import SwiftUI
 import WebKit
 
-class WebKitDelegate: WKWebView, WKNavigationDelegate {
+class WebKitDelegate: WKWebView, WKNavigationDelegate, ObservableObject {
     
-    var contentRules: WKContentRuleList?
-    
-    init?(contentRules: WKContentRuleList? = nil) {
-        super.init(coder: NSCoder())
-        self.contentRules = contentRules
-        self.setupContentRules()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
+    @Published var currentUrl: URL?
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
         return WKNavigationActionPolicy.allow
     }
     
-    func setupContentRules() {
-        WKContentRuleListStore
-            .default()
-            .compileContentRuleList(forIdentifier: "adBlock",
-                                    encodedContentRuleList: "Test") { list, error in
-                if let error = error {
-                    print(error)
-                    return
-                }
-                self.contentRules = list
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        self.currentUrl = webView.url
+    }
+    
+    func openURL() {
+        if let url = self.currentUrl {
+            guard let itemComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+                return
             }
+            if itemComponents.scheme != "https" {
+                return
+            }
+            guard let urlStr = itemComponents.host?.appending(itemComponents.path) else {
+                return
+            }
+            var urlComponents = URLComponents()
+            urlComponents.scheme = "RecipeSafe"
+            urlComponents.host = "open-recipe"
+            urlComponents.queryItems = [URLQueryItem(name: "url", value: urlStr)]
+            guard let finalURL = urlComponents.url else {
+                return
+            }
+            
+            UIApplication
+                .shared
+                .open(finalURL)
+        }
     }
 }
