@@ -35,8 +35,6 @@ import SwiftUI
         } else {
             self.goToNewRecipe = false
         }
-        /// Run if group exists from previous app version
-        if group.color == 0 { group.color = dataManager.getNewColor() }
     }
 }
 

@@ -37,6 +37,7 @@ import SwiftUI
         self.network = networkManager
         self.dataManager = dataManager
         self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
+        self.dataManager.appUpdate()
     }
     
 }

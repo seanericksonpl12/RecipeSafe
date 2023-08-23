@@ -214,3 +214,43 @@ extension DataManager {
         } else { return Int16.random(in: 1..<7) }
     }
 }
+
+extension DataManager {
+    
+    /// Updates Core Data Models if data exists from previous app version
+    func appUpdate() {
+        if UserDefaults.standard.bool(forKey: "v1.2Update") { return }
+        UserDefaults.standard.set(true, forKey: "v1.2Update")
+
+        let recipes: [RecipeItem] = self.getItems(filter: {_ in true})
+        if !recipes.isEmpty {
+            recipes.forEach { recipe in
+                if let img = recipe.imageUrl {
+                    var components = URLComponents(url: img, resolvingAgainstBaseURL: false)
+                    components?.query = ""
+                    recipe.imageUrl = components?.url ?? img
+                }
+            }
+        }
+        
+        let groups: [GroupItem] = self.getItems(filter: {_ in true})
+        if !groups.isEmpty {
+            groups.forEach { group in
+                if group.color == 0 { group.color = self.getNewColor() }
+                if group.imgUrl == nil {
+                    if let recipes = group.recipes?.array as? [RecipeItem] {
+                        group.imgUrl = recipes.first(where: { $0.imageUrl != nil })?.imageUrl
+                    }
+                }
+            }
+        }
+        
+        if groups.isEmpty && recipes.isEmpty { return }
+        
+        do {
+            try self.viewContext.save()
+        } catch {
+            print(String(describing: error))
+        }
+    }
+}
