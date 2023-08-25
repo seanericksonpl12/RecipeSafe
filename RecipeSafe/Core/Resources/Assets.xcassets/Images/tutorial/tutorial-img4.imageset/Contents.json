@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "recipeicon@1x.png",
+      "filename" : "new-tutorial-img4@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "recipeicon@2x.png",
+      "filename" : "new-tutorial-img4@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "recipeicon@3x.png",
+      "filename" : "new-tutorial-img4@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
