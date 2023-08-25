@@ -13,6 +13,10 @@ struct GroupModel: Hashable {
     var title: String
     var dataEntity: GroupItem
     
+    var imgUrl: URL? {
+        self.recipes.first(where: { $0.imageUrl != nil })?.imageUrl
+    }
+    
     init(dataEntity: GroupItem) {
         self.recipes = dataEntity.recipes?.array as? [RecipeItem] ?? []
         self.title = dataEntity.title ?? "group.default".localized

@@ -58,7 +58,6 @@ extension RecipeJSONParser {
         var rtrnDict = [String: JSON]()
         var queue: [JSON] = []
         queue.append(json)
-        
         while(!queue.isEmpty && rtrnDict.count < keys.count) {
             
             let cur = queue.remove(at: 0)
@@ -145,7 +144,9 @@ extension RecipeJSONParser {
         var img: ImageData = .none
         
         if let imgUrl = json[RecipeKeys.imageUrl.rawValue]?.url {
-            img = .downloaded(imgUrl)
+            var components = URLComponents(url: imgUrl, resolvingAgainstBaseURL: false)
+            components?.query = ""
+            img = .downloaded(components?.url ?? imgUrl)
         }
         
         let description = json[RecipeKeys.description.rawValue]?

@@ -53,7 +53,7 @@ struct SelectGroupsView: View {
                             .scaledToFill()
                             .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
                             .ignoresSafeArea(.all)
-                            .opacity(0.3)
+                            .opacity(0.15)
                     }
                 }
                 .popover(isPresented: $viewModel.newGroupSwitch) {
@@ -61,7 +61,7 @@ struct SelectGroupsView: View {
                         NewGroupPopover(titleText: $viewModel.newGroupText,
                                         selectedRecipes: $viewModel.selectedRecipes,
                                         recipes: [viewModel.newRecipe],
-                                        allowSelection: false)
+                                        allowSelection: false, color: ColorSet.color(viewModel.newGroupColor))
                         .editableToolbar(isEditing: $viewModel.editBinding,
                                          alternateLabel: "",
                                          saveAction: { self.viewModel.saveNewGroup()},

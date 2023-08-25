@@ -65,7 +65,7 @@ struct ContentView: View {
                         .scaledToFill()
                         .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
                         .ignoresSafeArea(.all)
-                        .opacity(recipeList.isEmpty ? 0 : 0.3)
+                        .opacity(recipeList.isEmpty ? 0 : 0.15)
                 }
                 .navigationTitle("content.nav.title".localized)
                 .navigationBarTitleDisplayMode(.inline)
@@ -77,6 +77,8 @@ struct ContentView: View {
                             viewModel.customRecipeSheet = true
                         } label: {
                             Label("content.toolbar.add".localized, systemImage: "plus")
+                                .frame(width: 40, height: 40)
+                                .contentShape(Rectangle())
                         }
                     }
                 }

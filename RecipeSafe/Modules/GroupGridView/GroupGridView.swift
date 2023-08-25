@@ -67,7 +67,7 @@ struct GroupGridView: View {
                         .scaledToFill()
                         .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
                         .ignoresSafeArea(.all)
-                        .opacity(groups.isEmpty ? 0.0 : 0.3)
+                        .opacity(groups.isEmpty ? 0.0 : 0.15)
                 }
             }
             
@@ -77,6 +77,8 @@ struct GroupGridView: View {
                     Button(viewModel.editingEnabled ? "button.done".localized : "button.edit".localized) {
                         viewModel.toggleEdit()
                     }
+                    .frame(width: 60, height: 60)
+                    .contentShape(Rectangle())
                 }
             }
             
@@ -87,6 +89,7 @@ struct GroupGridView: View {
             .navigationDestination(for: Recipe.self) { recipe in
                 RecipeView(viewModel: RecipeViewModel(recipe: recipe))
             }
+            .navigationBarTitleDisplayMode(.inline)
             
             // MARK: - Environment
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
@@ -96,7 +99,8 @@ struct GroupGridView: View {
                 NavigationStack {
                     NewGroupPopover(titleText: $viewModel.newGroupText,
                                     selectedRecipes: $viewModel.selectedRecipes,
-                                    recipes: viewModel.getRecipes())
+                                    recipes: viewModel.getRecipes(),
+                                    color: ColorSet.color(viewModel.newGroupColor))
                     .editableToolbar(isEditing: $viewModel.editingEnabled,
                                      alternateLabel: "",
                                      saveAction: {self.viewModel.saveNewGroup()},

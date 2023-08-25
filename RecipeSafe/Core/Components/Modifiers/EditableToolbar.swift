@@ -58,8 +58,11 @@ struct EditableToolbar: ViewModifier {
                                 deleteAction()
                             }
                         } label: {
-                            Image(systemName: "ellipsis")
+                            Image(systemName: "ellipsis.circle")
+                                .frame(width: 40, height: 40)
+                                .contentShape(Rectangle())
                         }
+                        
                     }
                 }
             }

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "pixil-frame-0-5.png",
+      "filename" : "new-log-clear@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "pixil-frame-0-5@2x.png",
+      "filename" : "new-log-clear@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "pixil-frame-0-5@3x.png",
+      "filename" : "new-log-clear@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

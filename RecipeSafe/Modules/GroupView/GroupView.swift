@@ -15,57 +15,55 @@ struct GroupView: View {
     
     // MARK: - Body
     var body: some View {
-            
-            // MARK: - Header
-            HStack {
-                Spacer()
-                TextField("", text: $viewModel.group.title, prompt: Text("group.title.prompt".localized), axis: .vertical)
-                    .font(.title)
-                    .padding(.leading)
-                    .padding(.top)
-                    .fontWeight(.heavy)
-                    .disabled(!viewModel.editingEnabled)
-                Spacer()
-            }
+        
+        // MARK: - Header
+        GroupHeaderImage(group: $viewModel.group)
+            .frame(maxHeight: 40)
             .editableToolbar(isEditing: $viewModel.editingEnabled,
                              saveAction: { viewModel.saveChanges() },
                              cancelAction: { viewModel.cancelChanges() },
                              deleteAction: {viewModel.toggleDelete() })
+        
+        // MARK: - Recipes
+        TabbedList(textFieldTitle: $viewModel.group.title,
+                   editing: $viewModel.editingEnabled,
+                   textFieldPrompt: "group.title.prompt".localized) {
             
-            // MARK: - Recipes
-            List {
-                ForEach(viewModel.group.recipes) { recipe in
-                    if let recipeModel = Recipe(dataItem: recipe) {
-                        NavigationLink {
-                            RecipeView(viewModel: RecipeViewModel(recipe: recipeModel))
-                        } label: {
-                            Text(recipe.title ?? "")
-                        }
-                    }
-                }.onDelete { offsets in
-                    viewModel.removeRecipe(at: offsets)
-                }
-                .onMove { start, end in
-                    viewModel.moveRecipes(from: start, to: end)
-                }
-                if !viewModel.getRecipes().isEmpty {
-                    Section {
-                        HStack {
-                            Spacer()
-                            Button {
-                                viewModel.addRecipeSwitch = true
-                            } label: {
-                                Image(systemName: "plus.circle")
-                                    .foregroundColor(.primary)
-                            }
-                            Spacer()
-                        }
-                    } header: {
-                        Text("group.list.add".localized + viewModel.group.title)
+            ForEach(viewModel.group.recipes) { recipe in
+                if let recipeModel = Recipe(dataItem: recipe) {
+                    NavigationLink {
+                        RecipeView(viewModel: RecipeViewModel(recipe: recipeModel))
+                    } label: {
+                        Text(recipe.title ?? "")
                     }
                 }
+            }.onDelete { offsets in
+                viewModel.removeRecipe(at: offsets)
             }
+            .onMove { start, end in
+                viewModel.moveRecipes(from: start, to: end)
+            }
+            if !viewModel.getRecipes().isEmpty {
+                Section {
+                    HStack {
+                        Spacer()
+                        Button {
+                            viewModel.addRecipeSwitch = true
+                        } label: {
+                            Image(systemName: "plus.circle")
+                                .foregroundColor(.primary)
+                        }
+                        Spacer()
+                    }
+                } header: {
+                    Text("group.list.add".localized + viewModel.group.title)
+                }
+            } else if viewModel.group.recipes.isEmpty {
+                EmptyGroupView()
+            }
+        }
         .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+        .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $viewModel.goToNewRecipe) {
             if let recipe = viewModel.newRecipe {
                 RecipeView(viewModel: RecipeViewModel(recipe: recipe))

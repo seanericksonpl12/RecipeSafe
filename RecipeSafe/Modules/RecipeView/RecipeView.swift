@@ -76,6 +76,7 @@ struct RecipeView<T: EditableRecipeModel>: View {
                 }
             }
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 viewModel.setup(dismiss: dismissView)
             }
