@@ -53,7 +53,7 @@ struct SelectGroupsView: View {
                             .scaledToFill()
                             .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
                             .ignoresSafeArea(.all)
-                            .opacity(0.3)
+                            .opacity(0.15)
                     }
                 }
                 .popover(isPresented: $viewModel.newGroupSwitch) {

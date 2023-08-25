@@ -45,24 +45,32 @@ struct CachedAsyncImage<Content: View>: View {
 fileprivate class ImageCache {
     
     static private var cache: [URL : Image] = [:]
+    static private var cacheChecker: [URL : Bool] = [:]
     static private var cacheAccessTimes: [URL : Int] = [:]
-    static private let cacheLimit: Int = 50
+    static private let cacheLimit: Int = 15
     
     static subscript(url: URL) -> Image? {
-        get { ImageCache.cache[url] }
+        get {
+            if cacheChecker[url] == false || cacheChecker[url] == nil { return nil }
+            return cache[url]
+        }
         set {
-            for pair in ImageCache.cacheAccessTimes {
-                ImageCache.cacheAccessTimes[pair.key] = pair.value + 1
+            for pair in cacheAccessTimes {
+                cacheAccessTimes[pair.key] = pair.value + 1
             }
             
-            if ImageCache.cache.count >= ImageCache.cacheLimit {
-                if let toReplace = ImageCache.cacheAccessTimes.max(by: { $0.value < $1.value })?.key {
-                    ImageCache.cache[toReplace] = newValue
-                    ImageCache.cacheAccessTimes[toReplace] = 0
+            if cache.count >= cacheLimit {
+                if let toReplace = cacheAccessTimes.max(by: { $0.value < $1.value })?.key {
+                    cache[toReplace] = newValue
+                    cacheAccessTimes[toReplace] = 0
                 }
             } else {
-                ImageCache.cache[url] = newValue
-                ImageCache.cacheAccessTimes[url] = 0
+                cache[url] = newValue
+                cacheAccessTimes[url] = 0
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                cacheChecker[url] = true
             }
         }
     }

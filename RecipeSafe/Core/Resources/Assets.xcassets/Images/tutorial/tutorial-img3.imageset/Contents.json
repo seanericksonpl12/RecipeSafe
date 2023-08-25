@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "safari-suggestion-circle@1x.png",
+      "filename" : "new-tutorial-img3@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "safari-suggestion-circle@2x.png",
+      "filename" : "new-tutorial-img3@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "safari-suggestion-circle@3x.png",
+      "filename" : "new-tutorial-img3@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

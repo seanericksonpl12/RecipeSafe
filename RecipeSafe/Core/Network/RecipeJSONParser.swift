@@ -58,7 +58,6 @@ extension RecipeJSONParser {
         var rtrnDict = [String: JSON]()
         var queue: [JSON] = []
         queue.append(json)
-        print(json)
         while(!queue.isEmpty && rtrnDict.count < keys.count) {
             
             let cur = queue.remove(at: 0)

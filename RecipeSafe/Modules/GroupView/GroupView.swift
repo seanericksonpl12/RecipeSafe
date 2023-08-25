@@ -63,6 +63,7 @@ struct GroupView: View {
             }
         }
         .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+        .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $viewModel.goToNewRecipe) {
             if let recipe = viewModel.newRecipe {
                 RecipeView(viewModel: RecipeViewModel(recipe: recipe))

@@ -31,7 +31,8 @@ struct GroupHeaderImage: View {
                         .zIndex(0)
                 case .success(let img):
                     img
-                        .frame(maxHeight: 40)
+                        .resizable()
+                        .scaledToFill()
                         .opacity(0.85)
                         .allowsHitTesting(false)
                         .zIndex(0)
