@@ -6,14 +6,12 @@
 //
 
 import XCTest
-import Combine
 @testable import RecipeSafe
 
 final class NetworkManagerTests: XCTestCase {
     
     var exp: XCTestExpectation!
     var finishedExp: XCTestExpectation!
-    var cancellables: Set<AnyCancellable>!
     var network: NetworkManager!
 
     override func setUp() {
@@ -21,45 +19,32 @@ final class NetworkManagerTests: XCTestCase {
         continueAfterFailure = false
         self.exp = XCTestExpectation()
         self.finishedExp = XCTestExpectation()
-        self.cancellables = Set<AnyCancellable>()
         self.network = NetworkManager(configuration: .default)
     }
     
-    override func tearDown() {
-        self.cancellables.forEach { $0.cancel() }
-    }
-    
-    func testGoodUrl() {
+    func testGoodUrl() async {
         let url = URL(string: "RecipeSafe://open-recipe?url=www.therecipecritic.com/easy-shrimp-tacos/")!
         var recievedRecipe: Recipe?
-        network.networkRequest(url: url).sink { status in
-            switch status{
-            case .finished:
-                self.finishedExp.fulfill()
-            case .failure(_):
-                XCTFail()
-            }
-        } receiveValue: { recipe in
+        switch await network.networkRequest(url: url) {
+        case .success(let recipe):
             recievedRecipe = recipe
             self.exp.fulfill()
-        }.store(in: &cancellables)
-        wait(for: [exp, finishedExp], timeout: 5)
+        case .failure:
+            XCTFail()
+        }
+        await fulfillment(of: [self.exp], timeout: 5)
         XCTAssertEqual(recievedRecipe?.url?.absoluteString, "https://www.therecipecritic.com/easy-shrimp-tacos/")
     }
     
-    func testBadUrl() {
+    func testBadUrl() async {
         let url =  URL(string: "RecipeSafe://open-recipe?url=www.someurlthatisnotvalidanddoesnotactuallyexit.com")!
-        network.networkRequest(url: url).sink { status in
-            switch status{
-            case .finished:
-                XCTFail()
-            case .failure(_):
-                self.exp.fulfill()
-            }
-        } receiveValue: { recipe in
+        switch await network.networkRequest(url: url) {
+        case .success:
             XCTFail()
-        }.store(in: &cancellables)
-        wait(for: [exp], timeout: 5)
+        case .failure:
+            self.exp.fulfill()
+        }
+        await fulfillment(of: [self.exp], timeout: 5)
     }
 
 }

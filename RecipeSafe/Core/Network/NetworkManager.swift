@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 class NetworkManager: NetworkProtocol {
     
@@ -23,27 +22,27 @@ class NetworkManager: NetworkProtocol {
     }
     
     // MARK: - Make Request
-    func networkRequest(url: URL) -> AnyPublisher<Recipe, Error> {
+    func networkRequest(url: URL) async -> Result<Recipe, Error> {
         
         guard url.scheme == "RecipeSafe" else {
-            return Fail(error: NetworkError.invalidURL("Bad URL scheme")).eraseToAnyPublisher()
+            return .failure(NetworkError.invalidURL("Bad URL scheme"))
         }
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            return Fail(error: NetworkError.invalidURL("Could not create components")).eraseToAnyPublisher()
+            return .failure(NetworkError.invalidURL("Could not create components"))
         }
         guard components.host == "open-recipe" else {
-            return Fail(error: NetworkError.invalidURL("Bad URL host")).eraseToAnyPublisher()
+            return .failure(NetworkError.invalidURL("Bad URL host"))
         }
         guard let embeddedUrl = components.queryItems?.first(where: { $0.name == "url" })?.value else {
-            return Fail(error: NetworkError.invalidURL("Bad URL queries")).eraseToAnyPublisher()
+            return .failure(NetworkError.invalidURL("Bad URL queries"))
         }
         let recipeComponents = URLComponents(string: "https://".appending(embeddedUrl))
         guard let urlStr = recipeComponents?.url?.absoluteString else {
-            return Fail(error: NetworkError.invalidURL("Could not resolve url")).eraseToAnyPublisher()
+            return .failure(NetworkError.invalidURL("Could not resolve url"))
         }
         
         let slicedURL = urlStr.replacing("RecipeSafe://", with: "")
         let request = RecipeRequest(url: slicedURL)
-        return executeRequest(request: request, retries: 0)
+        return  await executeRequest(request: request, retries: 0)
     }
 }

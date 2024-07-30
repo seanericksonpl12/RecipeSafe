@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 import SwiftUI
 
 @MainActor class AppViewModel: ObservableObject {
@@ -26,7 +25,6 @@ import SwiftUI
     // MARK: - Private Properties
     private var network: NetworkManager = NetworkManager()
     private var dataManager: DataManager = DataManager()
-    private var subscriptions = Set<AnyCancellable>()
     private var fetchedRecipe: Recipe?
     private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
@@ -47,20 +45,15 @@ extension AppViewModel {
     
     func onURLOpen(url: URL) {
         self.viewState = .loading
-        network.networkRequest(url: url).sink { [weak self] status in
-            guard let self = self else { return }
-            switch status {
-            case .finished:
-                break
+        Task { @MainActor in
+            switch await network.networkRequest(url: url) {
+            case .success(let recipe):
+                self.handleNewRecipe(recipe)
             case .failure(let error):
                 self.handleFailure()
                 print(error.localizedDescription)
             }
-        } receiveValue: { [weak self] recipe in
-            guard let self = self else { return }
-            self.handleNewRecipe(recipe)
         }
-        .store(in: &subscriptions)
     }
 }
 

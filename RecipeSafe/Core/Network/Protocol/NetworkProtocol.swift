@@ -6,27 +6,26 @@
 //
 
 import Foundation
-import Combine
 
 protocol NetworkProtocol {
     
     var session: URLSession { get }
     
     func executeRequest<Request: NetworkRequest>(request: Request,
-                                                 retries: Int) -> AnyPublisher<Request.Response, Error>
+                                                 retries: Int) async -> Result<Request.Response, Error>
     
     func getHTML(request: URLRequest,
-                 retries: Int) -> AnyPublisher<String, Error>
+                 retries: Int) async -> Result<String, Error>
 }
 
 // MARK: - Default Functions
 extension NetworkProtocol {
     
     func executeRequest<Request: NetworkRequest>(request: Request,
-                                    retries: Int) -> AnyPublisher<Request.Response, Error> {
+                                    retries: Int) async -> Result<Request.Response, Error> {
         
         guard var components = URLComponents(string: request.url) else {
-            return Fail(error: NetworkError.invalidURL("Bad URL: \(request.url)")).eraseToAnyPublisher()
+            return .failure(NetworkError.invalidURL("Bad URL: \(request.url)"))
         }
         
         if components.queryItems == nil {
@@ -40,7 +39,7 @@ extension NetworkProtocol {
         
         
         guard let url = components.url else {
-            return Fail(error: NetworkError.invalidURL("Component has no URL")).eraseToAnyPublisher()
+            return .failure(NetworkError.invalidURL("Component has no URL"))
         }
         
         var urlRequest = URLRequest(url: url)
@@ -49,32 +48,31 @@ extension NetworkProtocol {
         urlRequest.allHTTPHeaderFields = request.header
         urlRequest.httpBody = request.body
         
-        return session.dataTaskPublisher(for: urlRequest)
-            .tryMap { reply in
-                guard let response = reply.response as? HTTPURLResponse, response.statusCode == 200 else {
-                    throw NetworkError.badResponse("Bad response: \(reply.response.debugDescription)")
-                }
-                return try request.decode(reply.data)
+        do {
+            let (data, response) = try await session.data(for: urlRequest)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200, httpResponse.statusCode <= 400 else {
+                return .failure(NetworkError.badResponse(response.debugDescription))
             }
-            .receive(on: DispatchQueue.main)
-            .retry(retries)
-            .eraseToAnyPublisher()
+            let object = try request.decode(data)
+            return .success(object)
+        } catch {
+            return .failure(error)
+        }
     }
     
-    func getHTML(request: URLRequest, retries: Int) -> AnyPublisher<String, Error> {
-        session.dataTaskPublisher(for: request)
-            .tryMap { reply in
-                guard let response = reply.response as? HTTPURLResponse, response.statusCode == 200 else {
-                    throw NetworkError.badResponse("Bad response: \(reply.response.debugDescription)")
-                }
-                guard let string = String(data: reply.data, encoding: .utf8) else {
-                    throw NetworkError.failedToDecodeJSON("Failed to decode data")
-                }
-                return string
+    func getHTML(request: URLRequest, retries: Int) async -> Result<String, Error> {
+        do {
+            let (data, response) = try await session.data(for: request)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200, httpResponse.statusCode <= 400 else {
+                return .failure(NetworkError.badResponse(response.debugDescription))
             }
-            .receive(on: DispatchQueue.main)
-            .retry(retries)
-            .eraseToAnyPublisher()
+            guard let string = String(data: data, encoding: .utf8) else {
+                return .failure(NetworkError.failedToDecodeJSON("Failed to decode data"))
+            }
+            return .success(string)
+        } catch {
+            return .failure(error)
+        }
     }
 }
 

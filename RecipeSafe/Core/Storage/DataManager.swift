@@ -22,10 +22,10 @@ class DataManager {
     convenience init() {
         self.init(viewContext: PersistenceController.shared.container.viewContext)
     }
-}
+
+    
     
 // MARK: - Recipe Functions
-extension DataManager {
     /// Save a given recipe model to Core Data
     ///
     ///  - Parameters:
@@ -169,10 +169,10 @@ extension DataManager {
             return nil
         }
     }
-}
+    
+    
 
 // MARK: - Group Functions
-extension DataManager {
     
     /// Updates the data entity of a given group model
     ///

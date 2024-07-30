@@ -8,7 +8,7 @@
 import XCTest
 @testable import RecipeSafe
 
-@MainActor final class AppViewModelTests: XCTestCase {
+final class AppViewModelTests: XCTestCase {
     
     var viewModel: AppViewModel!
     var networkManager: MockNetworkManager!
@@ -16,7 +16,7 @@ import XCTest
     var dataStack: PersistenceController!
     var url: URL!
 
-    override func setUp() {
+    @MainActor override func setUp() {
         super.setUp()
         continueAfterFailure = false
         self.dataStack = PersistenceController(inMemory: true)
@@ -26,22 +26,23 @@ import XCTest
         self.url = URL(string: "RecipeSafe://open-recipe?url=www.allrecipes.com/recipe/149975/beer-brats/")
     }
     
-    func testGoodUrl() {
+    @MainActor func testGoodUrl() {
         self.networkManager.returnValidInput = true
         XCTAssertNil(self.dataManager.recipe)
         let expectation = XCTestExpectation()
         self.dataManager.saveItemExpectation = expectation
         viewModel.onURLOpen(url: url)
-        XCTAssertEqual(viewModel.viewState, .successfullyLoaded)
+        XCTAssertEqual(viewModel.viewState, .loading)
         XCTAssertFalse(viewModel.displayBadSite)
         wait(for: [dataManager.saveItemExpectation!], timeout: 5)
+        XCTAssertEqual(viewModel.viewState, .successfullyLoaded)
         XCTAssertEqual(self.dataManager.recipe?.title, "Test Title")
         XCTAssertEqual(self.dataManager.recipe?.description, "Test Description")
         XCTAssertEqual(self.dataManager.recipe?.ingredients, ["i 1", "i 2"])
         XCTAssertEqual(self.dataManager.recipe?.instructions, ["in 1", "in 2"])
     }
     
-    func testBadUrl() {
+    @MainActor func testBadUrl() {
         self.networkManager.returnValidInput = false
         viewModel.onURLOpen(url: url)
         let ex = XCTNSPredicateExpectation(predicate: NSPredicate(block: {_,_ in self.viewModel.displayBadSite}), object: self)
@@ -49,34 +50,38 @@ import XCTest
         XCTAssertEqual(viewModel.viewState, .failedToLoad)
     }
     
-    func testDuplicate() {
+    @MainActor func testDuplicate() {
         self.networkManager.returnValidInput = true
         self.dataManager.findDuplicate = true
         viewModel.onURLOpen(url: url)
+        wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate { _,_ in self.viewModel.viewState == .successfullyLoaded }, object: self)])
         XCTAssertTrue(viewModel.duplicateFound)
     }
     
-    func testOverwriteWithoutCopy() {
+    @MainActor func testOverwriteWithoutCopy() {
         self.networkManager.returnValidInput = true
         self.dataManager.findDuplicate = true
-        let expectation = XCTestExpectation()
-        let saveExpectation = XCTestExpectation()
+        let expectation = XCTestExpectation(description: "exp")
+        let saveExpectation = XCTestExpectation(description: "save exp")
         self.dataManager.deleteItemExpectation = expectation
         self.dataManager.saveItemExpectation = saveExpectation
         viewModel.onURLOpen(url: url)
+        wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate { _,_ in self.viewModel.viewState == .successfullyLoaded }, object: self)])
         viewModel.overwriteRecipe(deletingDup: true)
+        
         wait(for: [expectation, saveExpectation], timeout: 5)
         
         XCTAssertEqual(self.dataManager.recipeToDelete?.title, "Test Duplicate")
         XCTAssertEqual(self.dataManager.recipe?.title, "Test Title")
     }
     
-    func testOverwriteWithCopy() {
+    @MainActor func testOverwriteWithCopy() {
         self.networkManager.returnValidInput = true
         self.dataManager.findDuplicate = true
         let saveExpectation = XCTestExpectation()
         self.dataManager.saveItemExpectation = saveExpectation
         viewModel.onURLOpen(url: url)
+        wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate { _,_ in self.viewModel.viewState == .successfullyLoaded }, object: self)])
         viewModel.overwriteRecipe(deletingDup: false)
         wait(for: [saveExpectation], timeout: 5)
         
@@ -84,7 +89,7 @@ import XCTest
         XCTAssertEqual(self.dataManager.recipe?.title, "Test Title")
     }
     
-    func testCancelOverwrite() {
+    @MainActor func testCancelOverwrite() {
         self.viewModel.duplicateFound = true
         self.viewModel.cancelOverwrite()
         XCTAssertFalse(viewModel.duplicateFound)
