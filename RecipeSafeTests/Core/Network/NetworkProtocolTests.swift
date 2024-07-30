@@ -6,118 +6,86 @@
 //
 
 import XCTest
-import Combine
 @testable import RecipeSafe
 
 final class NetworkProtocolTests: XCTestCase {
     
     var network: NetworkManager!
     var expectation: XCTestExpectation!
-    var cancellables: Set<AnyCancellable>!
     
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
         self.network = NetworkManager(configuration: .default)
         self.expectation = XCTestExpectation(description: "Failed to complete request within timeout boundary.")
-        self.cancellables = Set<AnyCancellable>()
     }
     
-    override func tearDown() {
-        self.cancellables.forEach { $0.cancel() }
-    }
-    
-    func testBadUrl() {
+    func testBadUrl() async {
         let request = RecipeRequest(url: "")
-        network.executeRequest(request: request, retries: 0)
-            .sink { status in
-                switch status {
-                case .finished:
-                    XCTFail()
-                case .failure(let error):
-                    if error is URLError {
-                        self.expectation.fulfill()
-                    }
-                }
-            } receiveValue: { _ in
-                XCTFail()
-            }.store(in: &cancellables)
-        wait(for: [self.expectation], timeout: 5)
+        switch await network.executeRequest(request: request, retries: 0) {
+        case .success:
+            XCTFail()
+        case .failure(let error):
+            if error is URLError {
+                self.expectation.fulfill()
+            }
+        }
+        await fulfillment(of: [self.expectation], timeout: 5)
     }
     
-    func testBadRequest() {
+    func testBadRequest() async {
         let request = RecipeRequest(url: "https://github.com/seanericksonpl12")
-        network.executeRequest(request: request, retries: 0)
-            .sink { status in
-                switch status {
-                case .finished:
-                    XCTFail()
-                case .failure(let error):
-                    if error is NetworkError {
-                        self.expectation.fulfill()
-                    }
-                }
-            } receiveValue: { _ in
-                XCTFail()
-            }.store(in: &cancellables)
-        wait(for: [self.expectation], timeout: 5)
+        
+        switch await network.executeRequest(request: request, retries: 0) {
+        case .success(_):
+            XCTFail()
+        case .failure(let error):
+            if error is NetworkError {
+                self.expectation.fulfill()
+            }
+        }
+        await fulfillment(of: [self.expectation], timeout: 5)
     }
     
-    func testGoodRequest() {
+    func testGoodRequest() async {
         // Use Mock request as data decoding will be tested in JSONParser tests
         let request = MockNetworkRequest(url: "https://therecipecritic.com/easy-shrimp-tacos/")
-        let finishedExp = XCTestExpectation()
-        network.executeRequest(request: request, retries: 0)
-            .sink { status in
-                switch status {
-                case .finished:
-                    finishedExp.fulfill()
-                case .failure(_):
-                    XCTFail()
-                }
-            } receiveValue: { data in
-                if !data.isEmpty {
-                    self.expectation.fulfill()
-                }
-            }.store(in: &cancellables)
-        wait(for: [self.expectation, finishedExp], timeout: 5)
+        switch await network.executeRequest(request: request, retries: 0) {
+        case .success(let data):
+            if !data.isEmpty {
+                self.expectation.fulfill()
+            }
+        case .failure:
+            XCTFail()
+        }
+        await fulfillment(of: [self.expectation], timeout: 5)
     }
     
-    func testGetHTMLBadUrl() {
+    func testGetHTMLBadUrl() async {
         let url = URL(string: "https://someinvalidwebsitethatdoesntactuallyexist.com")!
         let request = URLRequest(url: url)
-        network.getHTML(request: request, retries: 0)
-            .sink { status in
-                switch status {
-                case .finished:
-                    XCTFail()
-                case .failure(_):
-                    self.expectation.fulfill()
-                }
-            } receiveValue: { string in
-                XCTFail()
-            }.store(in: &cancellables)
-        wait(for: [self.expectation], timeout: 5)
+        
+        switch await network.getHTML(request: request, retries: 0) {
+        case .success(_):
+            XCTFail()
+        case .failure(_):
+            self.expectation.fulfill()
+        }
+        await fulfillment(of: [self.expectation], timeout: 5)
     }
     
-    func testGetHTMLGoodUrl() {
+    func testGetHTMLGoodUrl() async {
         let url = URL(string: "https://therecipecritic.com/easy-shrimp-tacos/")!
         let request = URLRequest(url: url)
-        let finishedExp = XCTestExpectation()
-        network.getHTML(request: request, retries: 0)
-            .sink { status in
-                switch status {
-                case .finished:
-                    finishedExp.fulfill()
-                case .failure(_):
-                    XCTFail()
-                }
-            } receiveValue: { string in
-                if !string.isEmpty {
-                    self.expectation.fulfill()
-                }
-            }.store(in: &cancellables)
-        wait(for: [self.expectation, finishedExp], timeout: 5)
+        
+        switch await network.getHTML(request: request, retries: 0) {
+        case .success(let string):
+            if !string.isEmpty {
+                self.expectation.fulfill()
+            }
+        case .failure:
+            XCTFail()
+        }
+        await fulfillment(of: [self.expectation], timeout: 5)
     }
-    
 }

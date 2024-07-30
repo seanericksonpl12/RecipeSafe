@@ -63,7 +63,7 @@ class MockDataManager: DataManager {
         self.saveItemExpectation?.fulfill()
     }
     
-    override func addGroup(title: String, recipes: [RecipeItem]) {
+    override func addGroup(title: String, recipes: [RecipeItem], color: Int16? = nil) {
         let newGroup = NSEntityDescription.insertNewObject(forEntityName: "GroupItem", into: self.viewContext) as! GroupItem
         newGroup.title = title
         recipes.forEach { newGroup.addToRecipes($0) }

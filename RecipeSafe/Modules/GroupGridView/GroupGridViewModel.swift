@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import Combine
 
 @MainActor class GroupGridViewModel: ObservableObject {
     
@@ -116,7 +115,9 @@ extension GroupGridViewModel {
     
     func handleNewRecipe(_ recipe: Recipe) {
         self.navPath = .init()
-        self.newRecipeSwitch = true
         self.newRecipe = recipe
+        Task {
+            self.newRecipeSwitch = true
+        }
     }
 }
