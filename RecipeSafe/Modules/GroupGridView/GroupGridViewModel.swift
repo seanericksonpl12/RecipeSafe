@@ -47,6 +47,7 @@ extension GroupGridViewModel {
             self.dataManager.addToGroup(recipe: recipe, group)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 self.navPath.append(group)
+                self.navPath.append(recipe)
             }
         }
         
