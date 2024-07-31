@@ -16,7 +16,6 @@ import SwiftUI
     @Published var deleteGroupSwitch: Bool = false
     @Published var editingEnabled: Bool = false
     @Published var selectedRecipes: [RecipeItem] = []
-    @Published var goToNewRecipe: Bool
     
     // MARK: - Private Properties
     private var dataManager: DataManager
@@ -29,12 +28,7 @@ import SwiftUI
     init(group: GroupItem, newRecipe: Recipe? = nil, dataManager: DataManager = DataManager()) {
         self.group = GroupModel(dataEntity: group)
         self.dataManager = dataManager
-        if newRecipe != nil {
-            self.goToNewRecipe = true
-            self.newRecipe = newRecipe
-        } else {
-            self.goToNewRecipe = false
-        }
+        self.newRecipe = newRecipe
     }
 }
 
