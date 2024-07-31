@@ -9,9 +9,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-
-@MainActor class RecipeViewModel: EditableRecipeModel {
-    
+class RecipeViewModel: EditableRecipeModel {
     
     // MARK: - Wrapped
     @Published var recipe: Recipe
@@ -65,7 +63,7 @@ extension RecipeViewModel {
         self.recipe.description = self.descriptionText
         self.recipe.cookTime = self.cookText
         self.recipe.prepTime = self.prepText
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.recipe.instructions.removeAll { $0 == "" }
             self.recipe.ingredients.removeAll { $0 == "" }
             self.dataManager.updateDataEntity(recipe: self.recipe)
@@ -86,4 +84,3 @@ extension RecipeViewModel {
         dataManager.addToGroup(recipe: self.recipe, group)
     }
 }
-

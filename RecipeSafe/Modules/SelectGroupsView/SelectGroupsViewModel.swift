@@ -7,7 +7,7 @@
 
 import Foundation
 
-@MainActor class SelectGroupsViewModel: ObservableObject {
+class SelectGroupsViewModel: ObservableObject {
     
     // MARK: - Published
     @Published var editBinding: Bool = true
