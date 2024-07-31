@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor class CreateRecipeViewModel: EditableRecipeModel {
+class CreateRecipeViewModel: EditableRecipeModel {
     
     // MARK: - Wrapped
     @Published var recipe: Recipe

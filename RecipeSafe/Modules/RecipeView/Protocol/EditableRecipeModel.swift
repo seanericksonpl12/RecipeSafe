@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor protocol EditableRecipeModel: ObservableObject {
+protocol EditableRecipeModel: ObservableObject {
     
     // MARK: - Properties
     var recipe: Recipe { get set }
@@ -60,7 +60,7 @@ extension EditableRecipeModel {
         self.descriptionText = self.recipe.description ?? self.descriptionText
         self.prepText = self.recipe.prepTime ?? self.prepText
         self.cookText = self.recipe.cookTime ?? self.cookText
-        DispatchQueue.main.async {
+        Task { @MainActor in
             guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }
             guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
             ingredientArr = ingredientArr.filter { $0.value != nil }

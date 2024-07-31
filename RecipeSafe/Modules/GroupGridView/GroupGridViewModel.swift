@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor class GroupGridViewModel: ObservableObject {
+class GroupGridViewModel: ObservableObject {
     
     // MARK: - Wrapped
     @Published var navPath: NavigationPath = .init()
@@ -45,7 +45,7 @@ extension GroupGridViewModel {
             guard let recipe = self.newRecipe else { return }
             
             self.dataManager.addToGroup(recipe: recipe, group)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            Task { @MainActor in
                 self.navPath.append(group)
                 self.navPath.append(recipe)
             }
@@ -54,7 +54,7 @@ extension GroupGridViewModel {
         self.cancelAction = {
             self.newRecipeSwitch = false
             guard let recipe = self.newRecipe else { return }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            Task {  @MainActor in
                 self.navPath.append(recipe)
             }
         }
@@ -117,7 +117,7 @@ extension GroupGridViewModel {
     func handleNewRecipe(_ recipe: Recipe) {
         self.navPath = .init()
         self.newRecipe = recipe
-        Task {
+        Task { @MainActor in
             self.newRecipeSwitch = true
         }
     }

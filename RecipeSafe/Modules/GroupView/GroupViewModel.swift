@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor class GroupViewModel: ObservableObject {
+class GroupViewModel: ObservableObject {
     
     // MARK: - Wrapped
     @Published var group: GroupModel

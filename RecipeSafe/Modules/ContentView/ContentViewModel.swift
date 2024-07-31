@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-@MainActor class ContentViewModel: ObservableObject {
+class ContentViewModel: ObservableObject {
     
     // MARK: - Wrapped
     @Published var navPath: NavigationPath = .init()
@@ -41,9 +41,8 @@ import CoreData
 extension ContentViewModel {
     
     func handleNewRecipe(_ recipe: Recipe) {
-        self.navPath = .init()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.navPath.append(recipe)
+        Task { @MainActor in
+            self.navPath = NavigationPath([recipe])
         }
     }
     

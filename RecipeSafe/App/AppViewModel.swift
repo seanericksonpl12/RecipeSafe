@@ -8,15 +8,15 @@
 import Foundation
 import SwiftUI
 
-@MainActor class AppViewModel: ObservableObject {
-    
+@MainActor
+class AppViewModel: ObservableObject {
     // MARK: - Wrapped
     @Published var tabSelection: Int = 1
     @Published var displayBadSite: Bool = false
     @Published var duplicateFound: Bool = false
     @Published var launchTutorial: Bool = false
-    @Published var contentViewModel: ContentViewModel = ContentViewModel()
-    @Published var groupViewModel: GroupGridViewModel = GroupGridViewModel()
+    @Published var contentViewModel: ContentViewModel
+    @Published var groupViewModel: GroupGridViewModel
     @Published var viewState: ViewState = .started
     
     // MARK: - Persistance
@@ -32,6 +32,8 @@ import SwiftUI
     // MARK: - Init
     init(networkManager: NetworkManager = NetworkManager(),
          dataManager: DataManager = DataManager()) {
+        self.contentViewModel = ContentViewModel()
+        self.groupViewModel = GroupGridViewModel()
         self.network = networkManager
         self.dataManager = dataManager
         self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
@@ -62,10 +64,8 @@ extension AppViewModel {
     
     // MARK: - Handle Failure
     private func handleFailure() {
-        DispatchQueue.main.async {
-            self.viewState = .failedToLoad
-            self.displayBadSite = true
-        }
+        self.viewState = .failedToLoad
+        self.displayBadSite = true
     }
     
     // MARK: - Handle Recipe
@@ -102,11 +102,9 @@ extension AppViewModel {
         if let dup = waitingDuplicate, deletingDup {
             self.dataManager.deleteItem(dup)
         }
-        DispatchQueue.main.async {
-            self.waitingRecipe.dataEntity = self.dataManager.saveItem(self.waitingRecipe)
-            self.waitingDuplicate = nil
-            self.openRecipe(self.waitingRecipe)
-        }
+        self.waitingRecipe.dataEntity = self.dataManager.saveItem(self.waitingRecipe)
+        self.waitingDuplicate = nil
+        self.openRecipe(self.waitingRecipe)
     }
     
     func cancelOverwrite() {
