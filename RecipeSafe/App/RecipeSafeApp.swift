@@ -40,6 +40,12 @@ struct RecipeSafeApp: App {
                     Label("app.group".localized, systemImage: "circlebadge.2")
                 }
                 .tag(2)
+            SearchView(viewModel: SearchViewModel())
+               // .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
+                .tabItem {
+                    Label("app.search".localized, systemImage: "globe")
+                }
+                .tag(3)
         }
         .onOpenURL { url in
             self.viewModel.onURLOpen(url: url)

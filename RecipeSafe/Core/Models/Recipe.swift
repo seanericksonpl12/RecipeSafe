@@ -8,7 +8,7 @@
 import Foundation
 import SwiftyJSON
 
-struct Recipe: Hashable, Decodable, Identifiable {
+struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     
     // MARK: - Properties
     var id: UUID = UUID()

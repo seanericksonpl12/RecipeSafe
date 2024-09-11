@@ -11,7 +11,7 @@ import SwiftUI
 struct PersistenceController {
     // MARK: - Instances
     static let shared = PersistenceController()
-    static var preview: PersistenceController = {
+    static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for i in 0..<10 {

@@ -7,10 +7,10 @@
 
 import Foundation
 
-class NetworkManager: NetworkProtocol {
+final class NetworkManager: NetworkProtocol, Sendable {
     
     // MARK: - Properties
-    var session: URLSession
+    let session: URLSession
     
     // MARK: - Inits
     init(configuration: URLSessionConfiguration) {

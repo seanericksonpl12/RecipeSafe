@@ -9,6 +9,7 @@
 // MARK: - App
 "app.all" = "All Recipes";
 "app.group" = "Groups";
+"app.search" = "Search";
 
 // MARK: - TutorialView
 "tutorial.title" = "Adding Recipes";

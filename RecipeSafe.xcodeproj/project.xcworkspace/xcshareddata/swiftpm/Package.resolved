@@ -1,4 +1,5 @@
 {
+  "originHash" : "42346083da1c1b0f30f33145804c222c64a1361f239b1b32642026acf3004793",
   "pins" : [
     {
       "identity" : "lottie-ios",
@@ -28,5 +29,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
