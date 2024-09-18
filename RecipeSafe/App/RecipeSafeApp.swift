@@ -41,7 +41,6 @@ struct RecipeSafeApp: App {
                 }
                 .tag(2)
             SearchView(viewModel: SearchViewModel())
-               // .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
                 .tabItem {
                     Label("app.search".localized, systemImage: "globe")
                 }

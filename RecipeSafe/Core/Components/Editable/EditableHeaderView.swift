@@ -8,33 +8,16 @@
 import SwiftUI
 import PhotosUI
 
-struct EditableHeaderView: View {
+struct EditableHeaderView<T: EditableRecipeModel>: View {
     
     // MARK: - Wrapped Properties
-    @Binding var recipe: Recipe
-    @Binding var isEditing: Bool
     @State private var photoItem: PhotosPickerItem?
-    @State private var tempPhoto: ImageData
+    @State private var tempPhoto: ImageData = .none
     
-    // MARK: - Actions
-    var saveAction: () -> Void = {}
-    var cancelAction: () -> Void = {}
-    var deleteAction: () -> Void = {}
-    var groupAction: () -> Void = {}
-    
+    @EnvironmentObject var viewModel: T
+
     // MARK: - Properties
     var optionalDisplay: String?
-    
-    init(recipe: Binding<Recipe>, isEditing: Binding<Bool>, saveAction: @escaping () -> Void, cancelAction: @escaping () -> Void, deleteAction: @escaping () -> Void, groupAction: @escaping () -> Void, optionalDisplay: String? = nil) {
-        self._recipe = recipe
-        self._isEditing = isEditing
-        self.tempPhoto = recipe.wrappedValue.img
-        self.saveAction = saveAction
-        self.cancelAction = cancelAction
-        self.deleteAction = deleteAction
-        self.groupAction = groupAction
-        self.optionalDisplay = optionalDisplay
-    }
     
     // MARK: - Body
     var body: some View {
@@ -42,27 +25,38 @@ struct EditableHeaderView: View {
             Spacer()
 
             PhotosPicker(selection: $photoItem, matching: .images) {
-                IconImage(isEditing: $isEditing, img: $tempPhoto)
+                IconImage(isEditing: $viewModel.editingEnabled, img: $tempPhoto)
+            }
+            .onAppear {
+                self.tempPhoto = viewModel.recipe.img
             }
             .onChange(of: photoItem) { _ in
                 pickPhoto()
             }
-            .disabled(!isEditing)
+            .disabled(!viewModel.editingEnabled)
             
-            TextField("", text: $recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
+            TextField("", text: $viewModel.recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                 .font(.title)
                 .fontWeight(.heavy)
                 .padding()
-                .disabled(!isEditing)
+                .disabled(!viewModel.editingEnabled)
             Spacer()
         }
-        .editableToolbar(isEditing: $isEditing,
-                         url: recipe.url,
-                         alternateLabel: recipe.dataEntity?.group == nil ? "recipe.group.add".localized : nil,
-                         saveAction: { recipe.img = tempPhoto; saveAction() },
-                         cancelAction: { tempPhoto = recipe.img; cancelAction() },
-                         deleteAction: deleteAction,
-                         alternateAction: recipe.dataEntity?.group == nil ? groupAction : {} )
+        .toolbar {
+            if viewModel.recipe.dataEntity == nil {
+                SaveableToolbar(save: { viewModel.recipe = viewModel.saveRecipe(recipe: viewModel.recipe) })
+            } else {
+                EditableToolbar(
+                    isEditing: $viewModel.editingEnabled,
+                    saveAction: { viewModel.recipe.img = tempPhoto; viewModel.saveAction() },
+                    cancelAction: { tempPhoto = viewModel.recipe.img; viewModel.cancelAction() },
+                    deleteAction: viewModel.deleteAction,
+                    alternateAction: viewModel.recipe.dataEntity?.group == nil ? viewModel.groupAction : {},
+                    urlLink: viewModel.recipe.url,
+                    alternateText: viewModel.recipe.dataEntity?.group == nil ? "recipe.group.add".localized : nil
+                )
+            }
+        }
     }
     
     // MARK: - Photo Selection

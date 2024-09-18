@@ -8,10 +8,15 @@
 import Foundation
 import SwiftUI
 
+enum Screen {
+    case allRecipes, groups, search
+}
+
 protocol EditableRecipeModel: ObservableObject {
     
     // MARK: - Properties
     var recipe: Recipe { get set }
+    var screen: Screen { get }
     var editingEnabled: Bool { get set }
     var descriptionText: String { get set }
     var cookText: String { get set }
@@ -37,6 +42,8 @@ protocol EditableRecipeModel: ObservableObject {
     func getGroups() -> [GroupItem]
     func addToGroup(_ group: GroupItem)
     func setup(dismiss: DismissAction)
+    func saveRecipe(recipe: Recipe) -> Recipe
+    func updateRecipe()
 }
 
 // MARK: - Defaults
@@ -44,6 +51,7 @@ extension EditableRecipeModel {
     
     // MARK: - Default Functions
     func setup(dismiss: DismissAction) {
+        print("dismiss")
         self.dismiss = dismiss
     }
     
@@ -83,4 +91,11 @@ extension EditableRecipeModel {
         self.alertSwitch = true
     }
     
+    func saveRecipe(recipe: Recipe) -> Recipe {
+        recipe
+    }
+    
+    func updateRecipe() {
+        print("updating from wrong spot")
+    }
 }

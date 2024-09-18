@@ -43,9 +43,12 @@ class RecipeViewModel: EditableRecipeModel {
         { self.groupSwitch = true }
     }
     
+    var screen: Screen
+    
     // MARK: - Init
-    init(recipe: Recipe, dataManager: DataManager = DataManager()) {
+    init(recipe: Recipe, screen: Screen, dataManager: DataManager = DataManager()) {
         self.recipe = recipe
+        self.screen = screen
         self.descriptionText = recipe.description ?? ""
         self.prepText = recipe.prepTime ?? ""
         self.cookText = recipe.cookTime ?? ""
@@ -82,5 +85,24 @@ extension RecipeViewModel {
     
     func addToGroup(_ group: GroupItem) {
         dataManager.addToGroup(recipe: self.recipe, group)
+    }
+    
+    func saveRecipe(recipe: Recipe) -> Recipe {
+        var newRecipe = recipe
+        newRecipe.dataEntity = dataManager.saveItem(recipe)
+        return newRecipe
+    }
+    
+    func updateRecipe() {
+        print("updating")
+        if screen == .search {
+            if let item = dataManager.findDuplicates(recipe) {
+                var new = recipe
+                new.dataEntity = item
+                self.recipe = new
+            } else {
+                self.recipe.dataEntity = nil
+            }
+        }
     }
 }

@@ -36,7 +36,7 @@ struct ContentView: View {
                     ForEach(viewModel.searchList(recipeList), id: \.id) { item in
                         NavigationLink {
                             if let recipe = Recipe(dataItem: item) {
-                                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+                                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
                                     .navigationBarTitleDisplayMode(.inline)
                             }
                         } label: {
@@ -68,7 +68,6 @@ struct ContentView: View {
                         .opacity(recipeList.isEmpty ? 0 : 0.15)
                 }
                 .navigationTitle("content.nav.title".localized)
-                .navigationBarTitleDisplayMode(.inline)
                 
                 // MARK: - Toolbar
                 .toolbar {
@@ -86,14 +85,14 @@ struct ContentView: View {
             
             // MARK: - Navigation
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
                     .navigationBarTitleDisplayMode(.inline)
             }
         }
         .searchable(text: $viewModel.searchText, prompt: "content.search.prompt".localized)
         .sheet(isPresented: $viewModel.customRecipeSheet) {
             NavigationView {
-                RecipeView(viewModel: CreateRecipeViewModel())
+                RecipeView(viewModel: CreateRecipeViewModel(screen: .allRecipes))
             }
         }
     }

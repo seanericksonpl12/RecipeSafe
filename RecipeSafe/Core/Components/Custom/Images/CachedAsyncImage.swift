@@ -34,6 +34,7 @@ struct CachedAsyncImage<Content: View>: View {
         case .success(let image):
             ImageCache[url] = image
         case .failure(let error):
+            print("load error 1")
             print(String(describing: error))
         @unknown default:
             break

@@ -10,7 +10,7 @@ import SwiftUI
 struct GroupView: View {
     
     // MARK: - Environment
-    @Environment(\.dismiss) var dismissAction
+    @Environment(\.presentationMode) var dismissAction
     @StateObject var viewModel: GroupViewModel
     
     // MARK: - Body
@@ -19,10 +19,18 @@ struct GroupView: View {
         // MARK: - Header
         GroupHeaderImage(group: $viewModel.group)
             .frame(maxHeight: 40)
-            .editableToolbar(isEditing: $viewModel.editingEnabled,
-                             saveAction: { viewModel.saveChanges() },
-                             cancelAction: { viewModel.cancelChanges() },
-                             deleteAction: {viewModel.toggleDelete() })
+            .toolbar {
+                EditableToolbar(
+                    isEditing: $viewModel.editingEnabled,
+                    saveAction: viewModel.saveChanges,
+                    cancelAction: viewModel.cancelChanges,
+                    deleteAction: viewModel.toggleDelete
+                )
+            }
+//            .editableToolbar(isEditing: $viewModel.editingEnabled,
+//                             saveAction: { viewModel.saveChanges() },
+//                             cancelAction: { viewModel.cancelChanges() },
+//                             deleteAction: {viewModel.toggleDelete() })
         
         // MARK: - Recipes
         TabbedList(textFieldTitle: $viewModel.group.title,
@@ -32,7 +40,7 @@ struct GroupView: View {
             ForEach(viewModel.group.recipes) { recipe in
                 if let recipeModel = Recipe(dataItem: recipe) {
                     NavigationLink {
-                        RecipeView(viewModel: RecipeViewModel(recipe: recipeModel))
+                        RecipeView(viewModel: RecipeViewModel(recipe: recipeModel, screen: .groups))
                     } label: {
                         Text(recipe.title ?? "")
                     }

@@ -14,3 +14,8 @@ enum NetworkError: LocalizedError {
     case failedToDecodeJSON(String)
     case recipeMissingItem(String)
 }
+
+enum DataError: LocalizedError {
+    case dataReadError(String)
+    case jsonReadError(String)
+}

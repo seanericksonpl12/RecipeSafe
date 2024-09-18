@@ -30,6 +30,16 @@ class RecipeJSONParser: JSONParser {
         }
         return recipe
     }
+    
+    // Backend parsing
+    func parseFromJSON() throws -> Recipe {
+        let json = try JSON(data: self.data, options: .fragmentsAllowed)
+        let dict = searchFor(keys: JSONKeys.allCases.map({$0.rawValue}),
+                                   excluding: ["review", "author"],
+                                   json: json)
+        
+        return try createRecipe(json: dict)
+    }
 }
 
 // MARK: - Private Helpers

@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 import SwiftUI
 
-class DataManager {
+struct DataManager {
     
     // MARK: - Properties
     private var viewContext: NSManagedObjectContext
@@ -19,7 +19,7 @@ class DataManager {
         self.viewContext = viewContext
     }
     
-    convenience init() {
+    init() {
         self.init(viewContext: PersistenceController.shared.container.viewContext)
     }
 

@@ -56,6 +56,9 @@
 "group.default" = "Group";
 "group.new.add" = "Add to a Group?";
 
+// MARK: - SearchView
+"search.nav.title" = "Search";
+
 
 // MARK: - EmptyListView
 "empty.title" = "Looks Empty...";

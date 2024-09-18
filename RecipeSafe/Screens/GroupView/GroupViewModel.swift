@@ -19,7 +19,7 @@ class GroupViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private var dataManager: DataManager
-    private var dismiss: DismissAction?
+    private var dismiss: Binding<PresentationMode>?
     
     // MARK: - Stored Properties
     private(set) var newRecipe: Recipe?
@@ -45,8 +45,8 @@ extension GroupViewModel {
     
     func deleteSelf() {
         self.dataManager.deleteItem(group.dataEntity)
-        if let exit = dismiss {
-            exit.callAsFunction()
+        if var exit = dismiss {
+            exit.wrappedValue.dismiss()
         }
     }
     
@@ -70,11 +70,15 @@ extension GroupViewModel {
     }
     
     func removeRecipe(at offsets: IndexSet) {
-        offsets.forEach {
-            self.group.recipes[$0].group = nil
+        if !editingEnabled {
+            offsets.forEach {
+                self.group.recipes[$0].group = nil
+            }
         }
         self.group.recipes.remove(atOffsets: offsets)
-        self.dataManager.updateDataEntity(group: group)
+        if !editingEnabled {
+            self.dataManager.updateDataEntity(group: group)
+        }
     }
     
     func moveRecipes(from start: IndexSet, to end: Int) {
@@ -88,7 +92,7 @@ extension GroupViewModel {
         self.selectedRecipes = []
     }
     
-    func setUp(dismiss: DismissAction) {
+    func setUp(dismiss: Binding<PresentationMode>) {
         self.editingEnabled = false
         self.dismiss = dismiss
     }

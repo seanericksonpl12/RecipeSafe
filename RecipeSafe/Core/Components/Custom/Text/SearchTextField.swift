@@ -18,6 +18,7 @@ struct SearchTextField: View {
     
     @Binding var text: String
     @Binding var isLoading: Bool
+    var isFocusing: Binding<Bool>?
     
     @FocusState private var isFocused: Bool
     
@@ -32,15 +33,17 @@ struct SearchTextField: View {
     private var _onCancel: (() -> Void)?
     private var _onRefresh: (() -> Void)?
     
-    init(text: Binding<String>, isLoading: Binding<Bool>, placeholder: String, delegate: SearchTextFieldDelegate? = nil) {
+    init(text: Binding<String>, isLoading: Binding<Bool>, isFocusing: Binding<Bool>?, placeholder: String, delegate: SearchTextFieldDelegate? = nil) {
         self._text = text
         self._isLoading = isLoading
         self.placeholder = placeholder
         self.delegate = delegate
+        self.isFocusing = isFocusing
     }
     
     private init(text: Binding<String>, 
                  isLoading: Binding<Bool>,
+                 isFocusing: Binding<Bool>?,
                  placeholder: String,
                  delegate: SearchTextFieldDelegate? = nil,
                  _onSubmit: (() -> Void)?,
@@ -48,6 +51,7 @@ struct SearchTextField: View {
                  _onRefresh: (() -> Void)?) {
         self._text = text
         self._isLoading = isLoading
+        self.isFocusing = isFocusing
         self.placeholder = placeholder
         self.delegate = delegate
         self._onSubmit = _onSubmit
@@ -69,6 +73,7 @@ struct SearchTextField: View {
                         _onSubmit?()
                     }
                     .onChange(of: isFocused) { focused in
+                        isFocusing?.wrappedValue = focused
                         withAnimation(.smooth) {
                             showCancel = focused
                         }
@@ -109,6 +114,7 @@ extension SearchTextField {
                        onRefresh: (() -> Void)?) -> SearchTextField {
         SearchTextField(text: self.$text,
                         isLoading: _isLoading,
+                        isFocusing: isFocusing,
                         placeholder: placeholder,
                         delegate: delegate,
                         _onSubmit: onSubmit,

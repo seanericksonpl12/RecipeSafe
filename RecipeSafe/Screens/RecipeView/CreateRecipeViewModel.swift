@@ -43,8 +43,11 @@ class CreateRecipeViewModel: EditableRecipeModel {
         {}
     }
     
+    var screen: Screen
+    
     // MARK: - Init
-    init(dataManager: DataManager = DataManager()) {
+    init(screen: Screen, dataManager: DataManager = DataManager()) {
+        self.screen = screen
         self.dataManager = dataManager
         self.recipe = Recipe()
         self.recipe.instructions = [""]

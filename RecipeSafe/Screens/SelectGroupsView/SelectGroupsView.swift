@@ -58,14 +58,19 @@ struct SelectGroupsView: View {
                 }
                 .popover(isPresented: $viewModel.newGroupSwitch) {
                     NavigationStack {
-                        NewGroupPopover(titleText: $viewModel.newGroupText,
-                                        selectedRecipes: $viewModel.selectedRecipes,
-                                        recipes: [viewModel.newRecipe],
-                                        allowSelection: false, color: ColorSet.color(viewModel.newGroupColor))
-                        .editableToolbar(isEditing: $viewModel.editBinding,
-                                         alternateLabel: "",
-                                         saveAction: { self.viewModel.saveNewGroup()},
-                                         cancelAction: {self.viewModel.cancelNewGroup()})
+                        NewGroupPopover(
+                            titleText: $viewModel.newGroupText,
+                            selectedRecipes: $viewModel.selectedRecipes,
+                            recipes: [viewModel.newRecipe],
+                            allowSelection: false, color: ColorSet.color(viewModel.newGroupColor)
+                        )
+                        .toolbar {
+                            EditableToolbar(
+                                isEditing: $viewModel.editBinding,
+                                saveAction: { self.viewModel.saveNewGroup()}, 
+                                cancelAction: {self.viewModel.cancelNewGroup()}
+                            )
+                        }
                     }
                 }
             }

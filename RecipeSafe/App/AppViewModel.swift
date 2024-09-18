@@ -39,7 +39,6 @@ class AppViewModel: ObservableObject {
         self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
         self.dataManager.appUpdate()
     }
-    
 }
 
 // MARK: - URL Open

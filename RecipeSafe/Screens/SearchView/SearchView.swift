@@ -13,53 +13,73 @@ struct SearchView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                searchBar
-                switch viewModel.state {
-                case .backgroundRunning, .loaded, .waiting:
-                    recipeView
-                case .failed:
-                    failedView
-                case .loading:
-                    LoadingView()
-                }
+            GeometryReader { geo in
+                SearchResultsView(viewModel: viewModel, geo: geo)
+                    .searchable(text: $viewModel.text, placement: .navigationBarDrawer(displayMode: .always))
+                    .onSubmit(of: .search) {
+                        viewModel.searchSubmitted()
+                    }
+                
+                    .searchSuggestions {
+                        if viewModel.text.isEmpty && !viewModel.seeAllRecentSearches {
+                            HStack {
+                                Text("Recent Searches")
+                                Spacer()
+                                Button {
+                                    viewModel.seeAllTapped()
+                                } label: {
+                                    Text("See All")
+                                }
+                            }
+                            .font(.callout)
+                            
+                            ForEach(viewModel.recentSearches.recentArray.toIdentifiable(), id: \.id) { item in
+                                HStack {
+                                    Image(systemName: "magnifyingglass")
+                                    Text(item.value)
+                                    Spacer()
+                                }
+                            }
+                            
+                            //                            HStack {
+                            //                                Text("Find nearby")
+                            //                                Spacer()
+                            //                                Button(action: {}) {
+                            //                                    Text("See all")
+                            //                                }
+                            //                            }
+                            //                            .padding(.top)
+                            //                            .font(.callout)
+                        } else if viewModel.seeAllRecentSearches {
+                            ForEach(viewModel.recentSearches.fullArray.toIdentifiable()) { element in
+                                VStack(alignment: .leading) {
+                                    Text(element.value)
+                                }
+                                .searchCompletion(element.value)
+                            }
+                        } else if viewModel.filteredAutoFillValues.isEmpty {
+                            VStack(alignment: .leading) {
+                                Text("")
+                            }
+                        } else {
+                            ForEach(viewModel.filteredAutoFillValues, id: \.hashValue) { completion in
+                                VStack(alignment: .leading) {
+                                    Text(completion)
+                                }
+                                .searchCompletion(completion)
+                            }
+                        }
+                    }
+                    .background {
+                        Image("logo-background")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
+                            .ignoresSafeArea(.all)
+                            .opacity( 0.15)
+                    }
+                    .navigationTitle("search.nav.title".localized)
             }
         }
-    }
-    
-    var searchBar: some View {
-        SearchTextField(text: $viewModel.text,
-                        isLoading: $viewModel.isLoading,
-                        placeholder: "search",
-                        delegate: viewModel)
-            .padding()
-    }
-    
-    var recipeView: some View {
-        List {
-            Section {
-                ForEach(viewModel.results) { recipe in
-                    NavigationLink {
-                        RecipeView(viewModel: RecipeViewModel(recipe: recipe))
-                    } label: {
-                        SearchRecipeView(recipe: recipe)
-                    }
-                }
-            }
-            if viewModel.state == .loaded {
-                Section {
-                    Button {
-                        print("load more")
-                    } label: {
-                        Text("Load More")
-                    }
-                }
-            }
-        }
-    }
-    
-    var failedView: some View {
-        Text("Whoops, something went wrong")
-            .padding()
     }
 }

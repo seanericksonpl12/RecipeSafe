@@ -20,27 +20,19 @@ struct RecipeView<T: EditableRecipeModel>: View {
     var body: some View {
         
         VStack {
-            EditableHeaderView(recipe: $viewModel.recipe,
-                               isEditing: $viewModel.editingEnabled,
-                               saveAction: viewModel.saveAction,
-                               cancelAction: viewModel.cancelAction,
-                               deleteAction: viewModel.deleteAction,
-                               groupAction: viewModel.groupAction,
-                               optionalDisplay: "create.display.title".localized)
-            .onTapGesture {
-                hideKeyboard()
-            }
-            
-            List {
-                
-                EditableDescriptionView(isEditing: $viewModel.editingEnabled,
-                                        description: $viewModel.descriptionText,
-                                        prepTime: $viewModel.prepText,
-                                        cookTime: $viewModel.cookText,
-                                        optionalDisplay: "create.display.desc".localized)
+            EditableHeaderView<T>()
+                .environmentObject(viewModel)
                 .onTapGesture {
                     hideKeyboard()
                 }
+            
+            List {
+                EditableDescriptionView<T>(optionalDisplay: "create.display.desc".localized)
+                    .environmentObject(viewModel)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
+                
                 if !viewModel.recipe.ingredients.isEmpty || viewModel.editingEnabled {
                     EditableSectionView(list: $viewModel.recipe.ingredients,
                                         isEditing: $viewModel.editingEnabled,
@@ -78,6 +70,8 @@ struct RecipeView<T: EditableRecipeModel>: View {
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
+                print("recipe: ", viewModel.recipe)
+                viewModel.updateRecipe()
                 viewModel.setup(dismiss: dismissView)
             }
         }

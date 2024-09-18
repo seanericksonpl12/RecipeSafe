@@ -28,4 +28,12 @@ class MockNetworkManager: NetworkManager {
             return .failure(NetworkError.badResponse("Bad Response"))
         }
     }
+    
+//    func executeStream<Request>(request: Request) async throws -> AsyncCompactMapSequence<AsyncLineSequence<URLSession.AsyncBytes>, Request.Response> where Request : NetworkRequest {
+//        if let req = request as? SearchRequest {
+//            let url =
+//        } else {
+//            throw URLError(.badServerResponse)
+//        }
+//    }
 }

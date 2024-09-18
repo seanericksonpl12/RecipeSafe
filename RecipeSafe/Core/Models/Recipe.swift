@@ -20,6 +20,7 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     var instructions: [String]
     var prepTime: String?
     var cookTime: String?
+    // TODO: CONFORM TO SENDABLE?
     var dataEntity: RecipeItem?
     
     // MARK: - Core Data Init
@@ -80,17 +81,18 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     // MARK: - Coding Init
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.description = try container.decodeIfPresent(String.self, forKey: .description)
-        self.ingredients = try container.decode(Array<String>.self, forKey: .ingredients)
-        self.instructions = try container.decode(Array<String>.self, forKey: .instructions)
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)?.recipeFormatted() ?? container.decode(String.self, forKey: .name).recipeFormatted()
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)?.recipeFormatted()
+        self.ingredients = try container.decode(Array<String>.self, forKey: .ingredients).map { $0.recipeFormatted() }
+        self.instructions = try container.decode(Array<DecodableInstruction>.self, forKey: .instructions).compactMap { $0.text?.recipeFormatted() }
         if let str = try container.decodeIfPresent(String.self, forKey: .thumbnail), let imgUrl = URL(string: str) {
             self.img = .downloaded(imgUrl)
         } else {
             self.img = .none
         }
-        self.cookTime = try container.decodeIfPresent(String.self, forKey: .cook_time)
-        self.prepTime = try container.decodeIfPresent(String.self, forKey: .prep_time)
+        self.url = URL(string: try container.decodeIfPresent(String.self, forKey: .url) ?? "")
+        self.cookTime = try container.decodeIfPresent(String.self, forKey: .cook_time)?.recipeFormatted()
+        self.prepTime = try container.decodeIfPresent(String.self, forKey: .prep_time)?.recipeFormatted()
     }
     
     // MARK: - Protocol Functions
@@ -108,9 +110,18 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     
     // MARK: - Coding Keys
     private enum CodingKeys: String, CodingKey {
-        case title, description, ingredients, instructions
-        case thumbnail = "thumbnail"
+        case name = "name"
+        case title = "headline"
+        case description = "description"
+        case ingredients = "recipeIngredient"
+        case instructions = "recipeInstructions"
+        case thumbnail = "thumbnailUrl"
         case cook_time = "cook_time"
         case prep_time = "prep_time"
+        case url = "recipeUrl"
     }
+}
+
+struct DecodableInstruction: Codable {
+    var text: String?
 }

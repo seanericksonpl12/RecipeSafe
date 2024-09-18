@@ -87,7 +87,7 @@ struct GroupGridView: View {
                 GroupView(viewModel: GroupViewModel(group: group, newRecipe: viewModel.newRecipe))
             }
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe))
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .groups))
             }
             .navigationBarTitleDisplayMode(.inline)
             
@@ -101,10 +101,13 @@ struct GroupGridView: View {
                                     selectedRecipes: $viewModel.selectedRecipes,
                                     recipes: viewModel.getRecipes(),
                                     color: ColorSet.color(viewModel.newGroupColor))
-                    .editableToolbar(isEditing: $viewModel.editingEnabled,
-                                     alternateLabel: "",
-                                     saveAction: {self.viewModel.saveNewGroup()},
-                                     cancelAction: {self.viewModel.cancelNewGroup()})
+                    .toolbar {
+                        EditableToolbar(
+                            isEditing: $viewModel.editingEnabled,
+                            saveAction: { self.viewModel.saveNewGroup() },
+                            cancelAction: { self.viewModel.cancelNewGroup() }
+                        )
+                    }
                 }
             }
             .popover(isPresented: $viewModel.newRecipeSwitch) {
