@@ -1,5 +1,5 @@
 {
-  "originHash" : "42346083da1c1b0f30f33145804c222c64a1361f239b1b32642026acf3004793",
+  "originHash" : "b80783f4f7003bd1ce55add0a80b021d0e6156db141d946b632948ed48168233",
   "pins" : [
     {
       "identity" : "lottie-ios",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "d6feea26a370019b4d3a85f5984cb95a2734776f",
         "version" : "4.2.0"
+      }
+    },
+    {
+      "identity" : "nuke",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Nuke",
+      "state" : {
+        "revision" : "0ead44350d2737db384908569c012fe67c421e4d",
+        "version" : "12.8.0"
       }
     },
     {

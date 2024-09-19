@@ -25,31 +25,22 @@ class SearchViewModel: ObservableObject {
     @Published var results: [Recipe] = []
     @Published var isLoading: Bool = false
     @Published var stringCompletions: [String] = []
-    @Published var isSearching: Bool = false
     @Published var seeAllRecentSearches: Bool = false
-    
-    // TESTING
-    @Published var isFocusing: Bool = false
+    @Published var filteredAutoFillValues: [String] = []
+    @Published var isSearchFocused: Bool = false
     
     var randomRecipes: [String] = []
-    var autoFillValues: [String] = []
     var recentSearches = RecentSearchStack()
     
     private var network: NetworkManager = NetworkManager()
     private var dataManager: DataManager = DataManager()
     private var searchTask: Task<(), Error>?
-    private var previousResults: [Recipe] = []
+    private var filterTask: Task<(), Error>?
+    private var autoFillValues: [String] = []
     private var didJustSubmit: Bool = false
-    private var shouldProcessSubmit: Bool = true
     private var subscribers: Set<AnyCancellable> = []
     
-    var filteredAutoFillValues: [String] {
-        autoFillValues.filter({ $0.lowercased().hasPrefix(text.lowercased()) })
-    }
-    
     lazy var suggestedRecipes: [RecipeSuggestion] = { fetchRandomRecipes() }()
-    
-    var dismissSearch: () -> Void = { print("not set..") }
     
     init() {
         $text.sink { [weak self] newText in
@@ -67,6 +58,7 @@ extension SearchViewModel {
         }
         self.searchTask = Task {
             await reset()
+            self.isSearchFocused = false
             self.recentSearches.add(term)
             self.state = .loading
             self.isLoading = true
@@ -86,7 +78,6 @@ extension SearchViewModel {
                 }
             }
             self.isLoading = false
-            self.previousResults = self.results
         }
     }
     
@@ -111,39 +102,13 @@ extension SearchViewModel {
         self.results = []
     }
     
-    func searchSubmitted() {
-        if !shouldProcessSubmit {
-            shouldProcessSubmit = true
-            return
-        }
-        didJustSubmit = true
-        let temp = text
-        start(term: temp)
-        dismissSearch()
-        // janky text reset to not lose text on submit
-        text = ""
-        DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: DispatchTimeInterval.milliseconds(100))) {
-            self.text = temp
-        }
-    }
-    
     func seeAllTapped() {
-        shouldProcessSubmit = false
         seeAllRecentSearches = true
     }
     
-    func isSearching(_ isSearching: Bool) {
-        if didJustSubmit {
-            didJustSubmit = false
-        } else {
-            cancelSearch()
-        }
-    }
-    
-    private func cancelSearch() {
+    func clearHistoryTapped() {
+        recentSearches.clear()
         seeAllRecentSearches = false
-        searchTask?.cancel()
-        self.state = results.isEmpty ? .waiting : .loaded
     }
     
     private func updatedText(text: String) {
@@ -158,22 +123,59 @@ extension SearchViewModel {
             }
         } else if text.count == 0 {
             self.autoFillValues = []
+        } 
+        
+        self.filterTask?.cancel()
+        self.filterTask = Task(priority: .background) {
+            self.filteredAutoFillValues = autoFillValues.filter({ $0.lowercased().hasPrefix(text.lowercased()) })
         }
     }
     
     private func fetchRandomRecipes() -> [RecipeSuggestion] {
         var recipes = [RecipeSuggestion]()
+        var killswitch = 0
         guard let file = FileUtility.read(name: "recipes_with_images", type: .json, model: RecipeSuggestionFile.self) else {
             return []
         }
         while recipes.count < 6 {
-            guard let arr = file.titles.randomElement()?.value,
+            guard killswitch < 10,
+                  let arr = file.titles.randomElement()?.value,
                   let recipe = arr.randomElement() else {
                 recipes = []
                 return []
             }
-            recipes.append(recipe)
+            if !recipes.contains(recipe) {
+                recipes.append(recipe)
+            }
+            killswitch += 1
         }
         return recipes
+    }
+}
+
+extension SearchViewModel: SearchTextFieldDelegate {
+    func submit() {
+        start(term: self.text)
+    }
+    
+    func refresh() {
+        searchTask?.cancel()
+        start(term: self.text)
+    }
+    
+    func cancel() {
+        self.isSearchFocused = false
+        seeAllRecentSearches = false
+    }
+    
+    func clear() {
+        if !isLoading {
+            self.text = ""
+        }
+        
+        seeAllRecentSearches = false
+        searchTask?.cancel()
+        results = []
+        state = .waiting
     }
 }

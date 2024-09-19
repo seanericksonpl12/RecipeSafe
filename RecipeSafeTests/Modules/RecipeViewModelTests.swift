@@ -19,7 +19,7 @@ import CoreData
         super.setUp()
         continueAfterFailure = false
         self.dataStack = PersistenceController(inMemory: true)
-        self.viewModel = RecipeViewModel(recipe: Recipe(), dataManager: DataManager(viewContext: self.dataStack.container.viewContext))
+        self.viewModel = RecipeViewModel(recipe: Recipe(), screen: .allRecipes, dataManager: DataManager(viewContext: self.dataStack.container.viewContext))
         self.dataEntity = RecipeItem(context: self.dataStack.container.viewContext)
         viewModel.recipe.dataEntity = self.dataEntity
     }

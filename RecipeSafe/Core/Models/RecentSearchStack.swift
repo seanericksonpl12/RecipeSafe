@@ -14,6 +14,8 @@ struct RecentSearchStack {
             let sliced = Array(searches[0..<longMax])
             UserDefaults.standard.recentSearches = sliced
             self.storage = sliced
+        } else if searches.count <= shortMax {
+            self.storage = searches
         } else {
             self.storage = Array(searches[0..<shortMax])
         }

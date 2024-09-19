@@ -47,14 +47,7 @@ struct SelectGroupsView: View {
                         }
                     }
                     .scrollContentBackground(.hidden)
-                    .background {
-                        Image("logo-background")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
-                            .ignoresSafeArea(.all)
-                            .opacity(0.15)
-                    }
+                    .applyAppBackground(proxy: geo)
                 }
                 .popover(isPresented: $viewModel.newGroupSwitch) {
                     NavigationStack {

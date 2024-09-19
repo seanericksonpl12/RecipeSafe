@@ -62,24 +62,6 @@ extension NetworkProtocol {
         }
     }
     
-    func executeRequests<Request: NetworkRequest>(requests: [Request]) async throws -> AsyncStream<Result<Request.Response, Error>> {
-            
-            await withTaskGroup(of: Result<Request.Response, Error>.self) { group in
-                for request in requests {
-                    group.addTask {
-                        return await self.executeRequest(request: request, retries: 0)
-                    }
-                }
-                
-                var myGroup = group.makeAsyncIterator()
-                return AsyncStream(unfolding: {
-                    return await myGroup.next()
-                })
-            }
-        
-        
-    }
-    
     func executeStream<Request: NetworkRequest>(request: Request) async throws -> AsyncCompactMapSequence<AsyncLineSequence<URLSession.AsyncBytes>, Request.Response> {
         
         // DEBUG!!!!!!

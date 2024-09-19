@@ -16,3 +16,16 @@ extension View {
     }
 }
 #endif
+
+extension View {
+    func applyAppBackground(proxy geo: GeometryProxy, isShown: Bool = true) -> some View {
+        self.background {
+            Image("logo-background")
+                .resizable()
+                .scaledToFill()
+                .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
+                .ignoresSafeArea(.all)
+                .opacity(isShown ? 0.05 : 0.0)
+        }
+    }
+}

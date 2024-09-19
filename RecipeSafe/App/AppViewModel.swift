@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Nuke
 
 @MainActor
 class AppViewModel: ObservableObject {
@@ -38,6 +39,7 @@ class AppViewModel: ObservableObject {
         self.dataManager = dataManager
         self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
         self.dataManager.appUpdate()
+        Nuke.ImagePipeline.shared = ImagePipeline(configuration: .withDataCache)
     }
 }
 

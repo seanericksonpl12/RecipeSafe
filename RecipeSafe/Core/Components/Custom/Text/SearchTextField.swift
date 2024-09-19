@@ -11,10 +11,17 @@ import SwiftUI
 protocol SearchTextFieldDelegate: AnyObject {
     @objc optional func submit()
     @objc optional func refresh()
+    @objc optional func clear()
     @objc optional func cancel()
 }
 
 struct SearchTextField: View {
+    
+    private enum ButtonState: String {
+        case refresh = "arrow.counterclockwise"
+        case cancel = "x.circle.fill"
+        case none = ""
+    }
     
     @Binding var text: String
     @Binding var isLoading: Bool
@@ -23,40 +30,19 @@ struct SearchTextField: View {
     @FocusState private var isFocused: Bool
     
     @State private var showCancel: Bool = false
-    @State private var showRefresh: Bool = false
+    @State private var buttonState: ButtonState = .none
+    @State private var hasMadeSearch: Bool = false
     
     let placeholder: String
     
     weak var delegate: SearchTextFieldDelegate?
     
-    private var _onSubmit: (() -> Void)?
-    private var _onCancel: (() -> Void)?
-    private var _onRefresh: (() -> Void)?
-    
-    init(text: Binding<String>, isLoading: Binding<Bool>, isFocusing: Binding<Bool>?, placeholder: String, delegate: SearchTextFieldDelegate? = nil) {
+    init(text: Binding<String>, isLoading: Binding<Bool>, isFocusing: Binding<Bool>?, placeholder: String, delegate: SearchTextFieldDelegate?) {
         self._text = text
         self._isLoading = isLoading
         self.placeholder = placeholder
         self.delegate = delegate
         self.isFocusing = isFocusing
-    }
-    
-    private init(text: Binding<String>, 
-                 isLoading: Binding<Bool>,
-                 isFocusing: Binding<Bool>?,
-                 placeholder: String,
-                 delegate: SearchTextFieldDelegate? = nil,
-                 _onSubmit: (() -> Void)?,
-                 _onCancel: (() -> Void)?,
-                 _onRefresh: (() -> Void)?) {
-        self._text = text
-        self._isLoading = isLoading
-        self.isFocusing = isFocusing
-        self.placeholder = placeholder
-        self.delegate = delegate
-        self._onSubmit = _onSubmit
-        self._onCancel = _onCancel
-        self._onRefresh = _onRefresh
     }
 
     var body: some View {
@@ -70,26 +56,41 @@ struct SearchTextField: View {
                     .textFieldStyle(PlainTextFieldStyle())
                     .onSubmit {
                         delegate?.submit?()
-                        _onSubmit?()
+                        hasMadeSearch = true
                     }
                     .onChange(of: isFocused) { focused in
-                        isFocusing?.wrappedValue = focused
+                        withAnimation(.interactiveSpring) {
+                            isFocusing?.wrappedValue = focused
+                        }
                         withAnimation(.smooth) {
                             showCancel = focused
                         }
+                        refreshButtonState()
                     }
                     .onChange(of: isLoading) { loading in
-                        withAnimation(.smooth) {
-                            showRefresh = !loading
+                        refreshButtonState()
+                    }
+                    .onChange(of: isFocusing?.wrappedValue) { focus in
+                        if let focus = focus {
+                            isFocused = focus
                         }
                     }
+                    
                 Spacer()
-                Button {
-                    isLoading ? delegate?.cancel?() : delegate?.refresh?()
-                    isLoading ? _onCancel?() : _onRefresh?()
-                } label: {
-                    Image(systemName: showRefresh ? "arrow.counterclockwise" : "x.circle.fill")
-                        .padding(8)
+                if buttonState != .none {
+                    Button {
+                        switch buttonState {
+                        case .refresh:
+                            delegate?.refresh?()
+                        case .cancel:
+                            delegate?.clear?()
+                        case .none:
+                            return
+                        }
+                    } label: {
+                        Image(systemName: buttonState.rawValue)
+                            .padding(8)
+                    }
                 }
             }
             .background {
@@ -98,7 +99,7 @@ struct SearchTextField: View {
             }
             if showCancel {
                 Button {
-                    isFocused = false
+                    delegate?.cancel?()
                 } label: {
                     Text("Cancel")
                 }
@@ -109,16 +110,16 @@ struct SearchTextField: View {
 }
 
 extension SearchTextField {
-    func searchActions(onSubmit: (() -> Void)?,
-                       onCancel: (() -> Void)?,
-                       onRefresh: (() -> Void)?) -> SearchTextField {
-        SearchTextField(text: self.$text,
-                        isLoading: _isLoading,
-                        isFocusing: isFocusing,
-                        placeholder: placeholder,
-                        delegate: delegate,
-                        _onSubmit: onSubmit,
-                        _onCancel: onCancel,
-                        _onRefresh: onRefresh)
+    
+    func refreshButtonState() {
+        if text.isEmpty && !isFocused {
+            withAnimation {
+                buttonState = .none
+            }
+        } else {
+            withAnimation {
+                buttonState = .cancel
+            }
+        }
     }
 }

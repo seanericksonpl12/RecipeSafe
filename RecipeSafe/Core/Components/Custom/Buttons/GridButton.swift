@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct GridButton: View {
     
@@ -24,25 +25,22 @@ struct GridButton: View {
             .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
             .background {
                 if let url = group.imgUrl {
-                    CachedAsyncImage(url: url) { phase in
-                        switch phase {
-                        case.empty:
+                    LazyImage(url: url) { state in
+                        switch state.result {
+                        case .none:
                             ColorSet.color(group.color)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                         case .failure(_):
                             ColorSet.color(group.color)
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                         case .success(let img):
-                            img
+                            Image(uiImage: img.image)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: (geoProxy.size.width / 2.75), height: (geoProxy.size.width / 2.75))
                                 .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .opacity(isEditing ? 0.5 : 1)
                                 .zIndex(0)
-                        @unknown default:
-                            ColorSet.color(group.color)
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
                         }
                     }
                 } else {

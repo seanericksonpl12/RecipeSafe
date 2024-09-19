@@ -35,7 +35,6 @@ extension Array where Element: Primitive {
     }
     
     func toIdentifiable() -> [IdentifiablePrimitive] {
-        print(self)
         if self.isEmpty { return [] }
         return self.map { IdentifiablePrimitive($0) }
     }

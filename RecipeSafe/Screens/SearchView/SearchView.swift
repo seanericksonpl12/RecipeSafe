@@ -1,8 +1,8 @@
 //
-//  SearchView.swift
+//  SearchResultsView.swift
 //  RecipeSafe
 //
-//  Created by Sean Erickson on 9/3/24.
+//  Created by Sean Erickson on 9/15/24.
 //
 
 import SwiftUI
@@ -11,75 +11,143 @@ struct SearchView: View {
     
     @StateObject var viewModel: SearchViewModel
     
+    @State var size: CGSize = .zero
+    
     var body: some View {
         NavigationStack {
             GeometryReader { geo in
-                SearchResultsView(viewModel: viewModel, geo: geo)
-                    .searchable(text: $viewModel.text, placement: .navigationBarDrawer(displayMode: .always))
-                    .onSubmit(of: .search) {
-                        viewModel.searchSubmitted()
-                    }
-                
-                    .searchSuggestions {
-                        if viewModel.text.isEmpty && !viewModel.seeAllRecentSearches {
-                            HStack {
-                                Text("Recent Searches")
-                                Spacer()
-                                Button {
-                                    viewModel.seeAllTapped()
-                                } label: {
-                                    Text("See All")
-                                }
-                            }
-                            .font(.callout)
-                            
-                            ForEach(viewModel.recentSearches.recentArray.toIdentifiable(), id: \.id) { item in
-                                HStack {
-                                    Image(systemName: "magnifyingglass")
-                                    Text(item.value)
-                                    Spacer()
-                                }
-                            }
-                            
-                            //                            HStack {
-                            //                                Text("Find nearby")
-                            //                                Spacer()
-                            //                                Button(action: {}) {
-                            //                                    Text("See all")
-                            //                                }
-                            //                            }
-                            //                            .padding(.top)
-                            //                            .font(.callout)
-                        } else if viewModel.seeAllRecentSearches {
-                            ForEach(viewModel.recentSearches.fullArray.toIdentifiable()) { element in
-                                VStack(alignment: .leading) {
-                                    Text(element.value)
-                                }
-                                .searchCompletion(element.value)
-                            }
-                        } else if viewModel.filteredAutoFillValues.isEmpty {
-                            VStack(alignment: .leading) {
-                                Text("")
-                            }
-                        } else {
-                            ForEach(viewModel.filteredAutoFillValues, id: \.hashValue) { completion in
-                                VStack(alignment: .leading) {
-                                    Text(completion)
-                                }
-                                .searchCompletion(completion)
-                            }
+                VStack {
+                    SearchTextField(
+                        text: $viewModel.text,
+                        isLoading: $viewModel.isLoading,
+                        isFocusing: $viewModel.isSearchFocused,
+                        placeholder: "Search",
+                        delegate: viewModel
+                    )
+                    .padding()
+                    if viewModel.isSearchFocused {
+                        suggestions
+                    } else {
+                        switch viewModel.state {
+                        case .waiting, .failed:
+                            waiting
+                        case .backgroundRunning, .loaded:
+                            recipeView
+                        case .loading:
+                            LoadingView()
                         }
+                        Spacer()
                     }
-                    .background {
-                        Image("logo-background")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
-                            .ignoresSafeArea(.all)
-                            .opacity( 0.15)
-                    }
-                    .navigationTitle("search.nav.title".localized)
+                }
+                .applyAppBackground(proxy: geo)
+                .navigationTitle("search.nav.title".localized)
+                .onChange(of: geo.size) {
+                    self.size = $0
+                }
             }
         }
+    }
+    
+    var waiting: some View {
+        ScrollView {
+            HStack {
+                Text("Suggestions")
+                    .font(.title3)
+                    .padding(.leading)
+                Spacer()
+            }
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], alignment: .center, spacing: 0) {
+                ForEach(Array(viewModel.suggestedRecipes.enumerated()), id: \.element) { i, recipe in
+                    SuggestionTile(title: recipe.title, size: size, img: URL(string: recipe.link), color: Int16(i + 1)) {
+                        viewModel.suggestionTapped(text: recipe.title)
+                    }
+                }
+            }
+            .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 10))
+        }
+    }
+    
+    @ViewBuilder
+    var recipeView: some View {
+        if viewModel.results.isEmpty {
+            Color.clear
+        } else {
+            List {
+                Section {
+                    ForEach(viewModel.results) { recipe in
+                        NavigationLink {
+                            RecipeView(viewModel: RecipeViewModel(recipe: viewModel.checkIfSaved(recipe: recipe), screen: .search))
+                        } label: {
+                            SearchRecipeView(recipe: recipe)
+                        }
+                    }
+                    .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
+                }
+            }
+            .scrollContentBackground(.hidden)
+        }
+    }
+    
+    var suggestions: some View {
+        ScrollView {
+            if viewModel.text.isEmpty && !viewModel.seeAllRecentSearches && !viewModel.recentSearches.recentArray.isEmpty {
+                HStack {
+                    Text("Recent Searches")
+                        .font(.title3)
+                    Spacer()
+                    
+                    Button {
+                        viewModel.seeAllTapped()
+                    } label: {
+                        Text("See All")
+                    }
+                }
+                .font(.callout)
+                .padding([.leading, .trailing, .bottom])
+                
+                SearchList(viewModel.recentSearches.recentArray, text: $viewModel.text) { item in
+                    Text(item)
+                } action: { value in
+                    viewModel.suggestionTapped(text: value)
+                }
+                
+            } else if viewModel.seeAllRecentSearches && !viewModel.recentSearches.fullArray.isEmpty {
+                HStack {
+                    Text("History")
+                    Spacer()
+                    Button {
+                        viewModel.recentSearches.clear()
+                        viewModel.seeAllRecentSearches = false
+                    } label: {
+                        Text("Clear")
+                    }
+                }
+                .font(.callout)
+                .padding([.leading, .trailing])
+                SearchList(viewModel.recentSearches.fullArray, text: $viewModel.text) { item in
+                    Text(item)
+                } action: { value in
+                    viewModel.suggestionTapped(text: value)
+                }
+            } else {
+                SearchList(viewModel.filteredAutoFillValues, text: $viewModel.text) { item in
+                    Text(item)
+                } action: { value in
+                    viewModel.suggestionTapped(text: value)
+                }
+            }
+        }
+    }
+    
+    var failedView: some View {
+        Text("Whoops, something went wrong")
+            .padding()
+    }
+    
+    var defaultView: some View {
+        Text("Make a search jackass")
     }
 }

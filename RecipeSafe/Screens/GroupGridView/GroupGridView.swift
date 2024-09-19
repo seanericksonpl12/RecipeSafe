@@ -61,14 +61,7 @@ struct GroupGridView: View {
                 // MARK: - Background
                 .scrollDisabled(groups.isEmpty && !viewModel.editingEnabled)
                 .scrollContentBackground(.hidden)
-                .background {
-                    Image("logo-background")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
-                        .ignoresSafeArea(.all)
-                        .opacity(groups.isEmpty ? 0.0 : 0.15)
-                }
+                .applyAppBackground(proxy: geo, isShown: !groups.isEmpty)
             }
             
             // MARK: - Toolbar

@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct SuggestionTile: View {
     
     var title: String
-    var geo: GeometryProxy
+    var size: CGSize
     var img: URL?
     var color: Int16
     
@@ -30,33 +31,30 @@ struct SuggestionTile: View {
                     Spacer()
                 }
             }
-            .frame(width: (geo.size.width / 2.75), height: (geo.size.width / 2.75))
+            .frame(width: (size.width / 2.3), height: (size.width / 2.5))
             .padding()
             .background {
                 RoundedRectangle(cornerRadius: 15)
                     .stroke(Color(.systemGray4), lineWidth: 4)
-                    .frame(width: (geo.size.width / 2.75), height: (geo.size.width / 2.75))
+                    .frame(width: (size.width / 2.3), height: (size.width / 2.5))
                     .background {
                         if let url = img {
-                            CachedAsyncImage(url: url) { phase in
-                                switch phase {
-                                case.empty:
+                            LazyImage(url: url) { state in
+                                switch state.result {
+                                case .none:
                                     ColorSet.color(color)
                                         .clipShape(RoundedRectangle(cornerRadius: 15))
                                 case .failure(_):
                                     ColorSet.color(color)
                                         .clipShape(RoundedRectangle(cornerRadius: 15))
                                 case .success(let img):
-                                    img
+                                    Image(uiImage: img.image)
                                         .resizable()
                                         .scaledToFill()
-                                        .frame(width: (geo.size.width / 2.75), height: (geo.size.width / 2.75))
+                                        .frame(width: (size.width / 2.3), height: (size.width / 2.5))
                                         .clipShape(RoundedRectangle(cornerRadius: 15))
                                         //.opacity(0.5)
                                         .zIndex(0)
-                                @unknown default:
-                                    ColorSet.color(color)
-                                        .clipShape(RoundedRectangle(cornerRadius: 15))
                                 }
                             }
                             .overlay {

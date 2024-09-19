@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NukeUI
 
 struct GroupHeaderImage: View {
     
@@ -13,9 +14,9 @@ struct GroupHeaderImage: View {
     
     var body: some View {
         if let url = group.imgUrl {
-            CachedAsyncImage(url: url) { phase in
-                switch phase {
-                case.empty:
+            LazyImage(url: url) { state in
+                switch state.result {
+                case .none:
                     ColorSet.color(group.dataEntity.color)
                         .scaledToFill()
                         .ignoresSafeArea()
@@ -30,17 +31,10 @@ struct GroupHeaderImage: View {
                         .allowsHitTesting(false)
                         .zIndex(0)
                 case .success(let img):
-                    img
+                    Image(uiImage: img.image)
                         .resizable()
                         .scaledToFill()
                         .opacity(0.85)
-                        .allowsHitTesting(false)
-                        .zIndex(0)
-                @unknown default:
-                    ColorSet.color(group.dataEntity.color)
-                        .scaledToFill()
-                        .ignoresSafeArea()
-                        .opacity(0.75)
                         .allowsHitTesting(false)
                         .zIndex(0)
                 }
