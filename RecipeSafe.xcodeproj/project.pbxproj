@@ -31,6 +31,9 @@
 		9211021E2A7D6B2B00F34E5A /* MockNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9211021D2A7D6B2B00F34E5A /* MockNetworkRequest.swift */; };
 		921102242A7EA08100F34E5A /* NetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921102232A7EA08100F34E5A /* NetworkManagerTests.swift */; };
 		921102262A7EA6BD00F34E5A /* JSONParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921102252A7EA6BD00F34E5A /* JSONParserTests.swift */; };
+		9218BB662C9EF19600378DE5 /* SearchReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9218BB652C9EF19600378DE5 /* SearchReducer.swift */; };
+		9218BB682C9EF66700378DE5 /* TCASearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9218BB672C9EF66700378DE5 /* TCASearchView.swift */; };
+		9218BB6A2C9F7A7D00378DE5 /* TCASearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9218BB692C9F7A7D00378DE5 /* TCASearchTextField.swift */; };
 		92275D7F2C8761BB00D08961 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92275D7E2C8761BB00D08961 /* SearchViewModel.swift */; };
 		92275D812C876F8C00D08961 /* SearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92275D802C876F8C00D08961 /* SearchRequest.swift */; };
 		9235E0882A7EB35F000B05EF /* test_data_1.html in Resources */ = {isa = PBXBuildFile; fileRef = 9235E0872A7EB35F000B05EF /* test_data_1.html */; };
@@ -108,6 +111,7 @@
 		92F09A272C9C6E660038A031 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 92F09A262C9C6E660038A031 /* NukeUI */; };
 		92F09A2B2C9C8B840038A031 /* PreferenceKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F09A2A2C9C8B840038A031 /* PreferenceKeys.swift */; };
 		92F09A2D2C9CE22F0038A031 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F09A2C2C9CE22F0038A031 /* ViewModel.swift */; };
+		92F09A332C9CE85D0038A031 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 92F09A322C9CE85D0038A031 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +177,9 @@
 		9211021D2A7D6B2B00F34E5A /* MockNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkRequest.swift; sourceTree = "<group>"; };
 		921102232A7EA08100F34E5A /* NetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerTests.swift; sourceTree = "<group>"; };
 		921102252A7EA6BD00F34E5A /* JSONParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParserTests.swift; sourceTree = "<group>"; };
+		9218BB652C9EF19600378DE5 /* SearchReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchReducer.swift; sourceTree = "<group>"; };
+		9218BB672C9EF66700378DE5 /* TCASearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCASearchView.swift; sourceTree = "<group>"; };
+		9218BB692C9F7A7D00378DE5 /* TCASearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCASearchTextField.swift; sourceTree = "<group>"; };
 		92275D7E2C8761BB00D08961 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		92275D802C876F8C00D08961 /* SearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRequest.swift; sourceTree = "<group>"; };
 		9235E0872A7EB35F000B05EF /* test_data_1.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test_data_1.html; sourceTree = "<group>"; };
@@ -263,6 +270,7 @@
 			files = (
 				92F09A272C9C6E660038A031 /* NukeUI in Frameworks */,
 				926687A02A6094CB00117A59 /* SwiftyJSON in Frameworks */,
+				92F09A332C9CE85D0038A031 /* ComposableArchitecture in Frameworks */,
 				9266879B2A608E3D00117A59 /* SwiftSoup in Frameworks */,
 				920DA35E2A6F0EF70086ADB5 /* Lottie in Frameworks */,
 				92F09A252C9C6E660038A031 /* Nuke in Frameworks */,
@@ -403,9 +411,20 @@
 			path = Placeholders;
 			sourceTree = "<group>";
 		};
+		9218BB642C9EF17C00378DE5 /* TCA SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				9218BB652C9EF19600378DE5 /* SearchReducer.swift */,
+				9218BB672C9EF66700378DE5 /* TCASearchView.swift */,
+				9218BB692C9F7A7D00378DE5 /* TCASearchTextField.swift */,
+			);
+			path = "TCA SearchView";
+			sourceTree = "<group>";
+		};
 		92275D7B2C8760B000D08961 /* SearchView */ = {
 			isa = PBXGroup;
 			children = (
+				9218BB642C9EF17C00378DE5 /* TCA SearchView */,
 				92F09A072C97641B0038A031 /* SearchView.swift */,
 				92275D7E2C8761BB00D08961 /* SearchViewModel.swift */,
 				92BD83A82C87829900C11C09 /* SearchRecipeView.swift */,
@@ -788,6 +807,7 @@
 				920DA35D2A6F0EF70086ADB5 /* Lottie */,
 				92F09A242C9C6E660038A031 /* Nuke */,
 				92F09A262C9C6E660038A031 /* NukeUI */,
+				92F09A322C9CE85D0038A031 /* ComposableArchitecture */,
 			);
 			productName = RecipeSafe;
 			productReference = 926687672A608C9200117A59 /* RecipeSafe.app */;
@@ -886,6 +906,7 @@
 				9266879E2A6094CB00117A59 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				920DA35C2A6F0EF70086ADB5 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				92F09A232C9C6E660038A031 /* XCRemoteSwiftPackageReference "Nuke" */,
+				92F09A312C9CE85D0038A031 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = 926687682A608C9200117A59 /* Products */;
 			projectDirPath = "";
@@ -951,6 +972,7 @@
 				9201F9852A7AF14800A6021A /* RecipeJSONParser.swift in Sources */,
 				92F09A192C99F9AA0038A031 /* PrimitiveType.swift in Sources */,
 				9201F9802A795F9000A6021A /* EditableRecipeModel.swift in Sources */,
+				9218BB662C9EF19600378DE5 /* SearchReducer.swift in Sources */,
 				92BD83A92C87829900C11C09 /* SearchRecipeView.swift in Sources */,
 				9272DD282A86F72400DD4549 /* AddRecipePopover.swift in Sources */,
 				92275D812C876F8C00D08961 /* SearchRequest.swift in Sources */,
@@ -978,6 +1000,7 @@
 				9201F97D2A7852AE00A6021A /* CreateRecipeViewModel.swift in Sources */,
 				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
 				92F09A0F2C98C5400038A031 /* RecipeImageRequest.swift in Sources */,
+				9218BB6A2C9F7A7D00378DE5 /* TCASearchTextField.swift in Sources */,
 				92F099FA2C94F1D30038A031 /* SaveableToolbar.swift in Sources */,
 				920DA36B2A70270F0086ADB5 /* EditableToolbar.swift in Sources */,
 				926687A22A60A26600117A59 /* Recipe.swift in Sources */,
@@ -990,6 +1013,7 @@
 				92535C232A7174F1003E30BD /* NetworkProtocol.swift in Sources */,
 				9268BDC82A8C749F00366964 /* TutorialViewModel.swift in Sources */,
 				926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */,
+				9218BB682C9EF66700378DE5 /* TCASearchView.swift in Sources */,
 				9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */,
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
 				92E705FC2A8A881600ACA24C /* AppViewModel.swift in Sources */,
@@ -1478,6 +1502,14 @@
 				minimumVersion = 12.8.0;
 			};
 		};
+		92F09A312C9CE85D0038A031 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.15.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1505,6 +1537,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 92F09A232C9C6E660038A031 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeUI;
+		};
+		92F09A322C9CE85D0038A031 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92F09A312C9CE85D0038A031 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 

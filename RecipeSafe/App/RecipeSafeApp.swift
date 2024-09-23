@@ -6,10 +6,30 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
+
+@Reducer
+struct AppReducer {
+    struct State {
+        var searchState = SearchReducer.State(textFieldState: SearchTextFieldReducer.State())
+    }
+    
+    enum Action {
+        case searchAction(SearchReducer.Action)
+    }
+    
+    var body: some ReducerOf<Self> {
+        Scope(state: \.searchState, action: \.searchAction) {
+            SearchReducer()
+        }
+    }
+}
 
 @main
 struct RecipeSafeApp: App {
-    
+    let store: StoreOf<AppReducer> = Store(initialState: AppReducer.State()) {
+        AppReducer()
+    }
     // MARK: - ViewModel
     @StateObject private var viewModel = AppViewModel()
 
@@ -40,11 +60,16 @@ struct RecipeSafeApp: App {
                     Label("app.group".localized, systemImage: "circlebadge.2")
                 }
                 .tag(2)
-            SearchView(viewModel: SearchViewModel())
+            TCASearchView(store: store.scope(state: \.searchState, action: \.searchAction))
                 .tabItem {
                     Label("app.search".localized, systemImage: "globe")
                 }
                 .tag(3)
+//            SearchView(viewModel: SearchViewModel())
+//                .tabItem {
+//                    Label("app.search".localized, systemImage: "globe")
+//                }
+//                .tag(3)
         }
         .onOpenURL { url in
             self.viewModel.onURLOpen(url: url)
