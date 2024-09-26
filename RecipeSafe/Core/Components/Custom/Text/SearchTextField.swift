@@ -24,7 +24,6 @@ struct SearchTextField: View {
     }
     
     @Binding var text: String
-    @Binding var isLoading: Bool
     var isFocusing: Binding<Bool>?
     
     @FocusState private var isFocused: Bool
@@ -37,9 +36,8 @@ struct SearchTextField: View {
     
     weak var delegate: SearchTextFieldDelegate?
     
-    init(text: Binding<String>, isLoading: Binding<Bool>, isFocusing: Binding<Bool>?, placeholder: String, delegate: SearchTextFieldDelegate?) {
+    init(text: Binding<String>, isFocusing: Binding<Bool>?, placeholder: String, delegate: SearchTextFieldDelegate?) {
         self._text = text
-        self._isLoading = isLoading
         self.placeholder = placeholder
         self.delegate = delegate
         self.isFocusing = isFocusing
@@ -58,24 +56,20 @@ struct SearchTextField: View {
                         delegate?.submit?()
                         hasMadeSearch = true
                     }
-                    .onChange(of: isFocused) { focused in
+                    .onChange(of: isFocused) { old, new in
                         withAnimation(.interactiveSpring) {
-                            isFocusing?.wrappedValue = focused
+                            isFocusing?.wrappedValue = new
                         }
                         withAnimation(.smooth) {
-                            showCancel = focused
+                            showCancel = new
                         }
                         refreshButtonState()
                     }
-                    .onChange(of: isLoading) { loading in
-                        refreshButtonState()
-                    }
-                    .onChange(of: isFocusing?.wrappedValue) { focus in
-                        if let focus = focus {
+                    .onChange(of: isFocusing?.wrappedValue) { old, new in
+                        if let focus = new {
                             isFocused = focus
                         }
                     }
-                    
                 Spacer()
                 if buttonState != .none {
                     Button {
@@ -87,6 +81,7 @@ struct SearchTextField: View {
                         case .none:
                             return
                         }
+                        refreshButtonState()
                     } label: {
                         Image(systemName: buttonState.rawValue)
                             .padding(8)

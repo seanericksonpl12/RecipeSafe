@@ -19,12 +19,12 @@ struct SearchView: View {
                 VStack {
                     SearchTextField(
                         text: $viewModel.text,
-                        isLoading: $viewModel.isLoading,
                         isFocusing: $viewModel.isSearchFocused,
                         placeholder: "Search",
                         delegate: viewModel
                     )
                     .padding()
+                    
                     if viewModel.isSearchFocused {
                         suggestions
                     } else {
@@ -41,9 +41,13 @@ struct SearchView: View {
                 }
                 .applyAppBackground(proxy: geo)
                 .navigationTitle("search.nav.title".localized)
-                .onChange(of: geo.size) {
-                    self.size = $0
+                .onChange(of: geo.size) { old, new in
+                    self.size = new
                 }
+            }
+            .sheet(isPresented: $viewModel.presentHistory) {
+                historyView
+                    .presentationDetents([.medium, .large])
             }
         }
     }
@@ -93,61 +97,76 @@ struct SearchView: View {
     
     var suggestions: some View {
         ScrollView {
-            if viewModel.text.isEmpty && !viewModel.seeAllRecentSearches && !viewModel.recentSearches.recentArray.isEmpty {
-                HStack {
-                    Text("Recent Searches")
-                        .font(.title3)
-                    Spacer()
-                    
-                    Button {
-                        viewModel.seeAllTapped()
-                    } label: {
-                        Text("See All")
-                    }
-                }
-                .font(.callout)
-                .padding([.leading, .trailing, .bottom])
-                
-                SearchList(viewModel.recentSearches.recentArray, text: $viewModel.text) { item in
-                    Text(item)
-                } action: { value in
-                    viewModel.suggestionTapped(text: value)
-                }
-                
-            } else if viewModel.seeAllRecentSearches && !viewModel.recentSearches.fullArray.isEmpty {
-                HStack {
-                    Text("History")
-                    Spacer()
-                    Button {
-                        viewModel.recentSearches.clear()
-                        viewModel.seeAllRecentSearches = false
-                    } label: {
-                        Text("Clear")
-                    }
-                }
-                .font(.callout)
-                .padding([.leading, .trailing])
-                SearchList(viewModel.recentSearches.fullArray, text: $viewModel.text) { item in
-                    Text(item)
-                } action: { value in
-                    viewModel.suggestionTapped(text: value)
-                }
+            if viewModel.text.isEmpty && !viewModel.recentSearches.recentArray.isEmpty {
+                recentSearchView
+            } else if viewModel.text.isEmpty && viewModel.recentSearches.recentArray.isEmpty {
+                    EmptyListView(description: "Try making some new searches!")
             } else {
-                SearchList(viewModel.filteredAutoFillValues, text: $viewModel.text) { item in
-                    Text(item)
-                } action: { value in
-                    viewModel.suggestionTapped(text: value)
-                }
+                    SearchList(viewModel.filteredAutoFillValues, text: $viewModel.text) { item in
+                        Text(item)
+                    } action: { value in
+                        viewModel.suggestionTapped(text: value)
+                    }
             }
         }
     }
     
-    var failedView: some View {
-        Text("Whoops, something went wrong")
-            .padding()
+    @ViewBuilder
+    var recentSearchView: some View {
+        HStack {
+            Text("Recent Searches")
+                .font(.title3)
+            Spacer()
+            
+            Button {
+                withAnimation {
+                    viewModel.seeAllTapped()
+                }
+            } label: {
+                Text("See All")
+            }
+        }
+        .font(.callout)
+        .padding([.leading, .trailing, .bottom])
+        
+        SearchList(viewModel.recentSearches.recentArray, text: $viewModel.text) { item in
+            Text(item)
+        } action: { value in
+            viewModel.suggestionTapped(text: value)
+        }
     }
     
-    var defaultView: some View {
-        Text("Make a search jackass")
+    @ViewBuilder
+    var historyView: some View {
+        
+            HStack {
+                Text("History")
+                    .font(.title)
+                    .fontWeight(.bold)
+                Spacer()
+                
+                Button {
+                    withAnimation {
+                        viewModel.clearHistory()
+                    }
+                } label: {
+                    Image(systemName: "trash")
+                }
+            }
+            
+            .padding()
+        ScrollView {
+            if viewModel.recentSearches.fullArray.isEmpty {
+                EmptyListView(description: "Try making some new searches!")
+                    .padding()
+            } else {
+                SearchList(viewModel.recentSearches.fullArray, text: $viewModel.text) { item in
+                    Text(item)
+                } action: { value in
+                    viewModel.suggestionTapped(text: value)
+                    viewModel.dismissHistoryView()
+                }
+            }
+        }
     }
 }

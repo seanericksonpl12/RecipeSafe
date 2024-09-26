@@ -53,7 +53,6 @@ struct SuggestionTile: View {
                                         .scaledToFill()
                                         .frame(width: (size.width / 2.3), height: (size.width / 2.5))
                                         .clipShape(RoundedRectangle(cornerRadius: 15))
-                                        //.opacity(0.5)
                                         .zIndex(0)
                                 }
                             }

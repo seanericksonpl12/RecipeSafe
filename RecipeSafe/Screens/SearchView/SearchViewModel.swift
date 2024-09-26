@@ -23,14 +23,13 @@ class SearchViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var state: SearchState = .waiting
     @Published var results: [Recipe] = []
-    @Published var isLoading: Bool = false
     @Published var stringCompletions: [String] = []
-    @Published var seeAllRecentSearches: Bool = false
+    @Published var presentHistory: Bool = false
     @Published var filteredAutoFillValues: [String] = []
     @Published var isSearchFocused: Bool = false
+    @Published var recentSearches = RecentSearchStack()
     
     var randomRecipes: [String] = []
-    var recentSearches = RecentSearchStack()
     
     private var network: NetworkManager = NetworkManager()
     private var dataManager: DataManager = DataManager()
@@ -61,7 +60,6 @@ extension SearchViewModel {
             self.isSearchFocused = false
             self.recentSearches.add(term)
             self.state = .loading
-            self.isLoading = true
             let request = SearchRequest(search: term, index: 0)
             do {
                 let stream = try await network.executeStream(request: request)
@@ -77,7 +75,6 @@ extension SearchViewModel {
                     state = .loaded
                 }
             }
-            self.isLoading = false
         }
     }
     
@@ -103,12 +100,15 @@ extension SearchViewModel {
     }
     
     func seeAllTapped() {
-        seeAllRecentSearches = true
+        presentHistory = true
     }
     
-    func clearHistoryTapped() {
+    func dismissHistoryView() {
+        presentHistory = false
+    }
+    
+    func clearHistory() {
         recentSearches.clear()
-        seeAllRecentSearches = false
     }
     
     private func updatedText(text: String) {
@@ -128,6 +128,9 @@ extension SearchViewModel {
         self.filterTask?.cancel()
         self.filterTask = Task(priority: .background) {
             self.filteredAutoFillValues = autoFillValues.filter({ $0.lowercased().hasPrefix(text.lowercased()) })
+            if self.filteredAutoFillValues.count > 8 {
+                self.filteredAutoFillValues = Array(filteredAutoFillValues[0..<8])
+            }
         }
     }
     
@@ -165,15 +168,13 @@ extension SearchViewModel: SearchTextFieldDelegate {
     
     func cancel() {
         self.isSearchFocused = false
-        seeAllRecentSearches = false
+        presentHistory = false
     }
     
     func clear() {
-        if !isLoading {
-            self.text = ""
-        }
-        
-        seeAllRecentSearches = false
+        self.text = ""
+
+        presentHistory = false
         searchTask?.cancel()
         results = []
         state = .waiting
