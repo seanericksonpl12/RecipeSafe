@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-class ContentViewModel: ObservableObject {
+class AllRecipesViewModel: ObservableObject {
     
     // MARK: - Wrapped
     @Published var navPath: NavigationPath = .init()
@@ -38,7 +38,7 @@ class ContentViewModel: ObservableObject {
 
 
 // MARK: - Functions
-extension ContentViewModel {
+extension AllRecipesViewModel {
     
     func handleNewRecipe(_ recipe: Recipe) {
         Task { @MainActor in

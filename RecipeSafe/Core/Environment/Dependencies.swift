@@ -6,3 +6,8 @@
 //
 
 import Foundation
+import Injector
+
+extension Dependencies {
+    var appConfig: AppConfig { resolve() }
+}

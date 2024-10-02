@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "27"
             endingLineNumber = "27"
-            landmarkName = "networkRequest(url:)"
+            landmarkName = "executeFromUrlOpen(url:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -34,78 +34,6 @@
             endingLineNumber = "97"
             landmarkName = "DotLottieFile"
             landmarkType = "21">
-            <Locations>
-               <Location
-                  uuid = "4E37E611-BEBE-46E9-BB31-18D3FB4A61FA - ec2a39d3b76c7cc0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for static Lottie.DotLottieFile.named(_: Swift.String, bundle: __C.NSBundle, subdirectory: Swift.Optional&lt;Swift.String&gt;, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-               <Location
-                  uuid = "4E37E611-BEBE-46E9-BB31-18D3FB4A61FA - a9290278a1e1b8de"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for static Lottie.DotLottieFile.named(_: Swift.String, bundle: __C.NSBundle, subdirectory: Swift.Optional&lt;Swift.String&gt;, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-               <Location
-                  uuid = "4E37E611-BEBE-46E9-BB31-18D3FB4A61FA - 3d982194fb11f4fc"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for static Lottie.DotLottieFile.named(_: Swift.String, bundle: __C.NSBundle, subdirectory: Swift.Optional&lt;Swift.String&gt;, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-               <Location
-                  uuid = "4E37E611-BEBE-46E9-BB31-18D3FB4A61FA - 554f2db980f808fe"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for static Lottie.DotLottieFile.named(_: Swift.String, bundle: __C.NSBundle, subdirectory: Swift.Optional&lt;Swift.String&gt;, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-               <Location
-                  uuid = "4E37E611-BEBE-46E9-BB31-18D3FB4A61FA - d7554967e9340d3d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.CheckedContinuation&lt;Lottie.DotLottieFile, Swift.Error&gt;) -&gt; () in static Lottie.DotLottieFile.named(_: Swift.String, bundle: __C.NSBundle, subdirectory: Swift.Optional&lt;Swift.String&gt;, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -122,78 +50,6 @@
             endingLineNumber = "142"
             landmarkName = "DotLottieFile"
             landmarkType = "21">
-            <Locations>
-               <Location
-                  uuid = "EA915618-70A0-4ABD-8E2A-4770B283261E - e61690cef78d56d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for static Lottie.DotLottieFile.loadedFrom(filepath: Swift.String, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142">
-               </Location>
-               <Location
-                  uuid = "EA915618-70A0-4ABD-8E2A-4770B283261E - d8102cc544e37702"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for static Lottie.DotLottieFile.loadedFrom(filepath: Swift.String, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142">
-               </Location>
-               <Location
-                  uuid = "EA915618-70A0-4ABD-8E2A-4770B283261E - 3bed2e5afa679ad1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for static Lottie.DotLottieFile.loadedFrom(filepath: Swift.String, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142">
-               </Location>
-               <Location
-                  uuid = "EA915618-70A0-4ABD-8E2A-4770B283261E - d5c0629ce7eb78d0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for static Lottie.DotLottieFile.loadedFrom(filepath: Swift.String, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142">
-               </Location>
-               <Location
-                  uuid = "EA915618-70A0-4ABD-8E2A-4770B283261E - 93feb89417cfdda"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.CheckedContinuation&lt;Lottie.DotLottieFile, Swift.Error&gt;) -&gt; () in static Lottie.DotLottieFile.loadedFrom(filepath: Swift.String, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -210,78 +66,6 @@
             endingLineNumber = "182"
             landmarkName = "DotLottieFile"
             landmarkType = "21">
-            <Locations>
-               <Location
-                  uuid = "408CDD7E-6C89-4909-9916-C135836812EE - b3a5b2beff9b58be"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for static Lottie.DotLottieFile.asset(named: Swift.String, bundle: __C.NSBundle, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182">
-               </Location>
-               <Location
-                  uuid = "408CDD7E-6C89-4909-9916-C135836812EE - 5fb96f5a9285b989"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for static Lottie.DotLottieFile.asset(named: Swift.String, bundle: __C.NSBundle, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182">
-               </Location>
-               <Location
-                  uuid = "408CDD7E-6C89-4909-9916-C135836812EE - 602519f9b65e4bc"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for static Lottie.DotLottieFile.asset(named: Swift.String, bundle: __C.NSBundle, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182">
-               </Location>
-               <Location
-                  uuid = "408CDD7E-6C89-4909-9916-C135836812EE - 2030e70ff55142a3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for static Lottie.DotLottieFile.asset(named: Swift.String, bundle: __C.NSBundle, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182">
-               </Location>
-               <Location
-                  uuid = "408CDD7E-6C89-4909-9916-C135836812EE - 44c7519e2d64ee54"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.CheckedContinuation&lt;Lottie.DotLottieFile, Swift.Error&gt;) -&gt; () in static Lottie.DotLottieFile.asset(named: Swift.String, bundle: __C.NSBundle, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "182"
-                  endingLineNumber = "182">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -298,78 +82,6 @@
             endingLineNumber = "248"
             landmarkName = "DotLottieFile"
             landmarkType = "21">
-            <Locations>
-               <Location
-                  uuid = "193CF610-2179-4149-8401-649FF0502FA0 - dae5747a477f3329"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for static Lottie.DotLottieFile.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "248"
-                  endingLineNumber = "248">
-               </Location>
-               <Location
-                  uuid = "193CF610-2179-4149-8401-649FF0502FA0 - eeb95eddd4f3a96b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for static Lottie.DotLottieFile.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "248"
-                  endingLineNumber = "248">
-               </Location>
-               <Location
-                  uuid = "193CF610-2179-4149-8401-649FF0502FA0 - 938860aa84bd60d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for static Lottie.DotLottieFile.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "248"
-                  endingLineNumber = "248">
-               </Location>
-               <Location
-                  uuid = "193CF610-2179-4149-8401-649FF0502FA0 - cc1eb013b5db6de"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for static Lottie.DotLottieFile.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "248"
-                  endingLineNumber = "248">
-               </Location>
-               <Location
-                  uuid = "193CF610-2179-4149-8401-649FF0502FA0 - 717019d24d59226a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.CheckedContinuation&lt;Lottie.DotLottieFile, Swift.Error&gt;) -&gt; () in static Lottie.DotLottieFile.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, dotLottieCache: Swift.Optional&lt;Lottie.DotLottieCacheProvider&gt;) async throws -&gt; Lottie.DotLottieFile"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/DotLottie/DotLottieFileHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "248"
-                  endingLineNumber = "248">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -386,64 +98,6 @@
             endingLineNumber = "181"
             landmarkName = "LottieAnimation"
             landmarkType = "21">
-            <Locations>
-               <Location
-                  uuid = "40CD0B21-2469-44CE-ACC7-FFB8147D7CA2 - 338ffca946b8dedb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(1) suspend resume partial function for static Lottie.LottieAnimation.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, animationCache: Swift.Optional&lt;Lottie.AnimationCacheProvider&gt;) async -&gt; Swift.Optional&lt;Lottie.LottieAnimation&gt;"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/Animation/LottieAnimationHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "181"
-                  endingLineNumber = "181">
-               </Location>
-               <Location
-                  uuid = "40CD0B21-2469-44CE-ACC7-FFB8147D7CA2 - 232ea4c1b3270eca"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(2) await resume partial function for static Lottie.LottieAnimation.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, animationCache: Swift.Optional&lt;Lottie.AnimationCacheProvider&gt;) async -&gt; Swift.Optional&lt;Lottie.LottieAnimation&gt;"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/Animation/LottieAnimationHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "181"
-                  endingLineNumber = "181">
-               </Location>
-               <Location
-                  uuid = "40CD0B21-2469-44CE-ACC7-FFB8147D7CA2 - 582515929e8092d9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for static Lottie.LottieAnimation.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, animationCache: Swift.Optional&lt;Lottie.AnimationCacheProvider&gt;) async -&gt; Swift.Optional&lt;Lottie.LottieAnimation&gt;"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/Animation/LottieAnimationHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "181"
-                  endingLineNumber = "181">
-               </Location>
-               <Location
-                  uuid = "40CD0B21-2469-44CE-ACC7-FFB8147D7CA2 - c8c88715c80fd8fe"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.CheckedContinuation&lt;Swift.Optional&lt;Lottie.LottieAnimation&gt;, Swift.Never&gt;) -&gt; () in static Lottie.LottieAnimation.loadedFrom(url: Foundation.URL, session: __C.NSURLSession, animationCache: Swift.Optional&lt;Lottie.AnimationCacheProvider&gt;) async -&gt; Swift.Optional&lt;Lottie.LottieAnimation&gt;"
-                  moduleName = "RecipeSafe"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/seanerickson/Library/Developer/Xcode/DerivedData/RecipeSafe-einrvtqnkltubpbqiqjpkdbvjiny/SourcePackages/checkouts/lottie-ios/Sources/Public/Animation/LottieAnimationHelpers.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "181"
-                  endingLineNumber = "181">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -504,8 +158,8 @@
             filePath = "RecipeSafe/Core/Storage/DataManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "findDuplicates(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -584,9 +238,41 @@
             filePath = "RecipeSafe/Screens/SearchView/SearchViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
             landmarkName = "start(term:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F9B63C96-6D08-4E70-A2F7-4B9203E90428"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RecipeSafe/App/AppConfig.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "fetchAppConfig()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C416B970-04C2-45A2-9236-4DCB9E19B4FD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RecipeSafe/App/AppConfig.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "fetchAppConfig()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

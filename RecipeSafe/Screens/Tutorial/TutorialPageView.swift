@@ -55,7 +55,7 @@ struct TutorialPageView: View {
                     Text(nextAction != nil ? "button.next".localized : "button.done".localized)
                         .frame(width: 150, height: 35)
                         .foregroundColor(.white)
-                        .background(.secondary, in: RoundedRectangle(cornerRadius: 10))
+                        .background(.blue, in: RoundedRectangle(cornerRadius: 10))
                 }
                 Spacer()
             }

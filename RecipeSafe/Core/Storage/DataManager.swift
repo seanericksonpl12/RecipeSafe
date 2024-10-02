@@ -8,7 +8,9 @@
 import Foundation
 import CoreData
 import SwiftUI
+import Injector
 
+@Dependency
 class DataManager {
     
     // MARK: - Properties
@@ -16,6 +18,7 @@ class DataManager {
     
     // MARK: - Inits
     init(viewContext: NSManagedObjectContext) {
+        print("data init")
         self.viewContext = viewContext
     }
     

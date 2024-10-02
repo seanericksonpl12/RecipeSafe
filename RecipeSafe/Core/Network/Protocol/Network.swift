@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol NetworkProtocol {
+protocol Network {
     
     var session: URLSession { get }
     
@@ -21,7 +21,7 @@ protocol NetworkProtocol {
 }
 
 // MARK: - Default Functions
-extension NetworkProtocol {
+extension Network {
     
     func executeRequest<Request: NetworkRequest>(request: Request,
                                                  retries: Int) async -> Result<Request.Response, Error> {
@@ -65,18 +65,18 @@ extension NetworkProtocol {
     func executeStream<Request: NetworkRequest>(request: Request) async throws -> AsyncCompactMapSequence<AsyncLineSequence<URLSession.AsyncBytes>, Request.Response> {
         
         // DEBUG!!!!!!
-        if true {
-            guard let url = Bundle.main.url(forResource: "teststream", withExtension: "json") else {
-                print("AHHHH")
-                throw URLError(.badURL)
-            }
-            try await Task.sleep(nanoseconds: 2_000_000_000)
-            let (bytes, response) = try await URLSession.shared.bytes(for: URLRequest(url: url))
-            return bytes.lines.compactMap {
-                try? request.decode(Data($0.utf8))
-            }
-            
-        }
+//        if true {
+//            guard let url = Bundle.main.url(forResource: "teststream", withExtension: "json") else {
+//                print("AHHHH")
+//                throw URLError(.badURL)
+//            }
+//            try await Task.sleep(nanoseconds: 2_000_000_000)
+//            let (bytes, response) = try await URLSession.shared.bytes(for: URLRequest(url: url))
+//            return bytes.lines.compactMap {
+//                try? request.decode(Data($0.utf8))
+//            }
+//            
+//        }
         
         guard var components = URLComponents(string: request.url) else {
             throw NetworkError.invalidURL("Bad URL: \(request.url)")

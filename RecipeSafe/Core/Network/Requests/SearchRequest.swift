@@ -18,15 +18,7 @@ struct SearchRequest: NetworkRequest {
     
     
     var url: String  {
-        var components = URLComponents()
-//        components.scheme = "https"
-//        components.host = "www.foreignspyware.com"
-//        components.path = "/api/recipe-safe/pageSearch"
-        components.scheme = "http"
-        components.host = "localhost"
-        components.port = 5050
-        components.path = "/api/recipe-safe/pageStream"
-        return components.url?.absoluteString ?? ""
+        AppEnvironment.baseUrl + "/api/recipe-safe/pageStream"
     }
     
     var queryItems: [String : String] {

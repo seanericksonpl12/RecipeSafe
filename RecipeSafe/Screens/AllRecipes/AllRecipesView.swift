@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct ContentView: View {
+struct AllRecipesView: View {
     
     // MARK: - Environment
     @Environment(\.managedObjectContext) private var viewContext
@@ -17,7 +17,7 @@ struct ContentView: View {
         animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
     
     // MARK: - ViewModel
-    @StateObject var viewModel: ContentViewModel
+    @StateObject var viewModel: AllRecipesViewModel
     
     // MARK: - Body
     var body: some View {
@@ -94,6 +94,6 @@ struct ContentView: View {
 // MARK: - Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(viewModel: ContentViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        AllRecipesView(viewModel: AllRecipesViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

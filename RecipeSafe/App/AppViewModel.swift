@@ -8,15 +8,19 @@
 import Foundation
 import SwiftUI
 import Nuke
+import Injector
 
 @MainActor
 class AppViewModel: ObservableObject {
+    // MARK: - Dependencies
+    @GlobalInjected(\.appConfig) var appConfig
+    
     // MARK: - Wrapped
     @Published var tabSelection: Int = 1
     @Published var displayBadSite: Bool = false
     @Published var duplicateFound: Bool = false
     @Published var launchTutorial: Bool = false
-    @Published var contentViewModel: ContentViewModel
+    @Published var allRecipesViewModel: AllRecipesViewModel
     @Published var groupViewModel: GroupGridViewModel
     @Published var viewState: ViewState = .started
     
@@ -33,7 +37,7 @@ class AppViewModel: ObservableObject {
     // MARK: - Init
     init(networkManager: NetworkManager = NetworkManager(),
          dataManager: DataManager = DataManager()) {
-        self.contentViewModel = ContentViewModel()
+        self.allRecipesViewModel = AllRecipesViewModel()
         self.groupViewModel = GroupGridViewModel()
         self.network = networkManager
         self.dataManager = dataManager
@@ -88,7 +92,7 @@ extension AppViewModel {
         let groups: [GroupItem] = dataManager.getItems(filter: {_ in true})
         if groups.isEmpty {
             self.tabSelection = 1
-            self.contentViewModel.handleNewRecipe(recipe)
+            self.allRecipesViewModel.handleNewRecipe(recipe)
         } else {
             self.tabSelection = 2
             self.groupViewModel.handleNewRecipe(recipe)
