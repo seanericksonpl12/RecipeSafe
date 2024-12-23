@@ -27,12 +27,13 @@ struct RecipeView<T: EditableRecipeModel>: View {
                 }
             
             List {
-                EditableDescriptionView<T>(optionalDisplay: "create.display.desc".localized)
-                    .environmentObject(viewModel)
-                    .onTapGesture {
-                        hideKeyboard()
-                    }
-                
+                if !viewModel.descriptionText.isEmpty {
+                    EditableDescriptionView<T>(optionalDisplay: "create.display.desc".localized)
+                        .environmentObject(viewModel)
+                        .onTapGesture {
+                            hideKeyboard()
+                        }
+                }
                 if !viewModel.recipe.ingredients.isEmpty || viewModel.editingEnabled {
                     EditableSectionView(list: $viewModel.recipe.ingredients,
                                         isEditing: $viewModel.editingEnabled,
