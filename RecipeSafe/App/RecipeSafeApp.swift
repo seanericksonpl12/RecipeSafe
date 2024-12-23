@@ -12,6 +12,10 @@ struct RecipeSafeApp: App {
     
     // MARK: - ViewModel
     @StateObject private var viewModel = AppViewModel()
+    
+    init() {
+        registerServices()
+    }
 
     // MARK: - Body
     var body: some Scene {
@@ -25,6 +29,7 @@ struct RecipeSafeApp: App {
                     case .started, .successfullyLoaded, .failedToLoad:
                         ContentView()
                             .environmentObject(viewModel)
+                          //  .environment(\.dataManager, DataManager())
                     case .loading:
                         LoadingView()
                     }

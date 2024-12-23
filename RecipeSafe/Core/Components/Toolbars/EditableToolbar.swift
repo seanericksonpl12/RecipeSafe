@@ -16,9 +16,11 @@ struct EditableToolbar: ToolbarContent {
     var saveAction: () -> Void = {}
     var cancelAction: () -> Void = {}
     var deleteAction: () -> Void = {}
-    var alternateAction: () -> Void = {}
+    var option1Action: () -> Void = {}
+    var option2Action: () -> Void = {}
     var urlLink: URL? = nil
-    var alternateText: String?
+    var option1Text: String?
+    var option2Text: String?
     
     var body: some ToolbarContent {
         if isEditing {
@@ -42,9 +44,14 @@ struct EditableToolbar: ToolbarContent {
                             isEditing = true
                         }
                     }
-                    if let text = alternateText {
+                    if let text = option1Text {
                         Button(text) {
-                            alternateAction()
+                            option1Action()
+                        }
+                    }
+                    if let text = option2Text {
+                        Button(text) {
+                            option2Action()
                         }
                     }
                     if let url = urlLink {

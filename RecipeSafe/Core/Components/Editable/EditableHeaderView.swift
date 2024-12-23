@@ -13,7 +13,7 @@ struct EditableHeaderView<T: EditableRecipeModel>: View {
     // MARK: - Wrapped Properties
     @State private var photoItem: PhotosPickerItem?
     @State private var tempPhoto: ImageData = .none
-    
+    @Service var dataManager: DataManager!
     @EnvironmentObject var viewModel: T
 
     // MARK: - Properties
@@ -43,19 +43,17 @@ struct EditableHeaderView<T: EditableRecipeModel>: View {
             Spacer()
         }
         .toolbar {
-            if viewModel.recipe.dataEntity == nil {
-                SaveableToolbar(save: { viewModel.recipe = viewModel.saveRecipe(recipe: viewModel.recipe) })
-            } else {
                 EditableToolbar(
                     isEditing: $viewModel.editingEnabled,
                     saveAction: { viewModel.recipe.img = tempPhoto; viewModel.saveAction() },
                     cancelAction: { tempPhoto = viewModel.recipe.img; viewModel.cancelAction() },
                     deleteAction: viewModel.deleteAction,
-                    alternateAction: viewModel.recipe.dataEntity?.group == nil ? viewModel.groupAction : {},
+                    option1Action: viewModel.recipe.dataEntity?.group == nil ? viewModel.groupAction : {},
+                    option2Action: { dataManager.addRecipeToShoppingList(recipe: viewModel.recipe) },
                     urlLink: viewModel.recipe.url,
-                    alternateText: viewModel.recipe.dataEntity?.group == nil ? "recipe.group.add".localized : nil
+                    option1Text: viewModel.recipe.dataEntity?.group == nil ? "recipe.group.add".localized : nil,
+                    option2Text: dataManager.isInShoppingList(recipe: viewModel.recipe) ? "Remove from Grocery List" : "Add to grocery list"
                 )
-            }
         }
     }
     

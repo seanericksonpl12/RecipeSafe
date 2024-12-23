@@ -20,7 +20,7 @@ struct RecipeView<T: EditableRecipeModel>: View {
     var body: some View {
         
         VStack {
-            EditableHeaderView<T>()
+            EditableHeaderView<T>(optionalDisplay: "create.display.title".localized)
                 .environmentObject(viewModel)
                 .onTapGesture {
                     hideKeyboard()
@@ -70,7 +70,6 @@ struct RecipeView<T: EditableRecipeModel>: View {
             .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                print("recipe: ", viewModel.recipe)
                 viewModel.updateRecipe()
                 viewModel.setup(dismiss: dismissView)
             }

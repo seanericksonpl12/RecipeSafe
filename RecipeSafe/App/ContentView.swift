@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @EnvironmentObject var viewModel: AppViewModel
+//    @Service var dataManager: DataManager!
     
     var body: some View {
         TabView(selection: $viewModel.tabSelection) {
@@ -25,12 +26,18 @@ struct ContentView: View {
                     Label("app.group".localized, systemImage: "circlebadge.2")
                 }
                 .tag(2)
+            ShoppingListView()
+                .tabItem {
+                    Label("app.shopping".localized, systemImage: "list.clipboard")
+                }
+                .tag(3)
+            
             if viewModel.appConfig.searchAvailable {
                 SearchView(viewModel: SearchViewModel())
                     .tabItem {
                         Label("app.search".localized, systemImage: "globe")
                     }
-                    .tag(3)
+                    .tag(4)
             }
         }
         .onOpenURL { url in
@@ -61,10 +68,11 @@ struct ContentView: View {
             let tabBar = UITabBarAppearance()
             tabBar.configureWithDefaultBackground()
             UITabBar.appearance().scrollEdgeAppearance = tabBar
+          //  dataManager.getShoppingList()
         }
     }
 }
 
-#Preview {
-    ContentView()
-}
+//#Preview {
+//    ContentView()
+//}

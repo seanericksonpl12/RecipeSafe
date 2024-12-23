@@ -25,10 +25,10 @@ class DataManager {
     convenience init() {
         self.init(viewContext: PersistenceController.shared.container.viewContext)
     }
-
     
     
-// MARK: - Recipe Functions
+    
+    // MARK: - Recipe Functions
     /// Save a given recipe model to Core Data
     ///
     ///  - Parameters:
@@ -174,8 +174,8 @@ class DataManager {
     }
     
     
-
-// MARK: - Group Functions
+    
+    // MARK: - Group Functions
     
     /// Updates the data entity of a given group model
     ///
@@ -243,11 +243,14 @@ class DataManager {
     ///     - filter: Object to Bool closure to filter results by
     ///
     ///  - Returns: Array of fetched Core Data Objects of the given type
-    func getItems<T: NSManagedObject>(filter: ((T) -> Bool)) -> [T] {
+    func getItems<T: NSManagedObject>(filter: ((T) -> Bool)? = nil) -> [T] {
         do {
             let request = try self.viewContext.fetch(NSFetchRequest(entityName: T.description()))
             guard let items = request as? [T] else { print("casting fail"); throw URLError(.resourceUnavailable) }
-            return items.filter(filter)
+            if let filter {
+                return items.filter(filter)
+            }
+            return items
         } catch {
             print(String(describing: error))
             return []
@@ -277,7 +280,7 @@ extension DataManager {
     func appUpdate() {
         if UserDefaults.standard.bool(forKey: "v1.2Update") { return }
         UserDefaults.standard.set(true, forKey: "v1.2Update")
-
+        
         let recipes: [RecipeItem] = self.getItems(filter: {_ in true})
         if !recipes.isEmpty {
             recipes.forEach { recipe in
@@ -308,5 +311,55 @@ extension DataManager {
         } catch {
             print(String(describing: error))
         }
+    }
+}
+
+extension DataManager {
+    
+    func getShoppingList() -> [ShoppingListItem] {
+        let list = UserDefaults.standard.currentShoppingList
+        return list.allItems
+    }
+    
+    func saveShoppingList(list: [ShoppingListItem]) {
+        var existing = UserDefaults.standard.currentShoppingList
+        existing.allItems = list
+        UserDefaults.standard.currentShoppingList = existing
+    }
+    
+    func getShoppingListRecipes() -> [Recipe] {
+        let list = UserDefaults.standard.currentShoppingList
+        let recipeItems: [RecipeItem] = self.getItems()
+        
+        return recipeItems
+            .compactMap {
+                Recipe(dataItem: $0)
+            }.filter {
+                list.recipeIDs.contains($0.realId)
+            }
+    }
+    
+    func addRecipeToShoppingList(recipe: Recipe) {
+        var list = UserDefaults.standard.currentShoppingList
+        if !list.recipeIDs.contains(recipe.realId) {
+            list.addRecipe(recipe)
+            UserDefaults.standard.currentShoppingList = list
+        }
+    }
+    
+    func isInShoppingList(recipe: Recipe) -> Bool {
+        let list = UserDefaults.standard.currentShoppingList
+        return list.recipeIDs.contains(recipe.realId)
+    }
+    
+    func updateShoppingRecipes(_ recipes: [Recipe]) -> [ShoppingListItem] {
+        var list = UserDefaults.standard.currentShoppingList
+        list.recipeIDs = recipes.map { $0.realId }
+        list.allItems = list.allItems
+            .filter { listItem in
+                recipes.contains(where: { listItem.recipeId == $0.realId })
+            }
+        UserDefaults.standard.currentShoppingList = list
+        return list.allItems
     }
 }

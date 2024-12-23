@@ -22,6 +22,7 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     var cookTime: String?
     // TODO: CONFORM TO SENDABLE?
     var dataEntity: RecipeItem?
+    var realId: String { self.url?.absoluteString ?? self.id.uuidString }
     
     // MARK: - Core Data Init
     init?(dataItem: RecipeItem) {

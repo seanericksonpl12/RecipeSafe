@@ -11,3 +11,9 @@ import Injector
 extension Dependencies {
     var appConfig: AppConfig { resolve() }
 }
+
+extension RecipeSafeApp {
+    func registerServices() {
+        ServiceRegister.addService(DataManager())
+    }
+}

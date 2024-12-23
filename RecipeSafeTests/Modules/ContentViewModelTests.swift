@@ -12,7 +12,7 @@ import CoreData
 import Injector
 @MainActor final class ContentViewModelTests: XCTestCase {
 
-    var viewModel: ContentViewModel!
+    var viewModel: AllRecipesViewModel!
     var dataEntity: RecipeItem!
     var dataStack: PersistenceController!
     var dataManager: MockDataManager!
@@ -23,8 +23,7 @@ import Injector
         self.dataStack = PersistenceController(inMemory: true)
         self.dataEntity = NSEntityDescription.insertNewObject(forEntityName: "RecipeItem", into: dataStack.container.viewContext) as? RecipeItem
         self.dataManager = MockDataManager(viewContext: dataStack.container.viewContext)
-        self.viewModel = ContentViewModel()
-        viewModel.inject(\.dataManager, MockDataManager(viewContext: self.dataStack.container.viewContext))
+        self.viewModel = AllRecipesViewModel()
         try? dataStack.container.viewContext.save()
         
     }

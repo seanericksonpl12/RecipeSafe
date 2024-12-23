@@ -10,6 +10,7 @@
 "app.all" = "All Recipes";
 "app.group" = "Groups";
 "app.search" = "Search";
+"app.shopping" = "Shopping List";
 
 // MARK: - TutorialView
 "tutorial.title" = "Adding Recipes";
