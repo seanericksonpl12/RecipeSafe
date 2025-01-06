@@ -29,18 +29,16 @@ class AppViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private var network: NetworkManager = NetworkManager()
-    private var dataManager: DataManager = DataManager()
+    @Service private var dataManager: DataManager!
     private var fetchedRecipe: Recipe?
     private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
     
     // MARK: - Init
-    init(networkManager: NetworkManager = NetworkManager(),
-         dataManager: DataManager = DataManager()) {
+    init(networkManager: NetworkManager = NetworkManager()) {
         self.allRecipesViewModel = AllRecipesViewModel()
         self.groupViewModel = GroupGridViewModel()
         self.network = networkManager
-        self.dataManager = dataManager
         self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
         self.dataManager.appUpdate()
         Nuke.ImagePipeline.shared = ImagePipeline(configuration: .withDataCache)
@@ -82,7 +80,7 @@ extension AppViewModel {
             self.waitingRecipe = newRecipe
             self.waitingDuplicate = duplicate
         } else {
-            newRecipe.dataEntity = dataManager.saveItem(recipe)
+            newRecipe.dataEntity = dataManager.saveItem(recipe)?.objectID
             self.openRecipe(newRecipe)
         }
     }
@@ -107,7 +105,7 @@ extension AppViewModel {
         if let dup = waitingDuplicate, deletingDup {
             self.dataManager.deleteItem(dup)
         }
-        self.waitingRecipe.dataEntity = self.dataManager.saveItem(self.waitingRecipe)
+        self.waitingRecipe.dataEntity = self.dataManager.saveItem(self.waitingRecipe)?.objectID
         self.waitingDuplicate = nil
         self.openRecipe(self.waitingRecipe)
     }

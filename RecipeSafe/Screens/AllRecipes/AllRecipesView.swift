@@ -11,10 +11,11 @@ import CoreData
 struct AllRecipesView: View {
     
     // MARK: - Environment
-    @Environment(\.managedObjectContext) private var viewContext
+    
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
-        animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
+        animation: .easeIn
+    ) private var recipeList: FetchedResults<RecipeItem>
     
     // MARK: - ViewModel
     @StateObject var viewModel: AllRecipesViewModel
@@ -56,13 +57,9 @@ struct AllRecipesView: View {
                     }
                     
                 }
-                
-                // MARK: - UI Modifiers
                 .scrollContentBackground(.hidden)
                 .applyAppBackground(proxy: geo, isShown: !recipeList.isEmpty)
                 .navigationTitle("content.nav.title".localized)
-                
-                // MARK: - Toolbar
                 .toolbar {
                     ToolbarItem {
                         Button{

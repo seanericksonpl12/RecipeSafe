@@ -31,6 +31,8 @@
 		9211021E2A7D6B2B00F34E5A /* MockNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9211021D2A7D6B2B00F34E5A /* MockNetworkRequest.swift */; };
 		921102242A7EA08100F34E5A /* NetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921102232A7EA08100F34E5A /* NetworkManagerTests.swift */; };
 		921102262A7EA6BD00F34E5A /* JSONParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921102252A7EA6BD00F34E5A /* JSONParserTests.swift */; };
+		921A75FA2D20742300255012 /* CustomEditableSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921A75F92D20741D00255012 /* CustomEditableSectionView.swift */; };
+		921A75FC2D20BA1300255012 /* EditableGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921A75FB2D20BA0C00255012 /* EditableGridView.swift */; };
 		92275D7F2C8761BB00D08961 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92275D7E2C8761BB00D08961 /* SearchViewModel.swift */; };
 		92275D812C876F8C00D08961 /* SearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92275D802C876F8C00D08961 /* SearchRequest.swift */; };
 		9235E0882A7EB35F000B05EF /* test_data_1.html in Resources */ = {isa = PBXBuildFile; fileRef = 9235E0872A7EB35F000B05EF /* test_data_1.html */; };
@@ -104,6 +106,7 @@
 		92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */; };
 		92E706032A8BBA9B00ACA24C /* SelectGroupsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E706022A8BBA9B00ACA24C /* SelectGroupsViewModel.swift */; };
 		92E706052A8C05B800ACA24C /* AppViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E706042A8C05B800ACA24C /* AppViewModelTests.swift */; };
+		92EF6E512D1B1765000B27C0 /* IngredientGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EF6E502D1B1761000B27C0 /* IngredientGroup.swift */; };
 		92F099F32C90DFFA0038A031 /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F099F22C90DFFA0038A031 /* SearchTextField.swift */; };
 		92F099FA2C94F1D30038A031 /* SaveableToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F099F92C94F1D30038A031 /* SaveableToolbar.swift */; };
 		92F09A062C97507B0038A031 /* SuggestionTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F09A052C97507B0038A031 /* SuggestionTile.swift */; };
@@ -187,6 +190,8 @@
 		9211021D2A7D6B2B00F34E5A /* MockNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkRequest.swift; sourceTree = "<group>"; };
 		921102232A7EA08100F34E5A /* NetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerTests.swift; sourceTree = "<group>"; };
 		921102252A7EA6BD00F34E5A /* JSONParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParserTests.swift; sourceTree = "<group>"; };
+		921A75F92D20741D00255012 /* CustomEditableSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomEditableSectionView.swift; sourceTree = "<group>"; };
+		921A75FB2D20BA0C00255012 /* EditableGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableGridView.swift; sourceTree = "<group>"; };
 		92275D7E2C8761BB00D08961 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		92275D802C876F8C00D08961 /* SearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRequest.swift; sourceTree = "<group>"; };
 		9235E0872A7EB35F000B05EF /* test_data_1.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = test_data_1.html; sourceTree = "<group>"; };
@@ -265,6 +270,7 @@
 		92E705FF2A8A9B8300ACA24C /* SelectGridButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGridButton.swift; sourceTree = "<group>"; };
 		92E706022A8BBA9B00ACA24C /* SelectGroupsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGroupsViewModel.swift; sourceTree = "<group>"; };
 		92E706042A8C05B800ACA24C /* AppViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModelTests.swift; sourceTree = "<group>"; };
+		92EF6E502D1B1761000B27C0 /* IngredientGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientGroup.swift; sourceTree = "<group>"; };
 		92F099F22C90DFFA0038A031 /* SearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
 		92F099F92C94F1D30038A031 /* SaveableToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveableToolbar.swift; sourceTree = "<group>"; };
 		92F09A052C97507B0038A031 /* SuggestionTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionTile.swift; sourceTree = "<group>"; };
@@ -407,6 +413,8 @@
 		920DA3612A6F59CF0086ADB5 /* Editable */ = {
 			isa = PBXGroup;
 			children = (
+				921A75FB2D20BA0C00255012 /* EditableGridView.swift */,
+				921A75F92D20741D00255012 /* CustomEditableSectionView.swift */,
 				920DA3622A701BF10086ADB5 /* EditableSectionView.swift */,
 				920DA3642A70225E0086ADB5 /* EditableHeaderView.swift */,
 				920DA36C2A702B830086ADB5 /* EditableDescriptionView.swift */,
@@ -513,6 +521,7 @@
 		925DCBEC2A61D73500B84A38 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				92EF6E502D1B1761000B27C0 /* IngredientGroup.swift */,
 				926687A12A60A26600117A59 /* Recipe.swift */,
 				925DCBF22A65F40A00B84A38 /* ErrorTypes.swift */,
 				920DA35A2A6F0B7E0086ADB5 /* ViewState.swift */,
@@ -1060,6 +1069,7 @@
 				92F09A0C2C98969F0038A031 /* ArrayExtensions.swift in Sources */,
 				92939FCA2CA43C0A002DE8D0 /* Dependencies.swift in Sources */,
 				9201F97D2A7852AE00A6021A /* CreateRecipeViewModel.swift in Sources */,
+				921A75FC2D20BA1300255012 /* EditableGridView.swift in Sources */,
 				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
 				92F09A0F2C98C5400038A031 /* RecipeImageRequest.swift in Sources */,
 				92F099FA2C94F1D30038A031 /* SaveableToolbar.swift in Sources */,
@@ -1072,6 +1082,7 @@
 				926687772A608C9200117A59 /* RecipeSafe.xcdatamodeld in Sources */,
 				9201F9952A7C250000A6021A /* DataManager.swift in Sources */,
 				92535C232A7174F1003E30BD /* Network.swift in Sources */,
+				921A75FA2D20742300255012 /* CustomEditableSectionView.swift in Sources */,
 				9268BDC82A8C749F00366964 /* TutorialViewModel.swift in Sources */,
 				926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */,
 				9293177C2A85CA240089A55D /* GroupGridViewModel.swift in Sources */,
@@ -1084,6 +1095,7 @@
 				9293171E2A81EB630089A55D /* ImageData.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
 				92F09A2B2C9C8B840038A031 /* PreferenceKeys.swift in Sources */,
+				92EF6E512D1B1765000B27C0 /* IngredientGroup.swift in Sources */,
 				9276896D2A9166D0002C1525 /* ColorSet.swift in Sources */,
 				92275D7F2C8761BB00D08961 /* SearchViewModel.swift in Sources */,
 				9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */,

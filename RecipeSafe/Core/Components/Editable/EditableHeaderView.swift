@@ -43,16 +43,17 @@ struct EditableHeaderView<T: EditableRecipeModel>: View {
             Spacer()
         }
         .toolbar {
+            let dataEntity: RecipeItem? = dataManager.object(with: viewModel.recipe.dataEntity)
                 EditableToolbar(
                     isEditing: $viewModel.editingEnabled,
                     saveAction: { viewModel.recipe.img = tempPhoto; viewModel.saveAction() },
                     cancelAction: { tempPhoto = viewModel.recipe.img; viewModel.cancelAction() },
                     deleteAction: viewModel.deleteAction,
-                    option1Action: viewModel.recipe.dataEntity?.group == nil ? viewModel.groupAction : {},
-                    option2Action: { dataManager.addRecipeToShoppingList(recipe: viewModel.recipe) },
+                    option1Action: dataEntity?.group == nil ? viewModel.groupAction : {},
+                    option2Action: { dataManager.updateShoppingList(entity: dataEntity, inList: !(dataEntity?.inShoppingList ?? false)) },
                     urlLink: viewModel.recipe.url,
-                    option1Text: viewModel.recipe.dataEntity?.group == nil ? "recipe.group.add".localized : nil,
-                    option2Text: dataManager.isInShoppingList(recipe: viewModel.recipe) ? "Remove from Grocery List" : "Add to grocery list"
+                    option1Text: dataEntity?.group == nil ? "recipe.group.add".localized : nil,
+                    option2Text: dataEntity?.inShoppingList ?? false ? "Remove from Grocery List" : "Add to grocery list"
                 )
         }
     }

@@ -8,25 +8,27 @@
 import Foundation
 import CoreData
 import SwiftUI
-import Injector
 
-@Dependency
 class DataManager {
     
     // MARK: - Properties
     private var viewContext: NSManagedObjectContext
     
+    @MainActor static let shared: DataManager = DataManager(viewContext: PersistenceController.shared.container.viewContext)
+    
     // MARK: - Inits
-    init(viewContext: NSManagedObjectContext) {
+    private init(viewContext: NSManagedObjectContext) {
         print("data init")
         self.viewContext = viewContext
     }
     
-    convenience init() {
-        self.init(viewContext: PersistenceController.shared.container.viewContext)
+    func object<T: NSManagedObject>(with id: NSManagedObjectID?) -> T? {
+        if let id {
+            return self.viewContext.object(with: id) as? T
+        } else {
+            return nil
+        }
     }
-    
-    
     
     // MARK: - Recipe Functions
     /// Save a given recipe model to Core Data
@@ -89,28 +91,13 @@ class DataManager {
     ///
     ///  - Parameters:
     ///     - recipe: The recipe model to update
-    func updateDataEntity(recipe: Recipe) {
-        recipe.dataEntity?.title = recipe.title
-        recipe.dataEntity?.desc = recipe.description
-        recipe.dataEntity?.prepTime = recipe.prepTime
-        recipe.dataEntity?.cookTime = recipe.cookTime
-        recipe.dataEntity?.ingredients = []
-        recipe.dataEntity?.instructions = []
-        if case .selected(let data) = recipe.img {
-            recipe.dataEntity?.photoData = data
-        }
-        recipe.ingredients.forEach {
-            let i = Ingredient(context: self.viewContext)
-            i.value = $0
-            recipe.dataEntity?.addToIngredients(i)
-        }
-        recipe.instructions.forEach {
-            let i = Instruction(context: self.viewContext)
-            i.value = $0
-            recipe.dataEntity?.addToInstructions(i)
-        }
+    func updateDataEntity(recipe: inout Recipe) {
+        guard let id = recipe.dataEntity, let oldEntity = object(with: id) else { return }
+        self.viewContext.delete(oldEntity)
+        let entity = saveItem(recipe)
         do {
             try self.viewContext.save()
+            recipe.dataEntity = entity?.objectID
         } catch {
             print(String(describing: error))
         }
@@ -121,7 +108,7 @@ class DataManager {
     ///  - Parameters:
     ///     - recipe: The recipe model to delete the data entity of
     func deleteDataEntity(recipe: Recipe) {
-        if let entity = recipe.dataEntity {
+        if let id = recipe.dataEntity, let entity = object(with: id) {
             self.viewContext.delete(entity)
             do {
                 try self.viewContext.save()
@@ -202,7 +189,7 @@ class DataManager {
     ///     - recipe: The recipe model to add to the group
     ///     - group: The group to add the recipe to
     func addToGroup(recipe: Recipe, _ group: GroupItem) {
-        if let data = recipe.dataEntity {
+        if let id = recipe.dataEntity, let data: RecipeItem = object(with: id) {
             group.addToRecipes(data)
             if let recipes = group.recipes?.array as? [RecipeItem] {
                 group.imgUrl = recipes.first(where: {$0.imageUrl != nil })?.imageUrl
@@ -316,50 +303,41 @@ extension DataManager {
 
 extension DataManager {
     
-    func getShoppingList() -> [ShoppingListItem] {
-        let list = UserDefaults.standard.currentShoppingList
-        return list.allItems
-    }
-    
-    func saveShoppingList(list: [ShoppingListItem]) {
-        var existing = UserDefaults.standard.currentShoppingList
-        existing.allItems = list
-        UserDefaults.standard.currentShoppingList = existing
-    }
-    
-    func getShoppingListRecipes() -> [Recipe] {
-        let list = UserDefaults.standard.currentShoppingList
-        let recipeItems: [RecipeItem] = self.getItems()
-        
-        return recipeItems
-            .compactMap {
-                Recipe(dataItem: $0)
-            }.filter {
-                list.recipeIDs.contains($0.realId)
+    func updateShoppingList(entity: RecipeItem?, inList: Bool) {
+        entity?.inShoppingList = inList
+        do {
+            if entity != nil {
+                print("SAVING ITEM!!!!!")
+                try self.viewContext.save()
             }
-    }
-    
-    func addRecipeToShoppingList(recipe: Recipe) {
-        var list = UserDefaults.standard.currentShoppingList
-        if !list.recipeIDs.contains(recipe.realId) {
-            list.addRecipe(recipe)
-            UserDefaults.standard.currentShoppingList = list
+        } catch {
+            print(String(describing: error))
         }
     }
     
-    func isInShoppingList(recipe: Recipe) -> Bool {
-        let list = UserDefaults.standard.currentShoppingList
-        return list.recipeIDs.contains(recipe.realId)
+    @MainActor
+    func updateIngredient(ingredient: Ingredient?, isSelected: Bool) {
+        ingredient?.selectedInShoppingList = isSelected
+        do {
+            if ingredient != nil {
+                try self.viewContext.save()
+            }
+        } catch {
+            print(String(describing: error))
+        }
     }
     
-    func updateShoppingRecipes(_ recipes: [Recipe]) -> [ShoppingListItem] {
-        var list = UserDefaults.standard.currentShoppingList
-        list.recipeIDs = recipes.map { $0.realId }
-        list.allItems = list.allItems
-            .filter { listItem in
-                recipes.contains(where: { listItem.recipeId == $0.realId })
-            }
-        UserDefaults.standard.currentShoppingList = list
-        return list.allItems
+    @MainActor
+    func updateIngredientsText(ingredients: [IngredientGroup]) {
+        for ingredient in ingredients {
+            print("text: \(ingredient.text)")
+            ingredient.ingredient.value = ingredient.text
+        }
+        
+        do {
+            try self.viewContext.save()
+        } catch {
+            print(String(describing: error))
+        }
     }
 }

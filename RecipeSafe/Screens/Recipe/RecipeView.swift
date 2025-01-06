@@ -13,6 +13,8 @@ struct RecipeView<T: EditableRecipeModel>: View {
     // MARK: - Environment
     @Environment(\.dismiss) private var dismissView
     
+    @Service var dataManager: DataManager!
+    
     // MARK: - ViewModel
     @StateObject var viewModel: T
     
@@ -62,7 +64,7 @@ struct RecipeView<T: EditableRecipeModel>: View {
                 Text("recipe.alert.delete.desc".localized)
             }
             .popover(isPresented: $viewModel.groupSwitch) {
-                if let recipeItem = viewModel.recipe.dataEntity {
+                if let recipeItem: RecipeItem = dataManager.object(with: viewModel.recipe.dataEntity) {
                     SelectGroupsView(viewModel: SelectGroupsViewModel(selectionAction: { viewModel.addToGroup($0); viewModel.groupSwitch = false },
                                                                       cancelAction: { viewModel.groupSwitch = false },
                                                                       newRecipe: recipeItem))

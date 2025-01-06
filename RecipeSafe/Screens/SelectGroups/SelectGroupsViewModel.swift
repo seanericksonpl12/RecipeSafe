@@ -23,15 +23,14 @@ class SelectGroupsViewModel: ObservableObject {
     var newRecipe: RecipeItem
     
     // MARK: - Private
-    private var dataManager: DataManager
+    @Service private var dataManager: DataManager!
     
     // MARK: - Init
-    init(selectionAction: @escaping (GroupItem) -> Void,
-         cancelAction: @escaping () -> Void,
-         dataManager: DataManager = DataManager(),
-         newRecipe: RecipeItem) {
-        
-        self.dataManager = dataManager
+    init(
+        selectionAction: @escaping (GroupItem) -> Void,
+        cancelAction: @escaping () -> Void,
+        newRecipe: RecipeItem
+    ) {
         self.selectionAction = selectionAction
         self.cancelAction = cancelAction
         self.newRecipe = newRecipe

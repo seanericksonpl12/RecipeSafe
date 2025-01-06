@@ -14,6 +14,6 @@ extension Dependencies {
 
 extension RecipeSafeApp {
     func registerServices() {
-        ServiceRegister.addService(DataManager())
+        ServiceRegister.addService(DataManager.shared)
     }
 }

@@ -17,12 +17,7 @@ class AllRecipesViewModel: ObservableObject {
     @Published var customRecipeSheet: Bool = false
     
     // MARK: - Private Properties
-    private var dataManager: DataManager
-    
-    // MARK: - Init
-    init(dataManager: DataManager = DataManager()) {
-        self.dataManager = dataManager
-    }
+    @Service private var dataManager: DataManager!
     
     // MARK: - Computed Properties
     var searchList: (any RandomAccessCollection<RecipeItem>) -> [RecipeItem] {

@@ -21,14 +21,14 @@ class RecipeViewModel: EditableRecipeModel {
     @Published var groupSwitch: Bool = false
     
     // MARK: - Private
-    private var dataManager: DataManager
+    @Service var dataManager: DataManager!
     
     // MARK: - Properties
     var dismiss: DismissAction?
     
     // MARK: - Computed
     var saveAction: () -> Void {
-        { self.saveChanges() }
+        { Task { await self.saveChanges() } }
     }
     
     var deleteAction: () -> Void {
@@ -46,37 +46,35 @@ class RecipeViewModel: EditableRecipeModel {
     var screen: Screen
     
     // MARK: - Init
-    init(recipe: Recipe, screen: Screen, dataManager: DataManager = DataManager()) {
+    init(recipe: Recipe, screen: Screen) {
         self.recipe = recipe
         self.screen = screen
         self.descriptionText = recipe.description ?? ""
         self.prepText = recipe.prepTime ?? ""
         self.cookText = recipe.cookTime ?? ""
-        self.dataManager = dataManager
     }
 }
 
 // MARK: - Functions
 extension RecipeViewModel {
     
-    func saveChanges() {
+    @MainActor
+    func saveChanges() async {
         withAnimation {
             self.editingEnabled = false
         }
         self.recipe.description = self.descriptionText
         self.recipe.cookTime = self.cookText
         self.recipe.prepTime = self.prepText
-        Task { @MainActor in
-            self.recipe.instructions.removeAll { $0 == "" }
-            self.recipe.ingredients.removeAll { $0 == "" }
-            self.dataManager.updateDataEntity(recipe: self.recipe)
-        }
+        self.recipe.instructions.removeAll { $0 == "" }
+        self.recipe.ingredients.removeAll { $0 == "" }
+        self.dataManager.updateDataEntity(recipe: &self.recipe)
     }
     
     func deleteSelf() {
         dataManager.deleteDataEntity(recipe: self.recipe)
         self.recipe.dataEntity = nil
-        dismiss?.callAsFunction()
+        dismiss?()
     }
     
     func getGroups() -> [GroupItem] {
@@ -89,7 +87,7 @@ extension RecipeViewModel {
     
     func saveRecipe(recipe: Recipe) -> Recipe {
         var newRecipe = recipe
-        newRecipe.dataEntity = dataManager.saveItem(recipe)
+        newRecipe.dataEntity = dataManager.saveItem(recipe)?.objectID
         return newRecipe
     }
     
@@ -98,7 +96,7 @@ extension RecipeViewModel {
         if screen == .search {
             if let item = dataManager.findDuplicates(recipe) {
                 var new = recipe
-                new.dataEntity = item
+                new.dataEntity = item.objectID
                 self.recipe = new
             } else {
                 self.recipe.dataEntity = nil

@@ -18,16 +18,15 @@ class GroupViewModel: ObservableObject {
     @Published var selectedRecipes: [RecipeItem] = []
     
     // MARK: - Private Properties
-    private var dataManager: DataManager
+    @Service private var dataManager: DataManager!
     private var dismiss: Binding<PresentationMode>?
     
     // MARK: - Stored Properties
     private(set) var newRecipe: Recipe?
     
     // MARK: - Init
-    init(group: GroupItem, newRecipe: Recipe? = nil, dataManager: DataManager = DataManager()) {
+    init(group: GroupItem, newRecipe: Recipe? = nil) {
         self.group = GroupModel(dataEntity: group)
-        self.dataManager = dataManager
         self.newRecipe = newRecipe
     }
 }

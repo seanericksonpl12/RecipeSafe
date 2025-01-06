@@ -27,6 +27,7 @@ struct ContentView: View {
                 }
                 .tag(2)
             ShoppingListView()
+                .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
                 .tabItem {
                     Label("app.shopping".localized, systemImage: "list.clipboard")
                 }

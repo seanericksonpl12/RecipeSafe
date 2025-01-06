@@ -32,7 +32,7 @@ class SearchViewModel: ObservableObject {
     var randomRecipes: [String] = []
     
     private var network: NetworkManager = NetworkManager()
-    private var dataManager: DataManager = DataManager()
+    @Service private var dataManager: DataManager!
     private var searchTask: Task<(), Error>?
     private var filterTask: Task<(), Error>?
     private var autoFillValues: [String] = []
@@ -87,7 +87,7 @@ extension SearchViewModel {
     func checkIfSaved(recipe: Recipe) -> Recipe {
         if let item = dataManager.findDuplicates(recipe) {
             var new = recipe
-            new.dataEntity = item
+            new.dataEntity = item.objectID
             return new
         } else {
             return recipe

@@ -18,7 +18,7 @@ class CreateRecipeViewModel: EditableRecipeModel {
     @Published var prepText = ""
     
     // MARK: - Private
-    private var dataManager: DataManager
+    @Service var dataManager: DataManager!
     
     // MARK: - Properties
     var alertSwitch: Bool = false
@@ -46,9 +46,8 @@ class CreateRecipeViewModel: EditableRecipeModel {
     var screen: Screen
     
     // MARK: - Init
-    init(screen: Screen, dataManager: DataManager = DataManager()) {
+    init(screen: Screen) {
         self.screen = screen
-        self.dataManager = dataManager
         self.recipe = Recipe()
         self.recipe.instructions = [""]
         self.recipe.ingredients = [""]
@@ -77,7 +76,7 @@ extension CreateRecipeViewModel {
     }
     
     func cancelEditing() {
-        dismiss?.callAsFunction()
+        dismiss?()
     }
     
     func deleteSelf() {

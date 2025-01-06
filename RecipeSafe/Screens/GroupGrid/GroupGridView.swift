@@ -104,7 +104,7 @@ struct GroupGridView: View {
                 }
             }
             .popover(isPresented: $viewModel.newRecipeSwitch) {
-                if let recipe = viewModel.newRecipe?.dataEntity {
+                if let recipeId = viewModel.newRecipe?.dataEntity, let recipe = viewContext.object(with: recipeId) as? RecipeItem {
                     SelectGroupsView(viewModel: SelectGroupsViewModel(selectionAction: viewModel.selectionAction,
                                                                       cancelAction: viewModel.cancelAction,
                                                                       newRecipe: recipe))

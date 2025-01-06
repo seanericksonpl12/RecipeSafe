@@ -7,116 +7,140 @@
 
 import SwiftUI
 
+extension ReferenceWritableKeyPath: @unchecked @retroactive Sendable {}
+
 struct ShoppingListView: View {
+    
+    @FetchRequest(
+        sortDescriptors: [SortDescriptor(\.title)],
+        animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
     
     @Service var dataManager: DataManager!
     
     @State var isEditing: Bool = false
-    @State var groceries: [ShoppingListItem] = []
-    @State var recipes: [Recipe] = []
-    @State private var backupGroceries: [ShoppingListItem] = []
-    @State private var backupRecipes: [Recipe] = []
+
     @State private var showRecipes: Bool = true
-    
+    @State private var addRecipes: Bool = false
+    @State private var recipesToAdd: [RecipeItem] = []
+    @State private var filteredRecipeTitles: [String] = []
+    @State private var ingredients: [IngredientGroup] = []
+
     var body: some View {
         NavigationStack {
-            Group {
-                if groceries.isEmpty && !isEditing {
-                    EmptyListView(description: "")
-                } else {
-                    listView
-                }
-            }
+            contentView
             .navigationTitle("Grocery List")
             .environment(\.editMode, .constant(isEditing ? EditMode.active : EditMode.inactive))
             .toolbar {
-                if isEditing {
-                    EditableToolbar(
-                        isEditing: $isEditing,
-                        saveAction: save,
-                        cancelAction: cancel
-                    )
-                } else {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            print("add shit")
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                    }
-                }
+                EditableToolbar(
+                    isEditing: $isEditing,
+                    saveAction: saveChanges,
+                    cancelAction: cancelChanges
+                )
+            }
+            .sheet(isPresented: $addRecipes) {
+                AddRecipePopover(
+                    selectedRecipes: $recipesToAdd,
+                    saveAction: saveAddedRecipes,
+                    recipes: recipeList.filter { !$0.inShoppingList }
+                )
             }
             .task {
-                self.groceries = dataManager.getShoppingList()
-                self.recipes = dataManager.getShoppingListRecipes()
-                self.backupGroceries = groceries
-                self.backupRecipes = recipes
+                self.filteredRecipeTitles = recipeList.filter { $0.inShoppingList }.compactMap(\.title)
+                self.ingredients = recipeList
+                    .filter { $0.inShoppingList }
+                    .flatMap { $0.ingredients?.array as? [Ingredient] ?? [] }
+                    .map { IngredientGroup(ingredient: $0, selected: $0.selectedInShoppingList) }
             }
         }
     }
     
-    @MainActor
-    var listView: some View {
-        
-        List {
-            if showRecipes {
-                Section {
-                    ForEach(recipes) {
-                        Text($0.title)
-                    }.onDelete {
-                        recipes.remove(atOffsets: $0)
-                        withAnimation {
-                            groceries = dataManager.updateShoppingRecipes(recipes)
-                        }
-                    }
-                } header: {
-                    Text("Recipes")
-                }
-            }
-            Section {
-                ForEach($groceries) { item in
-                    HStack {
-                        Group {
-                            Button {
-                                withAnimation(.linear(duration: 0.1)) {
-                                    item.selected.wrappedValue.toggle()
-                                }
-                                dataManager.saveShoppingList(list: groceries)
-                            } label: {
-                                Image(systemName: item.selected.wrappedValue ? "checkmark.circle" : "circle")
+    
+    var contentView: some View {
+        GeometryReader { proxy in
+            VStack {
+                List {
+                    if showRecipes {
+//                        EditableSectionView(
+//                            list: $filteredRecipeTitles,
+//                            isEditing: $isEditing,
+//                            headerText: "Recipes",
+//                            deleteAction: { _ in },
+//                            addAction: {}
+//                        )
+//                        .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
+                        Section {
+                            EditableGridView(isEditing: $isEditing, list: filteredRecipeTitles) { index, item in
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(Color(uiColor: UIColor.secondarySystemBackground))
+                                    .stroke(Color(uiColor: UIColor.lightGray), lineWidth: 1)
+                                    .frame(width: proxy.size.width / 4.0, height: 40)
+                                    .overlay {
+                                        Text(item)
+                                    }
                             }
-                            .padding([.leading, .trailing])
-                            
-                            CustomTextField(
-                                text: item.ingredient,
-                                prompt: "Ingredient",
-                                promptAlign: .leading,
-                                staticLabel: "",
-                                font: .callout,
-                                fontWeight: .light,
-                                axis: .vertical
-                            )
-                            
-                            .disabled(!isEditing)
-                            .padding(.trailing)
-                            
-                        }
-                        .onLongPressGesture {
-                            print("long press")
+                            .padding([.leading, .trailing], -15)
+                            .listRowBackground(Color.clear)
+                        } header: {
+                            Text("Recipes")
                         }
                     }
-                    //.onTapGesture {}
                     
-                    
+                    CustomEditableSectionView(
+                        list: $ingredients,
+                        isEditing: $isEditing,
+                        headerText: "Ingredients",
+                        deleteAction: { _ in },
+                        addAction: {}
+                    ) {
+                        customIngredientItem($0, $1)
+                    }
+                    .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                 }
-                .onDelete {
-                    groceries.remove(atOffsets: $0)
+                .scrollContentBackground(.hidden)
+                
+                HStack {
+                    Button {
+                        addRecipes = true
+                    } label: {
+                        Label("New Ingredient", systemImage: "plus.circle")
+                    }
+                    Spacer()
                 }
-            } header: {
-                Text("Ingredients")
+                .padding()
             }
+            .applyAppBackground(proxy: proxy)
         }
-        
+    }
+    
+    
+    
+    func customIngredientItem(_ index: Int, _ item: Binding<IngredientGroup>) -> some View {
+        HStack {
+            Button {
+                withAnimation(.linear(duration: 0.1)) {
+                    if let _ = ingredients.safeValue(at: index) {
+                        ingredients[index].selected.toggle()
+                    }
+                    dataManager.updateIngredient(
+                        ingredient: item.wrappedValue.ingredient,
+                        isSelected: item.wrappedValue.selected
+                    )
+                }
+            } label: {
+                Image(systemName: item.wrappedValue.selected ? "checkmark.circle" : "circle")
+            }
+            
+            CustomTextField(
+                text: item.text,
+                prompt: "Ingredient",
+                promptAlign: .leading,
+                staticLabel: "",
+                font: .callout,
+                fontWeight: .light,
+                axis: .vertical
+            )
+            .disabled(!isEditing)
+        }
     }
 }
 
@@ -128,16 +152,25 @@ extension ShoppingListView {
         }
     }
     
-    func cancel() {
-        withAnimation {
-            groceries = backupGroceries
-            recipes = backupRecipes
-            isEditing = false
-        }
+    func saveAddedRecipes() {
+
+        addRecipes = false
     }
     
-    func fetchRecipes() {
-        print("self recipe count: \(self.recipes.count)")
+    func saveChanges() {
+        dataManager.updateIngredientsText(ingredients: self.ingredients)
+        withAnimation { isEditing = false }
+    }
+    
+    func cancelChanges() {
+        for i in 0..<self.ingredients.count {
+            if let text = ingredients[i].ingredient.value {
+                ingredients[i].text = text
+            }
+        }
+        Task { @MainActor in
+            withAnimation { isEditing = false }
+        }
     }
 }
 

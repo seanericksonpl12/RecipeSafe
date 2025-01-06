@@ -14,6 +14,8 @@ enum Screen {
 
 protocol EditableRecipeModel: ObservableObject {
     
+    var dataManager: DataManager! { get }
+    
     // MARK: - Properties
     var recipe: Recipe { get set }
     var screen: Screen { get }
@@ -33,7 +35,7 @@ protocol EditableRecipeModel: ObservableObject {
     
     
     // MARK: - Functions
-    func saveChanges()
+    func saveChanges() async
     func cancelEditing()
     func toggleAlert()
     func deleteFromIngr(offsets: IndexSet)
@@ -56,27 +58,29 @@ extension EditableRecipeModel {
     }
     
     func cancelEditing() {
-        withAnimation {
-            self.editingEnabled = false
+        Task { @MainActor in
+            withAnimation {
+                self.editingEnabled = false
+            }
         }
-        
-        self.recipe.title = self.recipe.dataEntity?.title ?? self.recipe.title
-        self.recipe.description = self.recipe.dataEntity?.desc
-        if let data = self.recipe.dataEntity?.photoData {
+        let entity: RecipeItem? = dataManager.object(with: self.recipe.dataEntity)
+        self.recipe.title = entity?.title ?? self.recipe.title
+        self.recipe.description = entity?.desc
+        if let data = entity?.photoData {
             self.recipe.img = .selected(data)
         }
         self.descriptionText = self.recipe.description ?? self.descriptionText
         self.prepText = self.recipe.prepTime ?? self.prepText
         self.cookText = self.recipe.cookTime ?? self.cookText
-        Task { @MainActor in
-            guard var ingredientArr = self.recipe.dataEntity?.ingredients?.array as? [Ingredient] else { return }
-            guard var instructionArr = self.recipe.dataEntity?.instructions?.array as? [Instruction] else { return }
-            ingredientArr = ingredientArr.filter { $0.value != nil }
-            instructionArr = instructionArr.filter { $0.value != nil }
-            
-            self.recipe.ingredients = ingredientArr.map { $0.value! }
-            self.recipe.instructions = instructionArr.map { $0.value! }
-        }
+        
+        guard var ingredientArr = entity?.ingredients?.array as? [Ingredient] else { return }
+        guard var instructionArr = entity?.instructions?.array as? [Instruction] else { return }
+        ingredientArr = ingredientArr.filter { $0.value != nil }
+        instructionArr = instructionArr.filter { $0.value != nil }
+        
+        self.recipe.ingredients = ingredientArr.map { $0.value! }
+        self.recipe.instructions = instructionArr.map { $0.value! }
+
     }
     
     func deleteFromIngr(offsets: IndexSet) {

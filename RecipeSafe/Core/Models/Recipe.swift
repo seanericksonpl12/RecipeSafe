@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftyJSON
+import CoreData
 
 struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     
@@ -20,8 +21,8 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     var instructions: [String]
     var prepTime: String?
     var cookTime: String?
-    // TODO: CONFORM TO SENDABLE?
-    var dataEntity: RecipeItem?
+    var isInShoppingList: Bool?
+    var dataEntity: NSManagedObjectID?
     var realId: String { self.url?.absoluteString ?? self.id.uuidString }
     
     // MARK: - Core Data Init
@@ -41,7 +42,8 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
         self.cookTime = dataItem.cookTime
         self.prepTime = dataItem.prepTime
         self.url = dataItem.url
-        self.dataEntity = dataItem
+        self.isInShoppingList = dataItem.inShoppingList
+        self.dataEntity = dataItem.objectID
         if let data = dataItem.photoData {
             self.img = .selected(data)
         } else if let imgUrl = dataItem.imageUrl {

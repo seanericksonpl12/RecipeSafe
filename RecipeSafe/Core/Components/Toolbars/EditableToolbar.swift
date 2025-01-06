@@ -40,8 +40,10 @@ struct EditableToolbar: ToolbarContent {
             ToolbarItem {
                 Menu {
                     Button("button.edit".localized) {
-                        withAnimation {
-                            isEditing = true
+                        Task { @MainActor in
+                            withAnimation {
+                                isEditing = true
+                            }
                         }
                     }
                     if let text = option1Text {

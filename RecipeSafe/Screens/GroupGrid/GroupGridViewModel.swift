@@ -22,7 +22,7 @@ class GroupGridViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private var onDeckToDelete: GroupItem?
-    private var dataManager: DataManager
+    @Service private var dataManager: DataManager!
     
     // MARK: - Stored Properties
     var selectionAction: (GroupItem) -> Void = { _ in }
@@ -30,8 +30,7 @@ class GroupGridViewModel: ObservableObject {
     var newRecipe: Recipe?
     
     // MARK: - Init
-    init(dataManager: DataManager = DataManager()) {
-        self.dataManager = dataManager
+    init() {
         self.setupActions()
     }
 }
