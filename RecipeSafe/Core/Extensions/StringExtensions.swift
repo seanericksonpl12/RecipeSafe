@@ -120,3 +120,13 @@ extension String {
         lhs = lhs + rhs
     }
 }
+
+extension String {
+    func removingWhitespace() -> Self {
+        var str = ""
+        for char in self {
+            if char != " " { str.append(char) }
+        }
+        return str
+    }
+}

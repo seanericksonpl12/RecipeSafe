@@ -47,6 +47,17 @@ struct CustomEditableSectionView<Content: View, Item: Any>: View {
     // MARK: - Body
     var body: some View {
         Section {
+            if list.isEmpty {
+                HStack {
+                    Spacer()
+                    Button {
+                        addAction()
+                    } label: {
+                        Image(systemName: "plus.app")
+                    }
+                    Spacer()
+                }
+            }
             ForEach(Array($list.enumerated()), id: \.offset) { index, $item in
                 content(index, $item)
             }

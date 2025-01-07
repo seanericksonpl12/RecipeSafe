@@ -12,8 +12,13 @@ extension ReferenceWritableKeyPath: @unchecked @retroactive Sendable {}
 struct ShoppingListView: View {
     
     @FetchRequest(
+        sortDescriptors: [SortDescriptor(\.index)],
+        animation: .easeIn) private var shoppingList: FetchedResults<ShoppingListItem>
+    @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
-        animation: .easeIn) private var recipeList: FetchedResults<RecipeItem>
+        animation: .easeIn) private var recipes: FetchedResults<RecipeItem>
+    
+    @FocusState var focused
     
     @Service var dataManager: DataManager!
     
@@ -21,10 +26,12 @@ struct ShoppingListView: View {
 
     @State private var showRecipes: Bool = true
     @State private var addRecipes: Bool = false
+    @State private var addNewIngredient: Bool = false
     @State private var recipesToAdd: [RecipeItem] = []
-    @State private var filteredRecipeTitles: [String] = []
+    @State private var filteredRecipes: [RecipeItem] = []
     @State private var ingredients: [IngredientGroup] = []
-
+    @State private var text: String = ""
+    
     var body: some View {
         NavigationStack {
             contentView
@@ -41,15 +48,11 @@ struct ShoppingListView: View {
                 AddRecipePopover(
                     selectedRecipes: $recipesToAdd,
                     saveAction: saveAddedRecipes,
-                    recipes: recipeList.filter { !$0.inShoppingList }
+                    recipes: Array(recipes)
                 )
             }
             .task {
-                self.filteredRecipeTitles = recipeList.filter { $0.inShoppingList }.compactMap(\.title)
-                self.ingredients = recipeList
-                    .filter { $0.inShoppingList }
-                    .flatMap { $0.ingredients?.array as? [Ingredient] ?? [] }
-                    .map { IngredientGroup(ingredient: $0, selected: $0.selectedInShoppingList) }
+                refreshRecipes()
             }
         }
     }
@@ -60,47 +63,69 @@ struct ShoppingListView: View {
             VStack {
                 List {
                     if showRecipes {
-//                        EditableSectionView(
-//                            list: $filteredRecipeTitles,
-//                            isEditing: $isEditing,
-//                            headerText: "Recipes",
-//                            deleteAction: { _ in },
-//                            addAction: {}
-//                        )
-//                        .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
-                        Section {
-                            EditableGridView(isEditing: $isEditing, list: filteredRecipeTitles) { index, item in
-                                RoundedRectangle(cornerRadius: 6)
-                                    .fill(Color(uiColor: UIColor.secondarySystemBackground))
-                                    .stroke(Color(uiColor: UIColor.lightGray), lineWidth: 1)
-                                    .frame(width: proxy.size.width / 4.0, height: 40)
-                                    .overlay {
-                                        Text(item)
-                                    }
-                            }
-                            .padding([.leading, .trailing], -15)
-                            .listRowBackground(Color.clear)
-                        } header: {
-                            Text("Recipes")
+                        CustomEditableSectionView(
+                            list: $filteredRecipes,
+                            isEditing: $isEditing,
+                            headerText: "Recipes",
+                            deleteAction: { deleteRecipe($0) },
+                            addAction: { addRecipes = true }
+                        ) {
+                            customRecipeItem($0, $1)
                         }
+                        .moveDisabled(true)
+                        .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                     }
                     
-                    CustomEditableSectionView(
-                        list: $ingredients,
-                        isEditing: $isEditing,
-                        headerText: "Ingredients",
-                        deleteAction: { _ in },
-                        addAction: {}
-                    ) {
-                        customIngredientItem($0, $1)
+                    Section {
+                        ForEach(Array($ingredients.enumerated()), id: \.offset) {
+                            customIngredientItem($0, $1)
+                        }
+                        .onDelete { deleteIngredient($0) }
+                        .moveDisabled(true)
+                        if addNewIngredient {
+                            CustomTextField(
+                                text: $text,
+                                prompt: "New Ingredient",
+                                promptAlign: .leading,
+                                staticLabel: "",
+                                font: .callout,
+                                fontWeight: .light,
+                                axis: .vertical
+                            ) {
+                                self.focused = false
+                                if !self.text.removingWhitespace().isEmpty {
+                                    dataManager.addShoppingListItem($0, index: Int16(shoppingList.count))
+                                    refreshRecipes()
+                                }
+                                withAnimation { addNewIngredient = false }
+                                self.text = ""
+                            }
+                            .disabled(!addNewIngredient)
+                            .focused($focused)
+                        }
+                    } header: {
+                        HStack {
+                            Text("Ingredients")
+                            if isEditing {
+                                Button {
+                                    
+                                } label: {
+                                    Image(systemName: "plus.app")
+                                        .tint(.green)
+                                }
+                            }
+                        }
                     }
                     .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
+                    
+                    
                 }
                 .scrollContentBackground(.hidden)
                 
                 HStack {
                     Button {
-                        addRecipes = true
+                        withAnimation { self.addNewIngredient = true }
+                        self.focused = true
                     } label: {
                         Label("New Ingredient", systemImage: "plus.circle")
                     }
@@ -113,18 +138,17 @@ struct ShoppingListView: View {
     }
     
     
-    
     func customIngredientItem(_ index: Int, _ item: Binding<IngredientGroup>) -> some View {
         HStack {
             Button {
                 withAnimation(.linear(duration: 0.1)) {
-                    if let _ = ingredients.safeValue(at: index) {
+                    if index < ingredients.count {
                         ingredients[index].selected.toggle()
                     }
-                    dataManager.updateIngredient(
-                        ingredient: item.wrappedValue.ingredient,
-                        isSelected: item.wrappedValue.selected
-                    )
+                    if index < shoppingList.count {
+                        shoppingList[index].selected.toggle()
+                        dataManager.save()
+                    }
                 }
             } label: {
                 Image(systemName: item.wrappedValue.selected ? "checkmark.circle" : "circle")
@@ -142,6 +166,15 @@ struct ShoppingListView: View {
             .disabled(!isEditing)
         }
     }
+    
+    @ViewBuilder
+    func customRecipeItem(_ index: Int, _ item: Binding<RecipeItem>) -> some View {
+        if let recipe = Recipe(dataItem: item.wrappedValue) {
+            NavigationLink(recipe.title) {
+                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+            }
+        }
+    }
 }
 
 extension ShoppingListView {
@@ -152,19 +185,54 @@ extension ShoppingListView {
         }
     }
     
-    func saveAddedRecipes() {
+    func deleteRecipe(_ indexSet: IndexSet) {
+        for index in indexSet {
+            guard self.filteredRecipes.count > index else { continue }
+            let recipe = self.filteredRecipes.remove(at: index)
+            dataManager.removeFromShoppingList(recipe: recipe)
+        }
+        refreshRecipes()
+    }
+    
+    func deleteIngredient(_ indexSet: IndexSet) {
+        let list = Array(shoppingList)
+        for index in indexSet {
+            guard let item = list.safeValue(at: index) else { continue }
+            dataManager.removeFromShoppingList(shoppingListItem: item)
+        }
+        refreshRecipes()
+    }
 
+    func saveAddedRecipes() {
+        for recipe in recipesToAdd {
+            guard !dataManager.isInShoppingList(recipe) else { continue }
+            dataManager.addToShoppingList(recipe: recipe)
+        }
+        refreshRecipes()
         addRecipes = false
     }
     
+    func refreshRecipes() {
+        var set = Set<RecipeItem>()
+        shoppingList.forEach {
+            if let recipe = $0.recipe { set.insert(recipe) }
+        }
+        self.filteredRecipes = Array(set)
+        self.ingredients = shoppingList
+            .map { IngredientGroup(shoppingListItem: $0) }
+    }
+    
     func saveChanges() {
-        dataManager.updateIngredientsText(ingredients: self.ingredients)
+        for item in ingredients {
+            item.shoppingListItem.value = item.text
+        }
+        dataManager.save()
         withAnimation { isEditing = false }
     }
     
     func cancelChanges() {
-        for i in 0..<self.ingredients.count {
-            if let text = ingredients[i].ingredient.value {
+        for i in 0..<ingredients.count {
+            if let text = ingredients[i].shoppingListItem.value {
                 ingredients[i].text = text
             }
         }

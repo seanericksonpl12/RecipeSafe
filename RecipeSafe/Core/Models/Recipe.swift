@@ -21,7 +21,6 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     var instructions: [String]
     var prepTime: String?
     var cookTime: String?
-    var isInShoppingList: Bool?
     var dataEntity: NSManagedObjectID?
     var realId: String { self.url?.absoluteString ?? self.id.uuidString }
     
@@ -42,7 +41,6 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
         self.cookTime = dataItem.cookTime
         self.prepTime = dataItem.prepTime
         self.url = dataItem.url
-        self.isInShoppingList = dataItem.inShoppingList
         self.dataEntity = dataItem.objectID
         if let data = dataItem.photoData {
             self.img = .selected(data)

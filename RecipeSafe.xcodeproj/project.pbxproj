@@ -66,8 +66,6 @@
 		926A4A8F2A71FD9000457935 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A8E2A71FD9000457935 /* NetworkRequest.swift */; };
 		926A4A932A72B7AC00457935 /* RecipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A4A922A72B7AC00457935 /* RecipeRequest.swift */; };
 		9272A7CE2CAE0BC50098724F /* ShoppingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272A7CD2CAE0BC50098724F /* ShoppingListView.swift */; };
-		9272A7D12CAE0F8B0098724F /* ShoppingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272A7D02CAE0F8B0098724F /* ShoppingList.swift */; };
-		9272A7D32CAE13A90098724F /* ShoppingListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272A7D22CAE13A90098724F /* ShoppingListViewModel.swift */; };
 		9272A7D52CAED36B0098724F /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272A7D42CAED36B0098724F /* NotificationExtension.swift */; };
 		9272A7D82CAED5990098724F /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272A7D72CAED5990098724F /* Service.swift */; };
 		9272DD1D2A85D52400DD4549 /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */; };
@@ -232,8 +230,6 @@
 		926A4A922A72B7AC00457935 /* RecipeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRequest.swift; sourceTree = "<group>"; };
 		926A4A952A748AD100457935 /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		9272A7CD2CAE0BC50098724F /* ShoppingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListView.swift; sourceTree = "<group>"; };
-		9272A7D02CAE0F8B0098724F /* ShoppingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingList.swift; sourceTree = "<group>"; };
-		9272A7D22CAE13A90098724F /* ShoppingListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListViewModel.swift; sourceTree = "<group>"; };
 		9272A7D42CAED36B0098724F /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		9272A7D72CAED5990098724F /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		9272DD1C2A85D52400DD4549 /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
@@ -716,19 +712,9 @@
 		9272A7CC2CAE0B8A0098724F /* Shopping */ = {
 			isa = PBXGroup;
 			children = (
-				9272A7CF2CAE0F760098724F /* Model */,
 				9272A7CD2CAE0BC50098724F /* ShoppingListView.swift */,
-				9272A7D22CAE13A90098724F /* ShoppingListViewModel.swift */,
 			);
 			path = Shopping;
-			sourceTree = "<group>";
-		};
-		9272A7CF2CAE0F760098724F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9272A7D02CAE0F8B0098724F /* ShoppingList.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9272A7D62CAED5880098724F /* Services */ = {
@@ -1033,7 +1019,6 @@
 				9272A7CE2CAE0BC50098724F /* ShoppingListView.swift in Sources */,
 				920DA3652A70225E0086ADB5 /* EditableHeaderView.swift in Sources */,
 				92E706032A8BBA9B00ACA24C /* SelectGroupsViewModel.swift in Sources */,
-				9272A7D32CAE13A90098724F /* ShoppingListViewModel.swift in Sources */,
 				929316FA2A816BF30089A55D /* AllRecipesView.swift in Sources */,
 				9201F9852A7AF14800A6021A /* RecipeJSONParser.swift in Sources */,
 				92F09A192C99F9AA0038A031 /* PrimitiveType.swift in Sources */,
@@ -1089,7 +1074,6 @@
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
 				92939FC32CA2FFC6002DE8D0 /* AppConfigRequest.swift in Sources */,
 				92E705FC2A8A881600ACA24C /* AppViewModel.swift in Sources */,
-				9272A7D12CAE0F8B0098724F /* ShoppingList.swift in Sources */,
 				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
 				92F09A062C97507B0038A031 /* SuggestionTile.swift in Sources */,
 				9293171E2A81EB630089A55D /* ImageData.swift in Sources */,

@@ -30,6 +30,11 @@ class DataManager {
         }
     }
     
+    func save() {
+        do { try self.viewContext.save() }
+        catch { print("Failed to Save") }
+    }
+    
     // MARK: - Recipe Functions
     /// Save a given recipe model to Core Data
     ///
@@ -303,41 +308,117 @@ extension DataManager {
 
 extension DataManager {
     
-    func updateShoppingList(entity: RecipeItem?, inList: Bool) {
-        entity?.inShoppingList = inList
-        do {
-            if entity != nil {
-                print("SAVING ITEM!!!!!")
-                try self.viewContext.save()
-            }
-        } catch {
-            print(String(describing: error))
-        }
+    func isInShoppingList(_ recipe: RecipeItem?) -> Bool {
+        print("checking if in list")
+        print("recipe: \(recipe?.objectID)")
+        return !(recipe?.shoppinglistitems?.allObjects.isEmpty ?? true)
     }
     
-    @MainActor
-    func updateIngredient(ingredient: Ingredient?, isSelected: Bool) {
-        ingredient?.selectedInShoppingList = isSelected
-        do {
-            if ingredient != nil {
-                try self.viewContext.save()
-            }
-        } catch {
-            print(String(describing: error))
-        }
+    func toggleShoppingList(recipe: RecipeItem?) {
+        isInShoppingList(recipe) ? removeFromShoppingList(recipe: recipe) : addToShoppingList(recipe: recipe)
     }
     
-    @MainActor
-    func updateIngredientsText(ingredients: [IngredientGroup]) {
-        for ingredient in ingredients {
-            print("text: \(ingredient.text)")
-            ingredient.ingredient.value = ingredient.text
-        }
+    func addToShoppingList(recipe: RecipeItem?) {
+        guard let recipe else { return }
         
+        if let ingredients = recipe.ingredients?.array as? [Ingredient] {
+            for ingredient in ingredients {
+                if let text = ingredient.value {
+                    let newItem = ShoppingListItem(context: self.viewContext)
+                    newItem.recipe = recipe
+                    newItem.value = text
+                    recipe.addToShoppinglistitems(newItem)
+                }
+            }
+            
+            do {
+                try viewContext.save()
+            } catch {
+                print("Error Saving shopping list")
+            }
+        }
+    }
+    
+    func removeFromShoppingList(recipe: RecipeItem?) {
+        guard let recipe else { return }
+        
+        if let items = recipe.shoppinglistitems?.allObjects as? [ShoppingListItem] {
+            for item in items {
+                self.viewContext.delete(item)
+            }
+        }
+        recipe.shoppinglistitems = nil
         do {
             try self.viewContext.save()
         } catch {
-            print(String(describing: error))
+            print("Error Removing items from shopping list")
         }
     }
+    
+    func removeFromShoppingList(shoppingListItem: ShoppingListItem?) {
+        guard let shoppingListItem else { return }
+        self.viewContext.delete(shoppingListItem)
+        do {
+            try self.viewContext.save()
+        } catch {
+            print("Error Removing items from shopping list")
+        }
+    }
+    
+    func addShoppingListItem(_ text: String? = nil, index: Int16) {
+        let item = ShoppingListItem(context: self.viewContext)
+        item.value = text
+        item.index = index
+        do {
+            try self.viewContext.save()
+        } catch {
+            print("Error Removing items from shopping list")
+        }
+    }
+    
+//    func updateShoppingList(entity: RecipeItem?, inList: Bool) {
+//        entity?.inShoppingList = inList
+//        do {
+//            if entity != nil {
+//                print("SAVING ITEM!!!!!")
+//                try self.viewContext.save()
+//            }
+//        } catch {
+//            print(String(describing: error))
+//        }
+//    }
+//    
+//    @MainActor
+//    func updateIngredient(ingredient: Ingredient?, isSelected: Bool) {
+//        ingredient?.selectedInShoppingList = isSelected
+//        do {
+//            if ingredient != nil {
+//                try self.viewContext.save()
+//            }
+//        } catch {
+//            print(String(describing: error))
+//        }
+//    }
+    
+//    @MainActor
+//    func updateIngredientsText(ingredients: [IngredientGroup]) {
+//        for ingredient in ingredients {
+//            print("text: \(ingredient.text)")
+//            ingredient.ingredient.value = ingredient.text
+//        }
+//        
+//        do {
+//            try self.viewContext.save()
+//        } catch {
+//            print(String(describing: error))
+//        }
+//    }
+//    
+//    func updateIngredientList(_ list: [RecipeItem]) {
+//        for recipe in list {
+//            recipe.inShoppingList = true
+//        }
+//        
+//        try? viewContext.save()
+//    }
 }

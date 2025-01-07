@@ -10,6 +10,10 @@ import PhotosUI
 
 struct EditableHeaderView<T: EditableRecipeModel>: View {
     
+    @FetchRequest(
+        sortDescriptors: [],
+        animation: nil) private var results: FetchedResults<ShoppingListItem>
+    
     // MARK: - Wrapped Properties
     @State private var photoItem: PhotosPickerItem?
     @State private var tempPhoto: ImageData = .none
@@ -30,9 +34,10 @@ struct EditableHeaderView<T: EditableRecipeModel>: View {
             .onAppear {
                 self.tempPhoto = viewModel.recipe.img
             }
-            .onChange(of: photoItem) { _ in
+            .onChange(of: photoItem) {
                 pickPhoto()
             }
+            .onChange(of: Array(results)) {}
             .disabled(!viewModel.editingEnabled)
             
             TextField("", text: $viewModel.recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
@@ -50,10 +55,10 @@ struct EditableHeaderView<T: EditableRecipeModel>: View {
                     cancelAction: { tempPhoto = viewModel.recipe.img; viewModel.cancelAction() },
                     deleteAction: viewModel.deleteAction,
                     option1Action: dataEntity?.group == nil ? viewModel.groupAction : {},
-                    option2Action: { dataManager.updateShoppingList(entity: dataEntity, inList: !(dataEntity?.inShoppingList ?? false)) },
+                    option2Action: { dataManager.toggleShoppingList(recipe: dataEntity) },
                     urlLink: viewModel.recipe.url,
                     option1Text: dataEntity?.group == nil ? "recipe.group.add".localized : nil,
-                    option2Text: dataEntity?.inShoppingList ?? false ? "Remove from Grocery List" : "Add to grocery list"
+                    option2Text: dataManager.isInShoppingList(dataEntity) ? "Remove from Grocery List" : "Add to grocery list"
                 )
         }
     }
