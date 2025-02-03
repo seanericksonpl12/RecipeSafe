@@ -7,9 +7,9 @@
 
 import Foundation
 
-protocol NetworkRequest {
+protocol NetworkRequest: Sendable {
     
-    associatedtype Response
+    associatedtype Response: Sendable
     
     var url: String { get }
     var method: HTTPMethod? { get }

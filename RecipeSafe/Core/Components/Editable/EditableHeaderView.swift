@@ -8,33 +8,20 @@
 import SwiftUI
 import PhotosUI
 
-struct EditableHeaderView: View {
+struct EditableHeaderView<T: EditableRecipeModel>: View {
+    
+    @FetchRequest(
+        sortDescriptors: [],
+        animation: nil) private var results: FetchedResults<ShoppingListItem>
     
     // MARK: - Wrapped Properties
-    @Binding var recipe: Recipe
-    @Binding var isEditing: Bool
     @State private var photoItem: PhotosPickerItem?
-    @State private var tempPhoto: ImageData
-    
-    // MARK: - Actions
-    var saveAction: () -> Void = {}
-    var cancelAction: () -> Void = {}
-    var deleteAction: () -> Void = {}
-    var groupAction: () -> Void = {}
-    
+    @State private var tempPhoto: ImageData = .none
+    @Service var dataManager: DataManager!
+    @EnvironmentObject var viewModel: T
+
     // MARK: - Properties
     var optionalDisplay: String?
-    
-    init(recipe: Binding<Recipe>, isEditing: Binding<Bool>, saveAction: @escaping () -> Void, cancelAction: @escaping () -> Void, deleteAction: @escaping () -> Void, groupAction: @escaping () -> Void, optionalDisplay: String? = nil) {
-        self._recipe = recipe
-        self._isEditing = isEditing
-        self.tempPhoto = recipe.wrappedValue.img
-        self.saveAction = saveAction
-        self.cancelAction = cancelAction
-        self.deleteAction = deleteAction
-        self.groupAction = groupAction
-        self.optionalDisplay = optionalDisplay
-    }
     
     // MARK: - Body
     var body: some View {
@@ -42,27 +29,38 @@ struct EditableHeaderView: View {
             Spacer()
 
             PhotosPicker(selection: $photoItem, matching: .images) {
-                IconImage(isEditing: $isEditing, img: $tempPhoto)
+                IconImage(isEditing: $viewModel.editingEnabled, img: $tempPhoto)
             }
-            .onChange(of: photoItem) { _ in
+            .onAppear {
+                self.tempPhoto = viewModel.recipe.img
+            }
+            .onChange(of: photoItem) {
                 pickPhoto()
             }
-            .disabled(!isEditing)
+            .onChange(of: Array(results)) {}
+            .disabled(!viewModel.editingEnabled)
             
-            TextField("", text: $recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
+            TextField("", text: $viewModel.recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                 .font(.title)
                 .fontWeight(.heavy)
                 .padding()
-                .disabled(!isEditing)
+                .disabled(!viewModel.editingEnabled)
             Spacer()
         }
-        .editableToolbar(isEditing: $isEditing,
-                         url: recipe.url,
-                         alternateLabel: recipe.dataEntity?.group == nil ? "recipe.group.add".localized : nil,
-                         saveAction: { recipe.img = tempPhoto; saveAction() },
-                         cancelAction: { tempPhoto = recipe.img; cancelAction() },
-                         deleteAction: deleteAction,
-                         alternateAction: recipe.dataEntity?.group == nil ? groupAction : {} )
+        .toolbar {
+            let dataEntity: RecipeItem? = dataManager.object(with: viewModel.recipe.dataEntity)
+                EditableToolbar(
+                    isEditing: $viewModel.editingEnabled,
+                    saveAction: { viewModel.recipe.img = tempPhoto; viewModel.saveAction() },
+                    cancelAction: { tempPhoto = viewModel.recipe.img; viewModel.cancelAction() },
+                    deleteAction: viewModel.deleteAction,
+                    option1Action: dataEntity?.group == nil ? viewModel.groupAction : {},
+                    option2Action: { dataManager.toggleShoppingList(recipe: dataEntity) },
+                    urlLink: viewModel.recipe.url,
+                    option1Text: dataEntity?.group == nil ? "recipe.group.add".localized : nil,
+                    option2Text: dataManager.isInShoppingList(dataEntity) ? "Remove from Grocery List" : "Add to grocery list"
+                )
+        }
     }
     
     // MARK: - Photo Selection

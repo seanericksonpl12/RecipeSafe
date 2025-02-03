@@ -17,12 +17,14 @@
 	</array>
 	<key>OpenAIKey</key>
 	<string>$(OPENAI_API_KEY)</string>
+	<key>ServerUrl</key>
+	<string>$(SERVER_API_URL)</string>
 	<key>UILaunchScreen</key>
 	<dict>
-		<key>UIImageRespectsSafeAreaInsets</key>
-		<true/>
 		<key>UIImageName</key>
 		<string>launch-screen</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
 		<key>UILaunchScreen</key>
 		<dict/>
 	</dict>

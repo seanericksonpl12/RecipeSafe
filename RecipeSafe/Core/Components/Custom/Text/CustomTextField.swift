@@ -20,6 +20,7 @@ struct CustomTextField: View {
     let font: Font
     let fontWeight: Font.Weight
     let axis: Axis
+    var onSubmitAction: (String) -> Void = { _ in }
     
     // MARK: - Body
     var body: some View {
@@ -47,8 +48,15 @@ struct CustomTextField: View {
                     .focused($focused)
                     .onSubmit {
                         self.focused = false
+                        onSubmitAction(text)
                     }
             }
         }
+    }
+    
+    func onSubmitAction(_ action: @escaping (String) -> Void) -> Self {
+        var copy = self
+        copy.onSubmitAction = action
+        return copy
     }
 }

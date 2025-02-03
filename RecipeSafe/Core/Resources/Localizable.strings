@@ -9,6 +9,8 @@
 // MARK: - App
 "app.all" = "All Recipes";
 "app.group" = "Groups";
+"app.search" = "Search";
+"app.shopping" = "Shopping List";
 
 // MARK: - TutorialView
 "tutorial.title" = "Adding Recipes";
@@ -54,6 +56,9 @@
 "group.recipes.add" = "Add Recipes";
 "group.default" = "Group";
 "group.new.add" = "Add to a Group?";
+
+// MARK: - SearchView
+"search.nav.title" = "Search";
 
 
 // MARK: - EmptyListView

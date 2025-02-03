@@ -7,15 +7,20 @@
 
 import Foundation
 import SwiftUI
+import Nuke
+import Injector
 
 @MainActor
 class AppViewModel: ObservableObject {
+    // MARK: - Dependencies
+    @GlobalInjected(\.appConfig) var appConfig
+    
     // MARK: - Wrapped
     @Published var tabSelection: Int = 1
     @Published var displayBadSite: Bool = false
     @Published var duplicateFound: Bool = false
     @Published var launchTutorial: Bool = false
-    @Published var contentViewModel: ContentViewModel
+    @Published var allRecipesViewModel: AllRecipesViewModel
     @Published var groupViewModel: GroupGridViewModel
     @Published var viewState: ViewState = .started
     
@@ -24,22 +29,20 @@ class AppViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private var network: NetworkManager = NetworkManager()
-    private var dataManager: DataManager = DataManager()
+    @Service private var dataManager: DataManager!
     private var fetchedRecipe: Recipe?
     private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
     
     // MARK: - Init
-    init(networkManager: NetworkManager = NetworkManager(),
-         dataManager: DataManager = DataManager()) {
-        self.contentViewModel = ContentViewModel()
+    init(networkManager: NetworkManager = NetworkManager()) {
+        self.allRecipesViewModel = AllRecipesViewModel()
         self.groupViewModel = GroupGridViewModel()
         self.network = networkManager
-        self.dataManager = dataManager
         self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
         self.dataManager.appUpdate()
+        Nuke.ImagePipeline.shared = ImagePipeline(configuration: .withDataCache)
     }
-    
 }
 
 // MARK: - URL Open
@@ -77,7 +80,7 @@ extension AppViewModel {
             self.waitingRecipe = newRecipe
             self.waitingDuplicate = duplicate
         } else {
-            newRecipe.dataEntity = dataManager.saveItem(recipe)
+            newRecipe.dataEntity = dataManager.saveItem(recipe)?.objectID
             self.openRecipe(newRecipe)
         }
     }
@@ -87,7 +90,7 @@ extension AppViewModel {
         let groups: [GroupItem] = dataManager.getItems(filter: {_ in true})
         if groups.isEmpty {
             self.tabSelection = 1
-            self.contentViewModel.handleNewRecipe(recipe)
+            self.allRecipesViewModel.handleNewRecipe(recipe)
         } else {
             self.tabSelection = 2
             self.groupViewModel.handleNewRecipe(recipe)
@@ -102,7 +105,7 @@ extension AppViewModel {
         if let dup = waitingDuplicate, deletingDup {
             self.dataManager.deleteItem(dup)
         }
-        self.waitingRecipe.dataEntity = self.dataManager.saveItem(self.waitingRecipe)
+        self.waitingRecipe.dataEntity = self.dataManager.saveItem(self.waitingRecipe)?.objectID
         self.waitingDuplicate = nil
         self.openRecipe(self.waitingRecipe)
     }

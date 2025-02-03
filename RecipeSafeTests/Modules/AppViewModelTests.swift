@@ -22,7 +22,7 @@ final class AppViewModelTests: XCTestCase {
         self.dataStack = PersistenceController(inMemory: true)
         self.dataManager = MockDataManager(viewContext: self.dataStack.container.viewContext)
         self.networkManager = MockNetworkManager()
-        self.viewModel = AppViewModel(networkManager: self.networkManager, dataManager: self.dataManager)
+        self.viewModel = AppViewModel(networkManager: self.networkManager)
         self.url = URL(string: "RecipeSafe://open-recipe?url=www.allrecipes.com/recipe/149975/beer-brats/")
     }
     

@@ -7,53 +7,48 @@
 
 import SwiftUI
 
-struct EditableDescriptionView: View {
+struct EditableDescriptionView< T: EditableRecipeModel>: View {
     
-    // MARK: - Wrapped
-    @Binding var isEditing: Bool
-    @Binding var description: String
-    @Binding var prepTime: String
-    @Binding var cookTime: String
+    @EnvironmentObject var viewModel: T
     
-    // MARK: - Properties
     var optionalDisplay: String?
     
     // MARK: - Body
     var body: some View {
         Section {
             VStack {
-                if !description.isEmpty || isEditing {
-                    CustomTextField(text: $description,
+                if !viewModel.descriptionText.isEmpty || viewModel.editingEnabled {
+                    CustomTextField(text: $viewModel.descriptionText,
                                     prompt: optionalDisplay ?? "",
                                     promptAlign: .center,
                                     staticLabel: nil,
                                     font: .callout,
                                     fontWeight: .light,
                                     axis: .vertical)
-                    .disabled(!isEditing)
+                    .disabled(!viewModel.editingEnabled)
                 }
                 HStack {
                     Spacer()
-                    if !prepTime.isEmpty || isEditing {
-                        CustomTextField(text: $prepTime,
+                    if !viewModel.prepText.isEmpty || viewModel.editingEnabled {
+                        CustomTextField(text: $viewModel.prepText,
                                         prompt: "recipe.preptime.label".localized,
                                         promptAlign: .leading,
                                         staticLabel: "recipe.preptime".localized,
                                         font: .footnote,
                                         fontWeight: .light,
                                         axis: .horizontal)
-                        .disabled(!isEditing)
+                        .disabled(!viewModel.editingEnabled)
                     }
                     Spacer()
-                    if !cookTime.isEmpty || isEditing {
-                        CustomTextField(text: $cookTime,
+                    if !viewModel.cookText.isEmpty || viewModel.editingEnabled {
+                        CustomTextField(text: $viewModel.cookText,
                                         prompt: "recipe.preptime.label".localized,
                                         promptAlign: .leading,
                                         staticLabel: "recipe.cooktime".localized,
                                         font: .footnote,
                                         fontWeight: .light,
                                         axis: .horizontal)
-                        .disabled(!isEditing)
+                        .disabled(!viewModel.editingEnabled)
                     }
                     Spacer()
                 }
