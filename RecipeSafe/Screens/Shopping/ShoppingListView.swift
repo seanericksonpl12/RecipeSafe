@@ -31,28 +31,71 @@ struct ShoppingListView: View {
     @State private var filteredRecipes: [RecipeItem] = []
     @State private var ingredients: [IngredientGroup] = []
     @State private var text: String = ""
+    @State private var showClearAlert = false
     
     var body: some View {
         NavigationStack {
             contentView
             .navigationTitle("Grocery List")
             .environment(\.editMode, .constant(isEditing ? EditMode.active : EditMode.inactive))
-            .toolbar {
-                EditableToolbar(
-                    isEditing: $isEditing,
-                    saveAction: saveChanges,
-                    cancelAction: cancelChanges
-                )
-            }
+            .toolbar { toolbar }
             .sheet(isPresented: $addRecipes) {
                 AddRecipePopover(
                     selectedRecipes: $recipesToAdd,
                     saveAction: saveAddedRecipes,
-                    recipes: Array(recipes)
+                    recipes: Array(recipes.filter({ !filteredRecipes.contains($0) }))
+                )
+            }
+            .alert(isPresented: $showClearAlert) {
+                Alert(
+                    title: Text("Are you sure you want to clear all recipes and ingredients?"),
+                    primaryButton: .destructive(Text("Clear")) {
+                        clearAction()
+                    },
+                    secondaryButton: .cancel()
                 )
             }
             .task {
                 refreshRecipes()
+            }
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        if isEditing {
+            ToolbarItem {
+                Button {
+                    saveChanges()
+                } label: {
+                    Text("button.save".localized)
+                }
+            }
+            ToolbarItem {
+                Button("button.cancel".localized, role: .destructive) {
+                    cancelChanges()
+                }
+            }
+        } else {
+            ToolbarItem {
+                Menu {
+                    Button("button.edit".localized) {
+                        Task { @MainActor in
+                            withAnimation { isEditing = true }
+                        }
+                    }
+                    Button("Reset Selected") {
+                        resetSelected()
+                    }
+                    Button("Clear", role: .destructive) {
+                        clear()
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .frame(width: 40, height: 40)
+                        .contentShape(Rectangle())
+                }
+                
             }
         }
     }
@@ -151,7 +194,7 @@ struct ShoppingListView: View {
                     }
                 }
             } label: {
-                Image(systemName: item.wrappedValue.selected ? "checkmark.circle" : "circle")
+                Image(systemName: item.wrappedValue.selected ? "checkmark.circle.fill" : "circle")
             }
             
             CustomTextField(
@@ -210,6 +253,7 @@ extension ShoppingListView {
         }
         refreshRecipes()
         addRecipes = false
+        recipesToAdd = []
     }
     
     func refreshRecipes() {
@@ -239,6 +283,24 @@ extension ShoppingListView {
         Task { @MainActor in
             withAnimation { isEditing = false }
         }
+    }
+    
+    func resetSelected() {
+        withAnimation {
+            for i in 0..<ingredients.count {
+                ingredients[i].selected = false
+            }
+        }
+        dataManager.save()
+    }
+    
+    func clear() {
+        self.showClearAlert = true
+    }
+    
+    func clearAction() {
+        deleteRecipe(IndexSet(0..<filteredRecipes.count))
+        deleteIngredient(IndexSet(0..<ingredients.count))
     }
 }
 

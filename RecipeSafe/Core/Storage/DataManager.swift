@@ -374,49 +374,15 @@ extension DataManager {
         }
     }
     
-//    func updateShoppingList(entity: RecipeItem?, inList: Bool) {
-//        entity?.inShoppingList = inList
-//        do {
-//            if entity != nil {
-//                print("SAVING ITEM!!!!!")
-//                try self.viewContext.save()
-//            }
-//        } catch {
-//            print(String(describing: error))
-//        }
-//    }
-//    
-//    @MainActor
-//    func updateIngredient(ingredient: Ingredient?, isSelected: Bool) {
-//        ingredient?.selectedInShoppingList = isSelected
-//        do {
-//            if ingredient != nil {
-//                try self.viewContext.save()
-//            }
-//        } catch {
-//            print(String(describing: error))
-//        }
-//    }
-    
-//    @MainActor
-//    func updateIngredientsText(ingredients: [IngredientGroup]) {
-//        for ingredient in ingredients {
-//            print("text: \(ingredient.text)")
-//            ingredient.ingredient.value = ingredient.text
-//        }
-//        
-//        do {
-//            try self.viewContext.save()
-//        } catch {
-//            print(String(describing: error))
-//        }
-//    }
-//    
-//    func updateIngredientList(_ list: [RecipeItem]) {
-//        for recipe in list {
-//            recipe.inShoppingList = true
-//        }
-//        
-//        try? viewContext.save()
-//    }
+    func clearShoppingList() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "ShoppingListItem")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try viewContext.execute(deleteRequest)
+            try viewContext.save()
+        } catch let error as NSError {
+            print("error!: \(error)")
+        }
+    }
 }
