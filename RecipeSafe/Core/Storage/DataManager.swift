@@ -309,9 +309,7 @@ extension DataManager {
 extension DataManager {
     
     func isInShoppingList(_ recipe: RecipeItem?) -> Bool {
-        print("checking if in list")
-        print("recipe: \(recipe?.objectID)")
-        return !(recipe?.shoppinglistitems?.allObjects.isEmpty ?? true)
+        !(recipe?.shoppinglistitems?.allObjects.isEmpty ?? true)
     }
     
     func toggleShoppingList(recipe: RecipeItem?) {

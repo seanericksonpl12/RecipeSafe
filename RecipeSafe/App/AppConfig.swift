@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import Injector
+@preconcurrency import Injector
 
 @Observable
 @Dependency
@@ -44,7 +44,7 @@ extension AppConfig {
             withAnimation(.linear) {
                 state = .loaded
             }
-        case .failure(let failure):
+        case .failure:
             state = .failed
         }
     }

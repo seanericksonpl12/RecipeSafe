@@ -72,12 +72,12 @@ struct TabbedList<Content: View>: View {
                                 .disabled(true)
                                 .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 25))
                                 .hidden()
-                                .onChange(of: textFieldTitle.wrappedValue) { text in
-                                    self.textFieldTitle.wrappedValue = text
-                                    if text.isEmpty {
+                                .onChange(of: textFieldTitle.wrappedValue) { _, new in
+                                    self.textFieldTitle.wrappedValue = new
+                                    if new.isEmpty {
                                         textFieldTitle.wrappedValue = " "
                                     }
-                                    if text.count > 1 && text[text.startIndex] == " " {
+                                    if new.count > 1 && new[new.startIndex] == " " {
                                         textFieldTitle.wrappedValue.removeFirst()
                                     }
                                 }
@@ -87,7 +87,7 @@ struct TabbedList<Content: View>: View {
                                         .zIndex(0)
                                     GeometryReader { proxy in
                                         Color.clear
-                                            .onChange(of: textFieldTitle.wrappedValue) { text in
+                                            .onChange(of: textFieldTitle.wrappedValue) {
                                                 if proxy.size.width >= geo.size.width * 0.9 {
                                                     charLimit = textFieldTitle.wrappedValue.count - 1
                                                 }
