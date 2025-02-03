@@ -6,7 +6,7 @@
 xcuserdata/
 
 ## Secrets
-secrets.plist
+*/secrets.plist
 
 ## Obj-C/Swift specific
 *.hmap
