@@ -21,11 +21,9 @@ struct AnalysisView: View {
     @State private var isImagePickerDisplay = false
     @State private var imageData: Data?
     @State private var isLoading: Bool = false
-    @State private var response: String = ""
     @State private var navPath: NavigationPath = .init()
     @State private var showEvent: Bool = false
     @State private var visionModel: VisionRecipeViewModel?
-    private let vision = VisionService()
     
     var body: some View {
         NavigationStack(path: $navPath) {
@@ -52,8 +50,6 @@ struct AnalysisView: View {
                     self.sourceType = .camera
                     self.isImagePickerDisplay.toggle()
                 }.padding()
-                
-                Text(response)
                 
                 if isLoading {
                     ProgressView()
@@ -97,22 +93,6 @@ struct AnalysisView: View {
         }
     }
     
-    private func makeRequest(_ image: CGImage) async throws {
-        self.isLoading = true
-        defer { self.isLoading = false }
-        
-        vision.run(image: image)
-        //        let request = try RecipeAnalysisRequest(imageData: data)
-        //        let response = await networkManager.executeRequest(request: request, retries: 0)
-        //
-        //        switch response {
-        //        case .success(let success):
-        //            self.response = success.result?.description ?? ""
-        //        case .failure(let failure):
-        //            print("failed with error: \(failure)")
-        //        }
-    }
-    
     private func makeRequest(_ data: Data) async throws {
         self.isLoading = true
         defer { self.isLoading = false }
@@ -133,7 +113,6 @@ struct AnalysisView: View {
                 }
                 self.navPath.append(recipe)
             }
-            self.response = "\(success.title), \(success.description), \(success.ingredients), \(success.instructions)"
         case .failure(let failure):
             print("failed with error: \(failure)")
         }
