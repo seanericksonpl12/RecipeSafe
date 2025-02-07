@@ -48,7 +48,12 @@ extension Network {
         
         urlRequest.httpMethod = request.method?.rawValue
         urlRequest.allHTTPHeaderFields = request.header
-        urlRequest.httpBody = request.body
+        if let body = request.body {
+            urlRequest.httpBody = body
+            if request.header["Content-Type"] == nil {
+                urlRequest.allHTTPHeaderFields?["Content-Type"] = "application/json"
+            }
+        }
         
         do {
             let (data, response) = try await session.data(for: urlRequest)

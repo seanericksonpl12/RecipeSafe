@@ -29,3 +29,20 @@ extension View {
         }
     }
 }
+
+extension View {
+    func temporaryOverlay<Overlay: View>(
+        duration: TimeInterval = 2.0,
+        @ViewBuilder overlay: @escaping () -> Overlay
+    ) -> some View {
+        modifier(TemporaryModifier(overlay: overlay, duration: duration, trigger: .constant(false)))
+    }
+    
+    func temporaryOverlay<Overlay: View>(
+        isPresented: Binding<Bool>,
+        duration: TimeInterval = 2.0,
+        @ViewBuilder overlay: @escaping () -> Overlay
+    ) -> some View {
+        modifier(TemporaryModifier(overlay: overlay, duration: duration, trigger: isPresented))
+    }
+}

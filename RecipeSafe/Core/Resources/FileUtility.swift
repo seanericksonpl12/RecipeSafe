@@ -45,4 +45,11 @@ struct FileUtility {
             return nil
         }
     }
+    
+    static func fetchPlist(name: String) throws -> [String: String] {
+        let path = Bundle.main.path(forResource: name, ofType: "plist")!
+        let url = URL(filePath: path)
+        let data = try Data(contentsOf: url)
+        return try PropertyListDecoder().decode([String: String].self, from: data)
+    }
 }

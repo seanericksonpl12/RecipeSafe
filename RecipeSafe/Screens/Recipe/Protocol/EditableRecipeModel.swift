@@ -35,7 +35,6 @@ protocol EditableRecipeModel: ObservableObject {
     
     
     // MARK: - Functions
-    func saveChanges() async
     func cancelEditing()
     func toggleAlert()
     func deleteFromIngr(offsets: IndexSet)

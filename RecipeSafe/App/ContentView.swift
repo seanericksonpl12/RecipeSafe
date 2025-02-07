@@ -32,13 +32,18 @@ struct ContentView: View {
                     Label("app.shopping".localized, systemImage: "list.clipboard")
                 }
                 .tag(3)
-            
+            AnalysisView()
+                .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
+                .tabItem {
+                    Label("Upload", systemImage: "camera.viewfinder")
+                }
+                .tag(4)
             if viewModel.appConfig.searchAvailable {
                 SearchView(viewModel: SearchViewModel())
                     .tabItem {
                         Label("app.search".localized, systemImage: "globe")
                     }
-                    .tag(4)
+                    .tag(5)
             }
         }
         .onOpenURL { url in
