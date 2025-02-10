@@ -23,6 +23,7 @@ struct AnalysisView: View {
     @State private var isLoading: Bool = false
     @State private var navPath: NavigationPath = .init()
     @State private var showEvent: Bool = false
+    @State private var hideTabBar: Bool = true
     @State private var visionModel: VisionRecipeViewModel?
     
     var body: some View {
@@ -68,7 +69,7 @@ struct AnalysisView: View {
             .navigationDestination(for: Recipe.self) { recipe in
                 if let viewModel = self.visionModel {
                     RecipeView(viewModel: viewModel)
-                        .toolbar(.hidden, for: .tabBar)
+                        .toolbar(self.hideTabBar ? .hidden : .automatic, for: .tabBar)
                         .temporaryOverlay(isPresented: $showEvent, duration: 1.5) {
                             EventIndicatorAlert(text: "Recipe Saved!")
                         }
@@ -124,7 +125,7 @@ struct AnalysisView: View {
                 self.visionModel?.editingEnabled = false
             }
             displaySavedIcon()
-           
+            self.hideTabBar = false
         }
     }
     
