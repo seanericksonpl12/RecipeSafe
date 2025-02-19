@@ -1,48 +1,48 @@
+////
+////  ContentViewModel.swift
+////  RecipeSafe
+////
+////  Created by Sean Erickson on 7/13/23.
+////
 //
-//  ContentViewModel.swift
-//  RecipeSafe
+//import Foundation
+//import SwiftUI
+//import CoreData
 //
-//  Created by Sean Erickson on 7/13/23.
+//class AllRecipesViewModel: ObservableObject {
+//    
+//    // MARK: - Wrapped
+//    @Published var navPath: NavigationPath = .init()
+//    @Published var searchText: String = ""
+//    @Published var customRecipeSheet: Bool = false
+//    
+//    // MARK: - Private Properties
+//    var dataManager: DataManager = DataManager.shared
+//    
+//    // MARK: - Computed Properties
+//    var searchList: (any RandomAccessCollection<RecipeItem>) -> [RecipeItem] {
+//        { [self] list in
+//            if searchText.isEmpty {
+//                return Array(list)
+//            } else {
+//                return list.filter({ $0.title?.lowercased().contains(searchText.lowercased()) ?? false })
+//            }
+//        }
+//    }
+//}
 //
-
-import Foundation
-import SwiftUI
-import CoreData
-
-class AllRecipesViewModel: ObservableObject {
-    
-    // MARK: - Wrapped
-    @Published var navPath: NavigationPath = .init()
-    @Published var searchText: String = ""
-    @Published var customRecipeSheet: Bool = false
-    
-    // MARK: - Private Properties
-    @Service private var dataManager: DataManager!
-    
-    // MARK: - Computed Properties
-    var searchList: (any RandomAccessCollection<RecipeItem>) -> [RecipeItem] {
-        { [self] list in
-            if searchText.isEmpty {
-                return Array(list)
-            } else {
-                return list.filter({ $0.title?.lowercased().contains(searchText.lowercased()) ?? false })
-            }
-        }
-    }
-}
-
-
-// MARK: - Functions
-extension AllRecipesViewModel {
-    
-    func handleNewRecipe(_ recipe: Recipe) {
-        Task { @MainActor in
-            self.navPath = NavigationPath([recipe])
-        }
-    }
-    
-    func deleteItem(offset: IndexSet, list: FetchedResults<RecipeItem>) {
-        dataManager.deleteItem(offset: offset, list: list)
-    }
-}
-
+//
+//// MARK: - Functions
+//extension AllRecipesViewModel {
+//    
+//    func handleNewRecipe(_ recipe: Recipe) {
+//        Task { @MainActor in
+//            self.navPath = NavigationPath([recipe])
+//        }
+//    }
+//    
+//    func deleteItem(offset: IndexSet, list: FetchedResults<RecipeItem>) {
+//        dataManager.deleteItem(offset: offset, list: list)
+//    }
+//}
+//

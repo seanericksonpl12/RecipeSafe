@@ -6,8 +6,131 @@
 //
 
 import Foundation
-import CoreData
+@preconcurrency import CoreData
 import SwiftUI
+
+
+
+
+//struct TestDataService<T: NSManagedObject>: Sendable, Service {
+//    
+//    static var defaultValue: Self { .init(viewContext: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)) }
+//    static var live: Self { .init(viewContext: PersistenceController.shared.container.viewContext) }
+//    static var mock: Self { .init(viewContext: PersistenceController.preview.container.viewContext) }
+//    
+//    var save: @Sendable () throws -> Void
+//    var saveItem: @Sendable (Recipe) throws -> RecipeItem?
+//    var deleteItem: @Sendable (T) throws -> Void
+//    var updateRecipe: @Sendable (inout Recipe) throws -> Void
+//    var deleteDataEntity: @Sendable (Recipe) throws -> Void
+//    var deleteItems: @Sendable (IndexSet, FetchedResults<T>) throws -> Void
+//    var findDuplicates: @Sendable (Recipe) throws -> RecipeItem?
+//    var updateGroup: @Sendable (GroupModel) throws -> Void
+//    
+//    
+//    init(viewContext: NSManagedObjectContext) {
+//        self.save = {
+//            try viewContext.save()
+//        }
+//        
+//        self.saveItem = { recipe in
+//            try TestDataService.saveRecipe(recipe: recipe, viewContext: viewContext)
+//        }
+//        
+//        self.deleteItem = { item in
+//            viewContext.delete(item)
+//            try viewContext.save()
+//        }
+//        
+//        self.deleteItems = { offset, list in
+//            offset.map { list[$0] }
+//                .forEach {
+//                    if let item = $0 as? GroupItem {
+//                        if let recipes = item.recipes?.array as? [RecipeItem] {
+//                            recipes.forEach { $0.group = nil }
+//                        }
+//                    }
+//                    viewContext.delete($0)
+//                }
+//            
+//            try viewContext.save()
+//        }
+//        
+//        self.updateRecipe = { recipe in
+//            guard let id = recipe.dataEntity, let oldEntity = TestDataService.object(with: id, viewContext: viewContext) else { return }
+//            viewContext.delete(oldEntity)
+//            let entity = try TestDataService.saveRecipe(recipe: recipe, viewContext: viewContext)
+//            try viewContext.save()
+//            recipe.dataEntity = entity.objectID
+//        }
+//        
+//        self.deleteDataEntity = { recipe in
+//            if let id = recipe.dataEntity, let entity = TestDataService.object(with: id, viewContext: viewContext) {
+//                viewContext.delete(entity)
+//                try viewContext.save()
+//            }
+//        }
+//        
+//        self.findDuplicates = { recipe in
+//            let request = try viewContext.fetch(NSFetchRequest(entityName: "RecipeItem"))
+//            guard let recipes = request as? [RecipeItem] else { print("casting fail"); throw URLError(.resourceUnavailable) }
+//            
+//            guard let url = recipe.url else { throw URLError(.badURL) }
+//            return recipes.first { $0.url == url }
+//        }
+//        
+//        self.updateGroup = { group in
+//            
+//        }
+//    }
+//    
+//}
+
+//extension TestDataService {
+//    
+//    private static func object(with id: NSManagedObjectID?, viewContext: NSManagedObjectContext) -> T? {
+//        if let id {
+//            return viewContext.object(with: id) as? T
+//        } else {
+//            return nil
+//        }
+//    }
+//    
+//    private static func saveRecipe(recipe: Recipe, viewContext: NSManagedObjectContext) throws -> RecipeItem {
+//        let newRecipe = RecipeItem(context: viewContext)
+//        newRecipe.id = recipe.id
+//        newRecipe.title = recipe.title
+//        newRecipe.desc = recipe.description
+//        newRecipe.cookTime = recipe.cookTime
+//        newRecipe.prepTime = recipe.prepTime
+//        newRecipe.url = recipe.url
+//        newRecipe.ingredients = []
+//        newRecipe.instructions = []
+//        switch recipe.img {
+//        case .downloaded(let url):
+//            newRecipe.imageUrl = url
+//        case .selected(let data):
+//            newRecipe.photoData = data
+//        case .none:
+//            newRecipe.photoData = nil
+//            newRecipe.imageUrl = nil
+//        }
+//        recipe.ingredients.forEach { item in
+//            let i = Ingredient(context: viewContext)
+//            i.value = item
+//            newRecipe.addToIngredients(i)
+//        }
+//        recipe.instructions.forEach { item in
+//            let i = Instruction(context: viewContext)
+//            i.value = item
+//            newRecipe.addToInstructions(i)
+//        }
+//        
+//        try viewContext.save()
+//        return newRecipe
+//    }
+//}
+
 
 class DataManager {
     
@@ -377,7 +500,7 @@ extension DataManager {
     func clearShoppingList() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "ShoppingListItem")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-
+        
         do {
             try viewContext.execute(deleteRequest)
             try viewContext.save()

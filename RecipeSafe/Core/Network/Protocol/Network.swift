@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 protocol Network {
     
@@ -64,20 +65,6 @@ extension Network {
     
     func executeStream<Request: NetworkRequest>(request: Request) async throws -> AsyncCompactMapSequence<AsyncLineSequence<URLSession.AsyncBytes>, Request.Response> {
         
-        // DEBUG!!!!!!
-//        if true {
-//            guard let url = Bundle.main.url(forResource: "teststream", withExtension: "json") else {
-//                print("AHHHH")
-//                throw URLError(.badURL)
-//            }
-//            try await Task.sleep(nanoseconds: 2_000_000_000)
-//            let (bytes, response) = try await URLSession.shared.bytes(for: URLRequest(url: url))
-//            return bytes.lines.compactMap {
-//                try? request.decode(Data($0.utf8))
-//            }
-//            
-//        }
-        
         guard var components = URLComponents(string: request.url) else {
             throw NetworkError.invalidURL("Bad URL: \(request.url)")
         }
@@ -123,4 +110,46 @@ extension Network {
             return .failure(error)
         }
     }
+}
+
+struct NetworkService: Sendable, Service {
+    let fetchData: @Sendable () async throws -> Void
+    let fetchAuthData: @Sendable () async throws -> Void
+    let fetchAuthStream: @Sendable () async throws -> Void
+}
+
+extension NetworkService {
+    static var defaultValue: Self { .mock }
+    
+    static func live(viewContext: NSManagedObjectContext) -> Self {
+        .init(
+            fetchData: {
+                
+            },
+            fetchAuthData: {
+                
+            },
+            fetchAuthStream: {
+                
+            }
+        )
+    }
+    
+    static var mock: Self {
+        .init(
+            fetchData: {
+                
+            },
+            fetchAuthData: {
+                
+            },
+            fetchAuthStream: {
+                
+            }
+        )
+    }
+}
+
+struct NetworkClient {
+    
 }

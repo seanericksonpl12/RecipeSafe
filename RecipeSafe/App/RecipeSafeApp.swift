@@ -12,29 +12,15 @@ struct RecipeSafeApp: App {
     
     // MARK: - ViewModel
     @StateObject private var viewModel = AppViewModel()
-    
-    init() {
-        registerServices()
-    }
 
     // MARK: - Body
     var body: some Scene {
         WindowGroup {
-            Group {
-                if viewModel.appConfig.state == .loading  {
-                    LaunchScreen()
-                        .ignoresSafeArea()
-                } else {
-                    switch viewModel.viewState {
-                    case .started, .successfullyLoaded, .failedToLoad:
-                        ContentView()
-                            .environmentObject(viewModel)
-                          //  .environment(\.dataManager, DataManager())
-                    case .loading:
-                        LoadingView()
-                    }
-                }
-            }.animation(.smooth(duration: 0.5), value: viewModel.appConfig.state)
+            LaunchView()
+                .injectServices()
+                .environmentObject(viewModel)
+                .animation(.smooth(duration: 0.5), value: viewModel.appConfig.state)
+                .environment(\.managedObjectContext, AppEnvironment.shouldMock ? PersistenceController.preview.container.viewContext : PersistenceController.shared.container.viewContext)
         }
     }
 }

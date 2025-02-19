@@ -18,7 +18,7 @@ class CreateRecipeViewModel: EditableRecipeModel {
     @Published var prepText = ""
     
     // MARK: - Private
-    @Service var dataManager: DataManager!
+    var dataManager: DataManager = DataManager.shared
     
     // MARK: - Properties
     var alertSwitch: Bool = false

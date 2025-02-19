@@ -21,7 +21,7 @@ class RecipeViewModel: EditableRecipeModel {
     @Published var groupSwitch: Bool = false
     
     // MARK: - Private
-    @Service var dataManager: DataManager!
+    var dataManager: DataManager = DataManager.shared
     
     // MARK: - Properties
     var dismiss: DismissAction?

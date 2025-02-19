@@ -10,24 +10,20 @@ import SwiftUI
 struct ContentView: View {
     
     @EnvironmentObject var viewModel: AppViewModel
-//    @Service var dataManager: DataManager!
     
     var body: some View {
         TabView(selection: $viewModel.tabSelection) {
-            AllRecipesView(viewModel: viewModel.allRecipesViewModel)
-                .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
+            AllRecipesView(navPath: viewModel.allRecipesNavPath)
                 .tabItem {
                     Label("app.all".localized, systemImage: "line.3.horizontal")
                 }
                 .tag(1)
-            GroupGridView(viewModel: viewModel.groupViewModel)
-                .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
+            GroupGridView()
                 .tabItem {
                     Label("app.group".localized, systemImage: "circlebadge.2")
                 }
                 .tag(2)
             ShoppingListView()
-                .environment(\.managedObjectContext, viewModel.persistenceController.container.viewContext)
                 .tabItem {
                     Label("app.shopping".localized, systemImage: "list.clipboard")
                 }

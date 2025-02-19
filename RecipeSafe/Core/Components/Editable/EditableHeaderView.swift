@@ -17,7 +17,7 @@ struct EditableHeaderView<T: EditableRecipeModel>: View {
     // MARK: - Wrapped Properties
     @State private var photoItem: PhotosPickerItem?
     @State private var tempPhoto: ImageData = .none
-    @Service var dataManager: DataManager!
+    var dataManager: DataManager = DataManager.shared
     @EnvironmentObject var viewModel: T
 
     // MARK: - Properties

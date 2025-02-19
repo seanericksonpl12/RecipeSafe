@@ -23,7 +23,7 @@ class SelectGroupsViewModel: ObservableObject {
     var newRecipe: RecipeItem
     
     // MARK: - Private
-    @Service private var dataManager: DataManager!
+    var dataManager: DataManager = DataManager.shared
     
     // MARK: - Init
     init(

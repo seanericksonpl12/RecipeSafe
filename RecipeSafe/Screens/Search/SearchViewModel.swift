@@ -32,7 +32,7 @@ class SearchViewModel: ObservableObject {
     var randomRecipes: [String] = []
     
     private var network: NetworkManager = NetworkManager()
-    @Service private var dataManager: DataManager!
+    var dataManager: DataManager = DataManager.shared
     private var searchTask: Task<(), Error>?
     private var filterTask: Task<(), Error>?
     private var autoFillValues: [String] = []

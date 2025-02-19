@@ -10,20 +10,31 @@ import CoreData
 
 struct AllRecipesView: View {
     
-    // MARK: - Environment
-    
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn
     ) private var recipeList: FetchedResults<RecipeItem>
     
-    // MARK: - ViewModel
-    @StateObject var viewModel: AllRecipesViewModel
+    @Environment(\.services.recipeData.deleteRecipes) var delete
+    
+    @State var navPath: NavigationPath
+    @State var searchText: String = ""
+    @State var customRecipeSheet: Bool = false
+    
+    var searchList: (any RandomAccessCollection<RecipeItem>) -> [RecipeItem] {
+        { [self] list in
+            if searchText.isEmpty {
+                return Array(list)
+            } else {
+                return list.filter({ $0.title?.lowercased().contains(searchText.lowercased()) ?? false })
+            }
+        }
+    }
     
     // MARK: - Body
     var body: some View {
         
-        NavigationStack(path: $viewModel.navPath) {
+        NavigationStack(path: $navPath) {
             
             if recipeList.isEmpty {
                 EmptyListView(description: "empty.desc.1".localized)
@@ -34,7 +45,7 @@ struct AllRecipesView: View {
                 
                 // MARK: - List
                 List {
-                    ForEach(viewModel.searchList(recipeList), id: \.id) { item in
+                    ForEach(searchList(recipeList), id: \.id) { item in
                         NavigationLink {
                             if let recipe = Recipe(dataItem: item) {
                                 RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
@@ -45,13 +56,12 @@ struct AllRecipesView: View {
                         }
                     }
                     .onDelete {
-                        viewModel.navPath = .init()
-                        viewModel.deleteItem(offset: $0,
-                                             list: recipeList)
+                        navPath = .init()
+                        try? delete($0, recipeList)
                     }
                     .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                     
-                    if viewModel.searchList(recipeList).isEmpty {
+                    if searchList(recipeList).isEmpty {
                         Spacer()
                             .listRowBackground(Color.clear)
                     }
@@ -63,7 +73,7 @@ struct AllRecipesView: View {
                 .toolbar {
                     ToolbarItem {
                         Button{
-                            viewModel.customRecipeSheet = true
+                            customRecipeSheet = true
                         } label: {
                             Label("content.toolbar.add".localized, systemImage: "plus")
                                 .frame(width: 40, height: 40)
@@ -79,8 +89,8 @@ struct AllRecipesView: View {
                     .navigationBarTitleDisplayMode(.inline)
             }
         }
-        .searchable(text: $viewModel.searchText, prompt: "content.search.prompt".localized)
-        .sheet(isPresented: $viewModel.customRecipeSheet) {
+        .searchable(text: $searchText, prompt: "content.search.prompt".localized)
+        .sheet(isPresented: $customRecipeSheet) {
             NavigationView {
                 RecipeView(viewModel: CreateRecipeViewModel(screen: .allRecipes))
             }
@@ -89,8 +99,9 @@ struct AllRecipesView: View {
 }
 
 // MARK: - Preview
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        AllRecipesView(viewModel: AllRecipesViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
+
+#Preview {
+    AllRecipesView(navPath: .init())
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
+

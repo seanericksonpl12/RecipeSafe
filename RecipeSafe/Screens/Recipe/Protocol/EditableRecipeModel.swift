@@ -14,7 +14,7 @@ enum Screen {
 
 protocol EditableRecipeModel: ObservableObject {
     
-    var dataManager: DataManager! { get }
+    var dataManager: DataManager { get }
     
     // MARK: - Properties
     var recipe: Recipe { get set }

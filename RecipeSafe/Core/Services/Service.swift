@@ -6,49 +6,56 @@
 //
 
 import Foundation
+import SwiftUI
+import CoreData
 
-@propertyWrapper
-final class Service<T> {
-    private lazy var _wrappedValue: T? = ServiceRegister.shared.resolveTaggedService()
+protocol Service {
+    static func live(viewContext: NSManagedObjectContext) -> Self
+    static var mock: Self { get }
     
-    var wrappedValue: T? {
-        get { _wrappedValue }
+    static var defaultValue: Self { get }
+}
+
+enum Services {
+    static func resolve<T: Service>(_ service: T.Type = T.self, viewContext: NSManagedObjectContext) -> T {
+        AppEnvironment.shouldMock ? T.mock : T.live(viewContext: viewContext)
     }
 }
 
-final class ServiceRegister: @unchecked Sendable {
-    typealias ServiceFactory = () -> Any
-    private var factories = [String: ServiceFactory]()
-    private var weakInstances = NSMapTable<NSString, AnyObject>.strongToWeakObjects()
-    static let shared = ServiceRegister()
-    
-    private init() {}
+struct ServiceValues: Sendable {
+    var network: NetworkService
+    var recipeData: RecipeDataService
+    var groupData: GroupDataService
 }
 
-extension ServiceRegister {
-    
-    fileprivate func resolveTaggedService<T>() -> T? {
-        let key = ServiceRegister.serviceName(of: T.self)
-        
-        if !(T.self is AnyClass) {
-            return factories[key]?() as? T
-        }
 
-        if let instance = weakInstances.object(forKey: key as NSString) {
-            return instance as? T
-        }
-        guard let obj = factories[key]?() as? T else {
-            return nil
-        }
-        weakInstances.setObject(obj as AnyObject, forKey: key as NSString)
-        return obj
+extension EnvironmentValues {
+    @Entry var services = ServiceValues(
+        network: .defaultValue,
+        recipeData: .defaultValue,
+        groupData: .defaultValue
+    )
+}
+
+private struct InjectServices: ViewModifier {
+    
+    @Environment(\.managedObjectContext) var viewContext
+    
+    private var services: ServiceValues {
+        .init(
+            network: Services.resolve(viewContext: viewContext),
+            recipeData: Services.resolve(viewContext: viewContext),
+            groupData: Services.resolve(viewContext: viewContext)
+        )
     }
     
-    static func addService<T>(_ service: @autoclosure @escaping () -> T) {
-        shared.factories[serviceName(of: T.self)] = service
+    func body(content: Content) -> some View {
+        content.environment(\.services, services)
     }
-    
-    private static func serviceName<T>(of service: T) -> String {
-        "\(type(of: service))"
+}
+
+extension View {
+    func injectServices() -> some View {
+        self.modifier(InjectServices())
     }
 }

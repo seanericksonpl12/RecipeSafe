@@ -20,8 +20,7 @@ class AppViewModel: ObservableObject {
     @Published var displayBadSite: Bool = false
     @Published var duplicateFound: Bool = false
     @Published var launchTutorial: Bool = false
-    @Published var allRecipesViewModel: AllRecipesViewModel
-    @Published var groupViewModel: GroupGridViewModel
+    @Published var allRecipesNavPath: NavigationPath = .init()
     @Published var viewState: ViewState = .started
     
     // MARK: - Persistance
@@ -29,15 +28,13 @@ class AppViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private var network: NetworkManager = NetworkManager()
-    @Service private var dataManager: DataManager!
+    private var dataManager: DataManager = DataManager.shared
     private var fetchedRecipe: Recipe?
     private var waitingRecipe = Recipe()
     private var waitingDuplicate: RecipeItem?
     
     // MARK: - Init
     init(networkManager: NetworkManager = NetworkManager()) {
-        self.allRecipesViewModel = AllRecipesViewModel()
-        self.groupViewModel = GroupGridViewModel()
         self.network = networkManager
         self.launchTutorial = !UserDefaults.standard.hasLaunchedBefore
         self.dataManager.appUpdate()
@@ -86,14 +83,16 @@ extension AppViewModel {
     }
     
     // MARK: - Open Recipe
+    @MainActor
     private func openRecipe(_ recipe: Recipe) {
         let groups: [GroupItem] = dataManager.getItems(filter: {_ in true})
         if groups.isEmpty {
             self.tabSelection = 1
-            self.allRecipesViewModel.handleNewRecipe(recipe)
+            self.allRecipesNavPath = NavigationPath([recipe])
+            
         } else {
             self.tabSelection = 2
-            self.groupViewModel.handleNewRecipe(recipe)
+           // self.groupViewModel.handleNewRecipe(recipe)
         }
     }
 }

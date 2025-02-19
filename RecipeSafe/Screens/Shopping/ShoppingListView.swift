@@ -20,7 +20,7 @@ struct ShoppingListView: View {
     
     @FocusState var focused
     
-    @Service var dataManager: DataManager!
+    var dataManager: DataManager = DataManager.shared
     
     @State var isEditing: Bool = false
 

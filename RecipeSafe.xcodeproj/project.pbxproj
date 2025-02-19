@@ -95,6 +95,10 @@
 		92939FCA2CA43C0A002DE8D0 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92939FC92CA43C0A002DE8D0 /* Dependencies.swift */; };
 		92939FD22CA4F036002DE8D0 /* Injector in Frameworks */ = {isa = PBXBuildFile; productRef = 92939FD12CA4F036002DE8D0 /* Injector */; };
 		929E1E762A87FF9D00A0596D /* GroupGridViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */; };
+		92A044852D652DDF00E0E237 /* RecipeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044842D652DDA00E0E237 /* RecipeDataService.swift */; };
+		92A044872D652FD000E0E237 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044862D652FCD00E0E237 /* CoreDataService.swift */; };
+		92A044892D652FFB00E0E237 /* GroupDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044882D652FF600E0E237 /* GroupDataService.swift */; };
+		92A0448C2D653F1D00E0E237 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A0448B2D653F1A00E0E237 /* LaunchView.swift */; };
 		92BD83A92C87829900C11C09 /* SearchRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BD83A82C87829900C11C09 /* SearchRecipeView.swift */; };
 		92D34D252CAAF17F00BFF22F /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D34D242CAAF17F00BFF22F /* LaunchScreen.swift */; };
 		92D34D272CAB47B600BFF22F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D34D262CAB47B600BFF22F /* Launch Screen.storyboard */; };
@@ -257,6 +261,10 @@
 		92939FC42CA30FC5002DE8D0 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		92939FC92CA43C0A002DE8D0 /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModelTests.swift; sourceTree = "<group>"; };
+		92A044842D652DDA00E0E237 /* RecipeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDataService.swift; sourceTree = "<group>"; };
+		92A044862D652FCD00E0E237 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
+		92A044882D652FF600E0E237 /* GroupDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDataService.swift; sourceTree = "<group>"; };
+		92A0448B2D653F1A00E0E237 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		92BD83A82C87829900C11C09 /* SearchRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecipeView.swift; sourceTree = "<group>"; };
 		92D34D242CAAF17F00BFF22F /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		92D34D262CAB47B600BFF22F /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -474,6 +482,7 @@
 		925DCBE92A61D71C00B84A38 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				92A0448B2D653F1A00E0E237 /* LaunchView.swift */,
 				9266876A2A608C9200117A59 /* RecipeSafeApp.swift */,
 				92E705FB2A8A881600ACA24C /* AppViewModel.swift */,
 				92939FC02CA2F864002DE8D0 /* AppConfig.swift */,
@@ -570,6 +579,7 @@
 		925DCBF12A61D78A00B84A38 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				92A0448A2D6538B400E0E237 /* Service */,
 				926687752A608C9200117A59 /* RecipeSafe.xcdatamodeld */,
 				926687732A608C9200117A59 /* Persistence.swift */,
 				9201F9942A7C250000A6021A /* DataManager.swift */,
@@ -801,6 +811,16 @@
 				92939FC92CA43C0A002DE8D0 /* Dependencies.swift */,
 			);
 			path = Environment;
+			sourceTree = "<group>";
+		};
+		92A0448A2D6538B400E0E237 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				92A044862D652FCD00E0E237 /* CoreDataService.swift */,
+				92A044842D652DDA00E0E237 /* RecipeDataService.swift */,
+				92A044882D652FF600E0E237 /* GroupDataService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 		92E706012A8BB9B300ACA24C /* SelectGroups */ = {
@@ -1036,6 +1056,7 @@
 				92E706002A8A9B8300ACA24C /* SelectGridButton.swift in Sources */,
 				9266879D2A608F6400117A59 /* NetworkManager.swift in Sources */,
 				9272DD1F2A867A7C00DD4549 /* GridButton.swift in Sources */,
+				92A044892D652FFB00E0E237 /* GroupDataService.swift in Sources */,
 				9268BDD02A8E51B300366964 /* TutorialPageView.swift in Sources */,
 				9268BDCA2A8D18C700366964 /* UserDefaultsExtensions.swift in Sources */,
 				92F09A2D2C9CE22F0038A031 /* ViewModel.swift in Sources */,
@@ -1043,6 +1064,7 @@
 				92D34D292CAB495700BFF22F /* ContentView.swift in Sources */,
 				927689612A8FEE69002C1525 /* TabbedList.swift in Sources */,
 				9201F9872A7AF22C00A6021A /* JSONParser.swift in Sources */,
+				92A044872D652FD000E0E237 /* CoreDataService.swift in Sources */,
 				920DA3592A6F053A0086ADB5 /* LoadingView.swift in Sources */,
 				92939FC52CA30FC5002DE8D0 /* AppEnvironment.swift in Sources */,
 				92F09A082C97641B0038A031 /* SearchView.swift in Sources */,
@@ -1053,6 +1075,7 @@
 				9247212C2A75B06500D879CA /* EmptyListView.swift in Sources */,
 				92F09A0C2C98969F0038A031 /* ArrayExtensions.swift in Sources */,
 				92939FCA2CA43C0A002DE8D0 /* Dependencies.swift in Sources */,
+				92A044852D652DDF00E0E237 /* RecipeDataService.swift in Sources */,
 				9201F97D2A7852AE00A6021A /* CreateRecipeViewModel.swift in Sources */,
 				921A75FC2D20BA1300255012 /* EditableGridView.swift in Sources */,
 				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
@@ -1061,6 +1084,7 @@
 				920DA36B2A70270F0086ADB5 /* EditableToolbar.swift in Sources */,
 				926687A22A60A26600117A59 /* Recipe.swift in Sources */,
 				9293177F2A85CFE30089A55D /* GroupView.swift in Sources */,
+				92A0448C2D653F1D00E0E237 /* LaunchView.swift in Sources */,
 				9276895E2A8FC90C002C1525 /* InverseRoundedRectangle.swift in Sources */,
 				9293177A2A85CA180089A55D /* GroupGridView.swift in Sources */,
 				92F09A1E2C9A18930038A031 /* RecentSearchStack.swift in Sources */,
@@ -1285,7 +1309,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
-				DEVELOPMENT_TEAM = CAZY9PB74F;
+				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RecipeSafe/Info.plist;
@@ -1325,7 +1349,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
-				DEVELOPMENT_TEAM = CAZY9PB74F;
+				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RecipeSafe/Info.plist;
@@ -1559,7 +1583,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
-				DEVELOPMENT_TEAM = CAZY9PB74F;
+				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RecipeSafe/Info.plist;
@@ -1720,7 +1744,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
-				DEVELOPMENT_TEAM = CAZY9PB74F;
+				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RecipeSafe/Info.plist;
@@ -1887,7 +1911,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
-				DEVELOPMENT_TEAM = CAZY9PB74F;
+				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RecipeSafe/Info.plist;
@@ -2048,7 +2072,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"RecipeSafe/Preview Content\"";
-				DEVELOPMENT_TEAM = CAZY9PB74F;
+				DEVELOPMENT_TEAM = LT8F54FWJ7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RecipeSafe/Info.plist;

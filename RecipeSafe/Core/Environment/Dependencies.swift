@@ -6,14 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 import Injector
+import CoreData
 
 extension Dependencies {
     var appConfig: AppConfig { resolve() }
 }
 
-extension RecipeSafeApp {
-    func registerServices() {
-        ServiceRegister.addService(DataManager.shared)
-    }
-}
+
