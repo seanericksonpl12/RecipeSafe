@@ -36,15 +36,6 @@ struct GroupView: View {
                 delete: { toggleDelete() },
                 cancel: { cancelChanges() }
             )
-//            .toolbar {
-////                EditableToolbar(
-////                    isEditing: $editingEnabled,
-////                    saveAction: saveChanges,
-////                    cancelAction: cancelChanges,
-////                    deleteAction: toggleDelete
-////                )
-//                EditableToolbar(isEditing: $editingEnabled)
-//            }
         
         // MARK: - Recipes
         TabbedList(textFieldTitle: $group.title,
@@ -54,7 +45,6 @@ struct GroupView: View {
             ForEach(group.recipes) { recipe in
                 if let recipeModel = Recipe(dataItem: recipe) {
                     NavigationLink {
-                        // RecipeView(viewModel: RecipeViewModel(recipe: recipeModel, screen: .groups))
                         RecipeView(recipe: recipeModel, screen: .groups)
                     } label: {
                         Text(recipe.title ?? "")

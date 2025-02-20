@@ -71,14 +71,6 @@ struct SelectGroupsView: View {
                             save: { saveNewGroup() },
                             cancel: { cancelNewGroup() }
                         )
-//                        .toolbar {
-////                            EditableToolbar(
-////                                isEditing: $editBinding,
-////                                saveAction: { saveNewGroup() },
-////                                cancelAction: { cancelNewGroup() }
-////                            )
-//                            EditableToolbar(isEditing: $editBinding)
-//                        }
                     }
                 }
             }

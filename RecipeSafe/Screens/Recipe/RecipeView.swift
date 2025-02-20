@@ -186,13 +186,7 @@ extension RecipeView {
         self.recipeStore.recipe.dataEntity = nil
         dismissView()
     }
-    
-//    func saveRecipe(recipe: Recipe) -> Recipe {
-//        var newRecipe = recipe
-//        newRecipe.dataEntity = try? dataService.save(recipe)?.objectID
-//        return newRecipe
-//    }
-    
+
     func updateRecipe() {
         if screen == .search {
             if let item = try? dataService.findDuplicates(recipeStore.recipe) {
