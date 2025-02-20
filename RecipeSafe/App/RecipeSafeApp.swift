@@ -10,17 +10,14 @@ import SwiftUI
 @main
 struct RecipeSafeApp: App {
     
-    // MARK: - ViewModel
-    @StateObject private var viewModel = AppViewModel()
-
+    let context = AppEnvironment.shouldMock ? PersistenceController.preview.container.viewContext : PersistenceController.shared.container.viewContext
+    let session = URLSession(configuration: .default)
+    
     // MARK: - Body
     var body: some Scene {
         WindowGroup {
             LaunchView()
-                .injectServices()
-                .environmentObject(viewModel)
-                .animation(.smooth(duration: 0.5), value: viewModel.appConfig.state)
-                .environment(\.managedObjectContext, AppEnvironment.shouldMock ? PersistenceController.preview.container.viewContext : PersistenceController.shared.container.viewContext)
+                .injectServices(viewContext: context, client: HttpClient(session: session))
         }
     }
 }

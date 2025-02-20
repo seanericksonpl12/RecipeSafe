@@ -1,15 +1,6 @@
 {
-  "originHash" : "e642caa77140ccdeced2e9152acef2e0fa196ee7eb5cbfce9338bc2747a91511",
+  "originHash" : "b80783f4f7003bd1ce55add0a80b021d0e6156db141d946b632948ed48168233",
   "pins" : [
-    {
-      "identity" : "injector",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/seanericksonpl12/Injector",
-      "state" : {
-        "branch" : "sandbox",
-        "revision" : "bb8950300692a397d8039fc4f7921ece2a2939bd"
-      }
-    },
     {
       "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
@@ -26,15 +17,6 @@
       "state" : {
         "revision" : "0ead44350d2737db384908569c012fe67c421e4d",
         "version" : "12.8.0"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
-      "state" : {
-        "revision" : "64889f0c732f210a935a0ad7cda38f77f876262d",
-        "version" : "509.1.1"
       }
     },
     {

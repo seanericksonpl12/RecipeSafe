@@ -8,6 +8,8 @@
 import Foundation
 import SwiftyJSON
 import CoreData
+import SwiftSoup
+import SwiftyJSON
 
 struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     

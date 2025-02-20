@@ -13,6 +13,7 @@ enum NetworkError: LocalizedError {
     case badResponse(String)
     case failedToDecodeJSON(String)
     case recipeMissingItem(String)
+    case failedWithStatus(Int)
 }
 
 enum DataError: LocalizedError {

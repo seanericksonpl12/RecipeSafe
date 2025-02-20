@@ -6,26 +6,19 @@
 //
 
 import SwiftUI
+import Injector
 
 struct LaunchView: View {
     
-    @EnvironmentObject var viewModel: AppViewModel
+    @Environment(\.services.network.fetchAppConfig) var fetchAppConfig
     
     var body: some View {
-        Group {
-            if viewModel.appConfig.state == .loading  {
-                LaunchScreen()
-                    .ignoresSafeArea()
-            } else {
-                switch viewModel.viewState {
-                case .started, .successfullyLoaded, .failedToLoad:
-                    ContentView()
-                        .environmentObject(viewModel)
-                case .loading:
-                    LoadingView()
-                }
-            }
+        if AppConfig.shared.state == .loading  {
+            LaunchScreen()
+                .ignoresSafeArea()
+                .task { await fetchAppConfig() }
+        } else {
+            ContentView()
         }
-        .animation(.smooth(duration: 0.5), value: viewModel.appConfig.state)
     }
 }

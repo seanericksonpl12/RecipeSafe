@@ -47,7 +47,6 @@ struct AllRecipesView: View {
                     ForEach(searchList(recipeList), id: \.id) { item in
                         NavigationLink {
                             if let recipe = Recipe(dataItem: item) {
-                                // RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
                                 RecipeView(recipe: recipe, screen: .allRecipes)
                                     .navigationBarTitleDisplayMode(.inline)
                             }

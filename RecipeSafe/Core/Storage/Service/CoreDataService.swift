@@ -12,6 +12,8 @@ protocol CoreDataService<Item>: Sendable, Service {
     associatedtype Item: NSManagedObject
     
     var viewContext: NSManagedObjectContext { get }
+    var saveContext: @Sendable () throws -> Void { get }
+    var deleteItem: @Sendable (Item) throws -> Void { get }
     var fetch: @Sendable () throws -> [Item] { get }
     var objectWithId: @Sendable (NSManagedObjectID?) -> Item? { get }
     
@@ -22,16 +24,23 @@ extension CoreDataService {
     static var defaultValue: Self { .init(viewContext: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)) }
     static var mock: Self { .init(viewContext: PersistenceController.preview.container.viewContext) }
     
-    static func live(viewContext: NSManagedObjectContext) -> Self {
+    static func live(viewContext: NSManagedObjectContext, client: NetworkClient) -> Self {
         .init(viewContext: viewContext)
     }
     
-    var fetch: @Sendable () throws -> [Item] {
+    var saveContext: @Sendable () throws -> Void {
+        { try self.viewContext.save() }
+    }
+    
+    var deleteItem: @Sendable (Item) throws -> Void {
         {
-            let request = try self.viewContext.fetch(NSFetchRequest(entityName: Item.description()))
-            guard let items = request as? [Item] else { print("casting fail"); throw URLError(.resourceUnavailable) }
-            return items
+            self.viewContext.delete($0)
+            try self.viewContext.save()
         }
+    }
+    
+    var fetch: @Sendable () throws -> [Item] {
+        { return try self.viewContext.fetchItems() }
     }
     
     var objectWithId: @Sendable (NSManagedObjectID?) -> Item? {

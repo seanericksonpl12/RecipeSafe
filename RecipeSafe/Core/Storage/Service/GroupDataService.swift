@@ -51,11 +51,8 @@ struct GroupDataService: CoreDataService {
 
 extension GroupDataService {
     
-    private static func getNewColor(viewContext: NSManagedObjectContext) throws -> Int16 {
-        let request = try viewContext.fetch(NSFetchRequest(entityName: GroupItem.description()))
-        guard let groups = (request as? [GroupItem]) else {
-            throw URLError(.resourceUnavailable)
-        }
+    static func getNewColor(viewContext: NSManagedObjectContext) throws -> Int16 {
+        let groups: [GroupItem] = try viewContext.fetchItems()
         var colors: [Int16 : Bool] = [1:false,2:false,3:false,4:false,5:false,6:false]
         groups.forEach {
             if $0.imgUrl == nil {
