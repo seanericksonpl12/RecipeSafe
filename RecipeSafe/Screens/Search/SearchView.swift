@@ -83,7 +83,8 @@ struct SearchView: View {
                 Section {
                     ForEach(viewModel.results) { recipe in
                         NavigationLink {
-                            RecipeView(viewModel: RecipeViewModel(recipe: viewModel.checkIfSaved(recipe: recipe), screen: .search))
+                            // RecipeView(viewModel: RecipeViewModel(recipe: viewModel.checkIfSaved(recipe: recipe), screen: .search))
+                            RecipeView(recipe: viewModel.checkIfSaved(recipe: recipe), screen: .search)
                         } label: {
                             SearchRecipeView(recipe: recipe)
                         }

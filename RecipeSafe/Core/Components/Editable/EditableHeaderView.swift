@@ -7,60 +7,78 @@
 
 import SwiftUI
 import PhotosUI
+import CoreData
 
-struct EditableHeaderView<T: EditableRecipeModel>: View {
+struct EditableHeaderView: View {
     
-    @FetchRequest(
-        sortDescriptors: [],
-        animation: nil) private var results: FetchedResults<ShoppingListItem>
+    @FetchRequest(sortDescriptors: []) private var results: FetchedResults<ShoppingListItem>
     
-    // MARK: - Wrapped Properties
+    @Environment(\.services.shoppingListData) var dataService
+    @Environment(\.services.recipeData) var recipeDataService
+    @Environment(\.toolbarActions) var actions
+    
+    @Binding var recipe: Recipe
+    @Binding var editingEnabled: Bool
+    
     @State private var photoItem: PhotosPickerItem?
     @State private var tempPhoto: ImageData = .none
-    var dataManager: DataManager = DataManager.shared
-    @EnvironmentObject var viewModel: T
 
     // MARK: - Properties
     var optionalDisplay: String?
     
+
+    private var newToolbarActions: ToolbarActions {
+        let entity = recipeDataService.objectWithId(recipe.dataEntity)
+        print("group: \(entity?.group)")
+        return ToolbarActions(
+            save: {
+                recipe.img = tempPhoto;
+                try? actions.save()
+            },
+            delete: actions.delete,
+            cancel: {
+                tempPhoto = recipe.img
+                try? actions.cancel()
+            },
+            option1: entity?.group == nil ? actions.option1 : { @Sendable @MainActor in },
+            option2: {
+                dataService.isInList(entity) ? try? dataService.removeRecipeFromList(entity) : try? dataService.addToList(entity)
+            }
+        )
+    }
+    
     // MARK: - Body
     var body: some View {
+        let entity = recipeDataService.objectWithId(recipe.dataEntity)
         HStack {
             Spacer()
 
             PhotosPicker(selection: $photoItem, matching: .images) {
-                IconImage(isEditing: $viewModel.editingEnabled, img: $tempPhoto)
+                IconImage(isEditing: $editingEnabled, img: $tempPhoto)
             }
             .onAppear {
-                self.tempPhoto = viewModel.recipe.img
+                self.tempPhoto = recipe.img
             }
             .onChange(of: photoItem) {
                 pickPhoto()
             }
             .onChange(of: Array(results)) {}
-            .disabled(!viewModel.editingEnabled)
+            .disabled(!editingEnabled)
             
-            TextField("", text: $viewModel.recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
+            TextField("", text: $recipe.title, prompt: Text(optionalDisplay ?? ""), axis: .vertical)
                 .font(.title)
                 .fontWeight(.heavy)
                 .padding()
-                .disabled(!viewModel.editingEnabled)
+                .disabled(!editingEnabled)
             Spacer()
         }
-        .toolbar {
-            let dataEntity: RecipeItem? = dataManager.object(with: viewModel.recipe.dataEntity)
-                EditableToolbar(
-                    isEditing: $viewModel.editingEnabled,
-                    saveAction: { viewModel.recipe.img = tempPhoto; viewModel.saveAction() },
-                    cancelAction: { tempPhoto = viewModel.recipe.img; viewModel.cancelAction() },
-                    deleteAction: viewModel.deleteAction,
-                    option1Action: dataEntity?.group == nil ? viewModel.groupAction : {},
-                    option2Action: { dataManager.toggleShoppingList(recipe: dataEntity) },
-                    urlLink: viewModel.recipe.url,
-                    option1Text: dataEntity?.group == nil ? "recipe.group.add".localized : nil,
-                    option2Text: dataManager.isInShoppingList(dataEntity) ? "Remove from Grocery List" : "Add to grocery list"
-                )
-        }
+        .editableToolbar(
+            isEditing: $editingEnabled,
+            urlLink: recipe.url,
+            option1Text: entity?.group == nil ? "recipe.group.add".localized : nil,
+            option2Text: dataService.isInList(entity) ? "Remove from Grocery List" : "Add to grocery list",
+            actions: newToolbarActions
+        )
     }
     
     // MARK: - Photo Selection
@@ -73,5 +91,4 @@ struct EditableHeaderView<T: EditableRecipeModel>: View {
             }
         }
     }
-    
 }

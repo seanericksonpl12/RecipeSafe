@@ -99,6 +99,8 @@
 		92A044872D652FD000E0E237 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044862D652FCD00E0E237 /* CoreDataService.swift */; };
 		92A044892D652FFB00E0E237 /* GroupDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044882D652FF600E0E237 /* GroupDataService.swift */; };
 		92A0448C2D653F1D00E0E237 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A0448B2D653F1A00E0E237 /* LaunchView.swift */; };
+		92A0448E2D66331600E0E237 /* ShoppingListDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A0448D2D66330F00E0E237 /* ShoppingListDataService.swift */; };
+		92A044902D66395A00E0E237 /* ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A0448F2D66394800E0E237 /* ToolbarActions.swift */; };
 		92BD83A92C87829900C11C09 /* SearchRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BD83A82C87829900C11C09 /* SearchRecipeView.swift */; };
 		92D34D252CAAF17F00BFF22F /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D34D242CAAF17F00BFF22F /* LaunchScreen.swift */; };
 		92D34D272CAB47B600BFF22F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D34D262CAB47B600BFF22F /* Launch Screen.storyboard */; };
@@ -265,6 +267,8 @@
 		92A044862D652FCD00E0E237 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		92A044882D652FF600E0E237 /* GroupDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDataService.swift; sourceTree = "<group>"; };
 		92A0448B2D653F1A00E0E237 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
+		92A0448D2D66330F00E0E237 /* ShoppingListDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListDataService.swift; sourceTree = "<group>"; };
+		92A0448F2D66394800E0E237 /* ToolbarActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarActions.swift; sourceTree = "<group>"; };
 		92BD83A82C87829900C11C09 /* SearchRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecipeView.swift; sourceTree = "<group>"; };
 		92D34D242CAAF17F00BFF22F /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		92D34D262CAB47B600BFF22F /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -817,6 +821,7 @@
 			isa = PBXGroup;
 			children = (
 				92A044862D652FCD00E0E237 /* CoreDataService.swift */,
+				92A0448D2D66330F00E0E237 /* ShoppingListDataService.swift */,
 				92A044842D652DDA00E0E237 /* RecipeDataService.swift */,
 				92A044882D652FF600E0E237 /* GroupDataService.swift */,
 			);
@@ -835,6 +840,7 @@
 		92F099F82C94F1BE0038A031 /* Toolbars */ = {
 			isa = PBXGroup;
 			children = (
+				92A0448F2D66394800E0E237 /* ToolbarActions.swift */,
 				920DA36A2A70270F0086ADB5 /* EditableToolbar.swift */,
 				92F099F92C94F1D30038A031 /* SaveableToolbar.swift */,
 			);
@@ -1038,6 +1044,7 @@
 				925DCBF52A65FBFC00B84A38 /* RecipeView.swift in Sources */,
 				9272A7CE2CAE0BC50098724F /* ShoppingListView.swift in Sources */,
 				920DA3652A70225E0086ADB5 /* EditableHeaderView.swift in Sources */,
+				92A044902D66395A00E0E237 /* ToolbarActions.swift in Sources */,
 				92E706032A8BBA9B00ACA24C /* SelectGroupsViewModel.swift in Sources */,
 				929316FA2A816BF30089A55D /* AllRecipesView.swift in Sources */,
 				9201F9852A7AF14800A6021A /* RecipeJSONParser.swift in Sources */,
@@ -1077,6 +1084,7 @@
 				92939FCA2CA43C0A002DE8D0 /* Dependencies.swift in Sources */,
 				92A044852D652DDF00E0E237 /* RecipeDataService.swift in Sources */,
 				9201F97D2A7852AE00A6021A /* CreateRecipeViewModel.swift in Sources */,
+				92A0448E2D66331600E0E237 /* ShoppingListDataService.swift in Sources */,
 				921A75FC2D20BA1300255012 /* EditableGridView.swift in Sources */,
 				920DA3572A6EED7E0086ADB5 /* StringExtensions.swift in Sources */,
 				92F09A0F2C98C5400038A031 /* RecipeImageRequest.swift in Sources */,

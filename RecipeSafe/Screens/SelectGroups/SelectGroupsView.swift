@@ -66,13 +66,19 @@ struct SelectGroupsView: View {
                             recipes: [newRecipe],
                             allowSelection: false, color: ColorSet.color(newGroupColor)
                         )
-                        .toolbar {
-                            EditableToolbar(
-                                isEditing: $editBinding,
-                                saveAction: { saveNewGroup() },
-                                cancelAction: { cancelNewGroup() }
-                            )
-                        }
+                        .editableToolbar(
+                            isEditing: $editBinding,
+                            save: { saveNewGroup() },
+                            cancel: { cancelNewGroup() }
+                        )
+//                        .toolbar {
+////                            EditableToolbar(
+////                                isEditing: $editBinding,
+////                                saveAction: { saveNewGroup() },
+////                                cancelAction: { cancelNewGroup() }
+////                            )
+//                            EditableToolbar(isEditing: $editBinding)
+//                        }
                     }
                 }
             }

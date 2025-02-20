@@ -26,15 +26,7 @@ struct ServiceValues: Sendable {
     var network: NetworkService
     var recipeData: RecipeDataService
     var groupData: GroupDataService
-}
-
-
-extension EnvironmentValues {
-    @Entry var services = ServiceValues(
-        network: .defaultValue,
-        recipeData: .defaultValue,
-        groupData: .defaultValue
-    )
+    var shoppingListData: ShoppingListDataService
 }
 
 private struct InjectServices: ViewModifier {
@@ -45,7 +37,8 @@ private struct InjectServices: ViewModifier {
         .init(
             network: Services.resolve(viewContext: viewContext),
             recipeData: Services.resolve(viewContext: viewContext),
-            groupData: Services.resolve(viewContext: viewContext)
+            groupData: Services.resolve(viewContext: viewContext),
+            shoppingListData: Services.resolve(viewContext: viewContext)
         )
     }
     

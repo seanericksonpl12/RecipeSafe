@@ -18,7 +18,7 @@ struct ContentView: View {
                     Label("app.all".localized, systemImage: "line.3.horizontal")
                 }
                 .tag(1)
-            GroupGridView()
+            GroupGridView(navPath: $viewModel.groupNavPath, newRecipe: $viewModel.newRecipe, newRecipeSwitch: $viewModel.newRecipeSwitch)
                 .tabItem {
                     Label("app.group".localized, systemImage: "circlebadge.2")
                 }
@@ -38,6 +38,7 @@ struct ContentView: View {
             }
         }
         .onOpenURL { url in
+            print("opening...")
             self.viewModel.onURLOpen(url: url)
         }
         .alert("content.alert.fail.title".localized, isPresented: $viewModel.displayBadSite) {

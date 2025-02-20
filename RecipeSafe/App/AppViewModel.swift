@@ -21,6 +21,9 @@ class AppViewModel: ObservableObject {
     @Published var duplicateFound: Bool = false
     @Published var launchTutorial: Bool = false
     @Published var allRecipesNavPath: NavigationPath = .init()
+    @Published var groupNavPath: NavigationPath = .init()
+    @Published var newRecipe: Recipe? = nil
+    @Published var newRecipeSwitch: Bool = false
     @Published var viewState: ViewState = .started
     
     // MARK: - Persistance
@@ -89,9 +92,13 @@ extension AppViewModel {
         if groups.isEmpty {
             self.tabSelection = 1
             self.allRecipesNavPath = NavigationPath([recipe])
-            
         } else {
             self.tabSelection = 2
+            self.groupNavPath = .init()
+            self.newRecipe = recipe
+            Task { @MainActor in
+                self.newRecipeSwitch = true
+            }
            // self.groupViewModel.handleNewRecipe(recipe)
         }
     }

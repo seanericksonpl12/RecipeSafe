@@ -14,4 +14,19 @@ extension Dependencies {
     var appConfig: AppConfig { resolve() }
 }
 
-
+extension EnvironmentValues {
+    @Entry var services = ServiceValues(
+        network: .defaultValue,
+        recipeData: .defaultValue,
+        groupData: .defaultValue,
+        shoppingListData: .defaultValue
+    )
+    
+    @Entry var toolbarActions = ToolbarActions(
+        save: {},
+        delete: {},
+        cancel: {},
+        option1: {},
+        option2: {}
+    )
+}

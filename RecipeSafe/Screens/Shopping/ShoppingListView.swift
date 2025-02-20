@@ -214,7 +214,8 @@ struct ShoppingListView: View {
     func customRecipeItem(_ index: Int, _ item: Binding<RecipeItem>) -> some View {
         if let recipe = Recipe(dataItem: item.wrappedValue) {
             NavigationLink(recipe.title) {
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+                // RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+                RecipeView(recipe: recipe, screen: .allRecipes)
             }
         }
     }

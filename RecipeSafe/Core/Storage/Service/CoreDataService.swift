@@ -13,6 +13,7 @@ protocol CoreDataService<Item>: Sendable, Service {
     
     var viewContext: NSManagedObjectContext { get }
     var fetch: @Sendable () throws -> [Item] { get }
+    var objectWithId: @Sendable (NSManagedObjectID?) -> Item? { get }
     
     init(viewContext: NSManagedObjectContext)
 }
@@ -30,6 +31,13 @@ extension CoreDataService {
             let request = try self.viewContext.fetch(NSFetchRequest(entityName: Item.description()))
             guard let items = request as? [Item] else { print("casting fail"); throw URLError(.resourceUnavailable) }
             return items
+        }
+    }
+    
+    var objectWithId: @Sendable (NSManagedObjectID?) -> Item? {
+        { id in
+            guard let id else { return nil }
+            return viewContext.object(with: id) as? Item
         }
     }
 }

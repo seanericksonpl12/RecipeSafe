@@ -21,17 +21,19 @@ struct GroupGridView: View {
     ) private var recipes: FetchedResults<RecipeItem>
     
     @Environment(\.services.groupData) var groupDataService
-    @Environment(\.services.recipeData.addToGroup) var addRecipeToGroup
+    @Environment(\.services.recipeData) var recipeDataService
     
-    @State var navPath: NavigationPath = .init()
+    @Binding var navPath: NavigationPath
+    @Binding var newRecipe: Recipe?
+    @Binding var newRecipeSwitch: Bool
+    
     @State var editingEnabled: Bool = false
     @State var addGroupSwitch: Bool = false
     @State var deleteGroupSwitch: Bool = false
-    @State var newRecipeSwitch: Bool = false
     @State var newGroupText: String = ""
     @State var selectedRecipes: [RecipeItem] = []
     @State var newGroupColor: Int16?
-    @State var newRecipe: Recipe?
+    
     @State private var onDeckToDelete: GroupItem?
     
     // MARK: - Body
@@ -97,7 +99,7 @@ struct GroupGridView: View {
                 GroupView(group: GroupModel(dataEntity: group))
             }
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .groups))
+                RecipeView(recipe: recipe, screen: .groups)
             }
             .navigationBarTitleDisplayMode(.inline)
             
@@ -111,17 +113,15 @@ struct GroupGridView: View {
                                     selectedRecipes: $selectedRecipes,
                                     recipes: Array(recipes),
                                     color: ColorSet.color(newGroupColor))
-                    .toolbar {
-                        EditableToolbar(
-                            isEditing: $editingEnabled,
-                            saveAction: { saveNewGroup() },
-                            cancelAction: { cancelNewGroup() }
-                        )
-                    }
+                    .editableToolbar(
+                        isEditing: $editingEnabled,
+                        save: { saveNewGroup() },
+                        cancel: { cancelNewGroup() }
+                    )
                 }
             }
             .popover(isPresented: $newRecipeSwitch) {
-                if let recipeId = newRecipe?.dataEntity, let recipe = groupDataService.viewContext.object(with: recipeId) as? RecipeItem {
+                if let recipeId = newRecipe?.dataEntity, let recipe = recipeDataService.objectWithId(recipeId) {
                     SelectGroupsView(
                         selectionAction: selectGroup,
                         cancelAction: cancel,
@@ -144,7 +144,7 @@ extension GroupGridView {
         self.newRecipeSwitch = false
         guard let recipe = self.newRecipe else { return }
         
-        try? addRecipeToGroup(recipe, group)
+        try? recipeDataService.addToGroup(recipe, group)
         Task { @MainActor in
             self.navPath.append(group)
             self.navPath.append(recipe)

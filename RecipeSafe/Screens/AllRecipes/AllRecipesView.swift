@@ -11,8 +11,7 @@ import CoreData
 struct AllRecipesView: View {
     
     @FetchRequest(
-        sortDescriptors: [SortDescriptor(\.title)],
-        animation: .easeIn
+        sortDescriptors: [SortDescriptor(\.title)]
     ) private var recipeList: FetchedResults<RecipeItem>
     
     @Environment(\.services.recipeData.deleteRecipes) var delete
@@ -48,7 +47,8 @@ struct AllRecipesView: View {
                     ForEach(searchList(recipeList), id: \.id) { item in
                         NavigationLink {
                             if let recipe = Recipe(dataItem: item) {
-                                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+                                // RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+                                RecipeView(recipe: recipe, screen: .allRecipes)
                                     .navigationBarTitleDisplayMode(.inline)
                             }
                         } label: {
@@ -85,14 +85,14 @@ struct AllRecipesView: View {
             
             // MARK: - Navigation
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+                RecipeView(recipe: recipe, screen: .allRecipes)
                     .navigationBarTitleDisplayMode(.inline)
             }
         }
         .searchable(text: $searchText, prompt: "content.search.prompt".localized)
         .sheet(isPresented: $customRecipeSheet) {
             NavigationView {
-                RecipeView(viewModel: CreateRecipeViewModel(screen: .allRecipes))
+                RecipeView(recipe: Recipe(), screen: .allRecipes, createNew: true)
             }
         }
     }
