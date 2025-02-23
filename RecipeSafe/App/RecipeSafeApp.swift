@@ -10,31 +10,14 @@ import SwiftUI
 @main
 struct RecipeSafeApp: App {
     
-    // MARK: - ViewModel
-    @StateObject private var viewModel = AppViewModel()
+    let context = AppEnvironment.shouldMock ? PersistenceController.preview.container.viewContext : PersistenceController.shared.container.viewContext
+    let session = URLSession(configuration: .default)
     
-    init() {
-        registerServices()
-    }
-
     // MARK: - Body
     var body: some Scene {
         WindowGroup {
-            Group {
-                if viewModel.appConfig.state == .loading  {
-                    LaunchScreen()
-                        .ignoresSafeArea()
-                } else {
-                    switch viewModel.viewState {
-                    case .started, .successfullyLoaded, .failedToLoad:
-                        ContentView()
-                            .environmentObject(viewModel)
-                          //  .environment(\.dataManager, DataManager())
-                    case .loading:
-                        LoadingView()
-                    }
-                }
-            }.animation(.smooth(duration: 0.5), value: viewModel.appConfig.state)
+            LaunchView()
+                .injectServices(viewContext: context, client: HttpClient(session: session))
         }
     }
 }

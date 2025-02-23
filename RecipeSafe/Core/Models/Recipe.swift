@@ -8,19 +8,21 @@
 import Foundation
 import SwiftyJSON
 import CoreData
+import SwiftSoup
+import SwiftyJSON
 
 struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     
     // MARK: - Properties
-    var id: UUID = UUID()
+    let id: UUID
     var title: String
     var ingredients: [String]
     var img: ImageData
     var url: URL?
-    var description: String?
+    var description: String
     var instructions: [String]
-    var prepTime: String?
-    var cookTime: String?
+    var prepTime: String
+    var cookTime: String
     var dataEntity: NSManagedObjectID?
     var realId: String { self.url?.absoluteString ?? self.id.uuidString }
     
@@ -37,9 +39,9 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
         self.title = title
         self.ingredients = ingredientArr.map { $0.value! }
         self.instructions = instructionArr.map { $0.value! }
-        self.description = dataItem.desc
-        self.cookTime = dataItem.cookTime
-        self.prepTime = dataItem.prepTime
+        self.description = dataItem.desc ?? ""
+        self.cookTime = dataItem.cookTime ?? ""
+        self.prepTime = dataItem.prepTime ?? ""
         self.url = dataItem.url
         self.dataEntity = dataItem.objectID
         if let data = dataItem.photoData {
@@ -53,10 +55,14 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     
     // MARK: - Empty Init
     init() {
+        self.id = UUID()
         self.title = ""
         self.ingredients = []
         self.instructions = []
         self.img = .none
+        self.description = ""
+        self.prepTime = ""
+        self.cookTime = ""
     }
     
     // MARK: - General Init
@@ -68,22 +74,23 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
          url: URL?,
          prepTime: String?,
          cookTime: String?) {
-        
+        self.id = UUID()
         self.title = title
-        self.description = description
+        self.description = description ?? ""
         self.ingredients = ingredients
         self.instructions = instructions
         self.img = img
         self.url = url
-        self.prepTime = prepTime
-        self.cookTime = cookTime
+        self.prepTime = prepTime ?? ""
+        self.cookTime = cookTime ?? ""
     }
     
     // MARK: - Coding Init
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = UUID()
         self.title = try container.decodeIfPresent(String.self, forKey: .title)?.recipeFormatted() ?? container.decode(String.self, forKey: .name).recipeFormatted()
-        self.description = try container.decodeIfPresent(String.self, forKey: .description)?.recipeFormatted()
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)?.recipeFormatted() ?? ""
         self.ingredients = try container.decode(Array<String>.self, forKey: .ingredients).map { $0.recipeFormatted() }
         self.instructions = try container.decode(Array<DecodableInstruction>.self, forKey: .instructions).compactMap { $0.text?.recipeFormatted() }
         if let str = try container.decodeIfPresent(String.self, forKey: .thumbnail), let imgUrl = URL(string: str) {
@@ -92,13 +99,8 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
             self.img = .none
         }
         self.url = URL(string: try container.decodeIfPresent(String.self, forKey: .url) ?? "")
-        self.cookTime = try container.decodeIfPresent(String.self, forKey: .cook_time)?.recipeFormatted()
-        self.prepTime = try container.decodeIfPresent(String.self, forKey: .prep_time)?.recipeFormatted()
-    }
-    
-    // MARK: - Protocol Functions
-    static func == (lhs: Recipe, rhs: Recipe) -> Bool {
-        lhs.id == rhs.id
+        self.cookTime = try container.decodeIfPresent(String.self, forKey: .cook_time)?.recipeFormatted() ?? ""
+        self.prepTime = try container.decodeIfPresent(String.self, forKey: .prep_time)?.recipeFormatted() ?? ""
     }
     
     func hash(into hasher: inout Hasher) {

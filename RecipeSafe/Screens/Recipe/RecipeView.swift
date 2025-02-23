@@ -8,75 +8,179 @@
 import SwiftUI
 import CoreData
 
-struct RecipeView<T: EditableRecipeModel>: View {
+struct RecipeView: View {
+    
+    enum Screen {
+        case allRecipes, groups, search
+    }
     
     // MARK: - Environment
     @Environment(\.dismiss) private var dismissView
+    @Environment(\.services.recipeData) private var dataService
     
-    @Service var dataManager: DataManager!
+    @State var recipe: Recipe
+    @State var editingEnabled: Bool
+    @State var alertSwitch: Bool = false
+    @State var groupSwitch: Bool = false
     
-    // MARK: - ViewModel
-    @StateObject var viewModel: T
+    let screen: Screen
+    let createNew: Bool
+    
+    init(recipe: Recipe, screen: Screen, createNew: Bool = false) {
+        self.recipe = recipe
+        self.screen = screen
+        self.editingEnabled = createNew
+        self.createNew = createNew
+        if createNew {
+            if self.recipe.ingredients.isEmpty { self.recipe.ingredients = [""] }
+            if self.recipe.instructions.isEmpty { self.recipe.instructions = [""] }
+        }
+    }
+    
+    var toolbarActions: ToolbarActions {
+        .init(
+            save: {
+                createNew ? saveNewRecipe() : saveChanges()
+            },
+            delete: { if !createNew { self.alertSwitch = true } },
+            cancel: { createNew ?  dismissView() : cancelChanges() },
+            option1: { if !createNew { self.groupSwitch = true } }
+        )
+    }
     
     // MARK: - Body
     var body: some View {
         
         VStack {
-            EditableHeaderView<T>(optionalDisplay: "create.display.title".localized)
-                .environmentObject(viewModel)
+            EditableHeaderView(recipe: $recipe, editingEnabled: $editingEnabled, optionalDisplay: "create.display.title".localized)
                 .onTapGesture {
                     hideKeyboard()
                 }
             
             List {
-                if !viewModel.descriptionText.isEmpty {
-                    EditableDescriptionView<T>(optionalDisplay: "create.display.desc".localized)
-                        .environmentObject(viewModel)
-                        .onTapGesture {
-                            hideKeyboard()
-                        }
+                if !recipe.description.isEmpty || editingEnabled {
+                    EditableDescriptionView(
+                        recipe: $recipe,
+                        editingEnabled: $editingEnabled,
+                        optionalDisplay: "create.display.desc".localized
+                    )
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
                 }
-                if !viewModel.recipe.ingredients.isEmpty || viewModel.editingEnabled {
-                    EditableSectionView(list: $viewModel.recipe.ingredients,
-                                        isEditing: $viewModel.editingEnabled,
-                                        headerText: "recipe.ingredients.title".localized,
-                                        deleteAction: { viewModel.deleteFromIngr(offsets: $0) },
-                                        addAction: { viewModel.recipe.ingredients.insert("", at: 0) },
-                                        optionalDisplay: "recipe.ingredients.new".localized)
+                if !recipe.ingredients.isEmpty || editingEnabled {
+                    EditableSectionView(
+                        list: $recipe.ingredients,
+                        isEditing: $editingEnabled,
+                        headerText: "recipe.ingredients.title".localized,
+                        deleteAction: { self.recipe.ingredients.remove(atOffsets: $0) },
+                        addAction: { recipe.ingredients.insert("", at: 0) },
+                        optionalDisplay: "recipe.ingredients.new".localized
+                    )
                 }
-                if !viewModel.recipe.instructions.isEmpty || viewModel.editingEnabled {
-                    EditableSectionView(list: $viewModel.recipe.instructions,
-                                        isEditing: $viewModel.editingEnabled,
-                                        headerText: "recipe.instructions.title".localized,
-                                        numbered: true,
-                                        deleteAction: { viewModel.deleteFromInst(offsets: $0) },
-                                        addAction: { viewModel.recipe.instructions.append("") },
-                                        optionalDisplay: "recipe.instructions.new".localized)
+                if !recipe.instructions.isEmpty || editingEnabled {
+                    EditableSectionView(
+                        list: $recipe.instructions,
+                        isEditing: $editingEnabled,
+                        headerText: "recipe.instructions.title".localized,
+                        numbered: true,
+                        deleteAction: { self.recipe.instructions.remove(atOffsets: $0) },
+                        addAction: { recipe.instructions.append("") },
+                        optionalDisplay: "recipe.instructions.new".localized
+                    )
                 }
                 
             }
-            .alert("recipe.alert.delete.title".localized, isPresented: $viewModel.alertSwitch) {
+            .alert("recipe.alert.delete.title".localized, isPresented: $alertSwitch) {
                 Button("button.delete".localized, role: .destructive) {
-                    viewModel.deleteSelf()
+                    deleteSelf()
                 }
                 Button("button.cancel".localized, role: .cancel){}
             } message: {
                 Text("recipe.alert.delete.desc".localized)
             }
-            .popover(isPresented: $viewModel.groupSwitch) {
-                if let recipeItem: RecipeItem = dataManager.object(with: viewModel.recipe.dataEntity) {
-                    SelectGroupsView(viewModel: SelectGroupsViewModel(selectionAction: { viewModel.addToGroup($0); viewModel.groupSwitch = false },
-                                                                      cancelAction: { viewModel.groupSwitch = false },
-                                                                      newRecipe: recipeItem))
+            .popover(isPresented: $groupSwitch) {
+                if let recipeItem: RecipeItem = dataService.getItem(recipe.dataEntity) {
+                    SelectGroupsView(
+                        selectionAction: {
+                            try? dataService.addToGroup(self.recipe, $0)
+                            groupSwitch = false
+                        },
+                        cancelAction: {
+                            groupSwitch = false
+                        },
+                        newRecipe: recipeItem
+                    )
                 }
             }
-            .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+            .environment(\.editMode, .constant(editingEnabled ? EditMode.active : EditMode.inactive))
+           
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                viewModel.updateRecipe()
-                viewModel.setup(dismiss: dismissView)
+                updateRecipe()
+            }
+        }
+        .environment(\.toolbarActions, toolbarActions)
+    }
+    
+}
+
+extension RecipeView {
+
+    @MainActor
+    func saveChanges() {
+        withAnimation {
+            self.editingEnabled = false
+        }
+        self.recipe.instructions.removeAll { $0 == "" }
+        self.recipe.ingredients.removeAll { $0 == "" }
+        try? dataService.update(&self.recipe)
+    }
+    
+    func saveNewRecipe() {
+        if recipe.title == "" { recipe.title = "recipe.title.new".localized }
+        if recipe.instructions.contains("") { recipe.instructions.removeAll(where: {$0 == ""}) }
+        if recipe.ingredients.contains("") { recipe.ingredients.removeAll(where: {$0 == ""}) }
+        print("about to save \(recipe)")
+        let _ = try? dataService.save(self.recipe)
+        dismissView()
+    }
+    
+    func cancelChanges() {
+        Task { @MainActor in
+            withAnimation {
+                self.editingEnabled = false
+            }
+        }
+        let entity: RecipeItem? = dataService.objectWithId(self.recipe.dataEntity)
+        self.recipe.title = entity?.title ?? self.recipe.title
+        self.recipe.description = entity?.desc ?? ""
+        if let data = entity?.photoData { self.recipe.img = .selected(data) }
+        
+        guard var ingredientArr = entity?.ingredients?.array as? [Ingredient] else { return }
+        guard var instructionArr = entity?.instructions?.array as? [Instruction] else { return }
+        ingredientArr = ingredientArr.filter { $0.value != nil }
+        instructionArr = instructionArr.filter { $0.value != nil }
+        
+        self.recipe.ingredients = ingredientArr.map { $0.value! }
+        self.recipe.instructions = instructionArr.map { $0.value! }
+    }
+    
+    func deleteSelf() {
+        try? dataService.delete(self.recipe)
+        self.recipe.dataEntity = nil
+        dismissView()
+    }
+
+    func updateRecipe() {
+        if screen == .search {
+            if let item = try? dataService.findDuplicates(recipe) {
+                var new = recipe
+                new.dataEntity = item.objectID
+                self.recipe = new
+            } else {
+                self.recipe.dataEntity = nil
             }
         }
     }
-    
 }

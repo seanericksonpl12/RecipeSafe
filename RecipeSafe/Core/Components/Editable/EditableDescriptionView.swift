@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct EditableDescriptionView< T: EditableRecipeModel>: View {
+struct EditableDescriptionView: View {
     
-    @EnvironmentObject var viewModel: T
+    @Binding var recipe: Recipe
+    @Binding var editingEnabled: Bool
     
     var optionalDisplay: String?
     
@@ -17,38 +18,44 @@ struct EditableDescriptionView< T: EditableRecipeModel>: View {
     var body: some View {
         Section {
             VStack {
-                if !viewModel.descriptionText.isEmpty || viewModel.editingEnabled {
-                    CustomTextField(text: $viewModel.descriptionText,
-                                    prompt: optionalDisplay ?? "",
-                                    promptAlign: .center,
-                                    staticLabel: nil,
-                                    font: .callout,
-                                    fontWeight: .light,
-                                    axis: .vertical)
-                    .disabled(!viewModel.editingEnabled)
+                if !recipe.description.isEmpty || editingEnabled {
+                    CustomTextField(
+                        text: $recipe.description,
+                        prompt: optionalDisplay ?? "",
+                        promptAlign: .center,
+                        staticLabel: nil,
+                        font: .callout,
+                        fontWeight: .light,
+                        axis: .vertical
+                    )
+                    .disabled(!editingEnabled)
                 }
                 HStack {
                     Spacer()
-                    if !viewModel.prepText.isEmpty || viewModel.editingEnabled {
-                        CustomTextField(text: $viewModel.prepText,
-                                        prompt: "recipe.preptime.label".localized,
-                                        promptAlign: .leading,
-                                        staticLabel: "recipe.preptime".localized,
-                                        font: .footnote,
-                                        fontWeight: .light,
-                                        axis: .horizontal)
-                        .disabled(!viewModel.editingEnabled)
+                    if !recipe.prepTime.isEmpty || editingEnabled {
+                        CustomTextField(
+                            text: $recipe.prepTime,
+                            prompt: "recipe.preptime.label".localized,
+                            promptAlign: .leading,
+                            staticLabel: "recipe.preptime".localized,
+                            font: .footnote,
+                            fontWeight: .light,
+                            axis: .horizontal
+                        )
+                        .disabled(!editingEnabled)
                     }
                     Spacer()
-                    if !viewModel.cookText.isEmpty || viewModel.editingEnabled {
-                        CustomTextField(text: $viewModel.cookText,
-                                        prompt: "recipe.preptime.label".localized,
-                                        promptAlign: .leading,
-                                        staticLabel: "recipe.cooktime".localized,
-                                        font: .footnote,
-                                        fontWeight: .light,
-                                        axis: .horizontal)
-                        .disabled(!viewModel.editingEnabled)
+                    if !recipe.cookTime.isEmpty || editingEnabled {
+                        CustomTextField(
+                            text: $recipe.cookTime,
+                            prompt: "recipe.preptime.label".localized,
+                            promptAlign: .leading,
+                            staticLabel: "recipe.cooktime".localized,
+                            font: .footnote,
+                            fontWeight: .light,
+                            axis: .horizontal
+                        )
+                        .disabled(!editingEnabled)
                     }
                     Spacer()
                 }

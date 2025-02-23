@@ -61,7 +61,8 @@ class ShareViewController: UIViewController {
         
         while responder != nil {
             if let app = responder as? UIApplication, app.responds(to: #selector(openURL(_:))) {
-                return app.perform(#selector(openURL(_:)), with: url) != nil
+                app.open(url)
+                return true
             }
             responder = responder?.next
         }

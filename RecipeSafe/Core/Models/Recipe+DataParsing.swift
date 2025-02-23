@@ -9,44 +9,15 @@ import Foundation
 import SwiftSoup
 import SwiftyJSON
 
-class RecipeJSONParser: JSONParser {
+extension Recipe {
     
-    // MARK: - Properties
-    var data: Data
-    private let scriptTag: String = "script[type=application/ld+json]"
+    private static let scriptTag: String = "script[type=application/ld+json]"
     
-    // MARK: - Init
-    init(data: Data) {
-        self.data = data
-    }
-    
-    // MARK: - Parse Function
-    func parse<Recipe>() throws -> Recipe {
+    static func fromHtml(_ data: Data) throws -> Recipe {
         guard let html = String(data: data, encoding: .utf8) else {
             throw URLError(.cannotDecodeRawData)
         }
-        guard let recipe = try soupify(html: html) as? Recipe else {
-            throw NetworkError.failedToDecodeJSON("Could not convert to Recipe")
-        }
-        return recipe
-    }
-    
-    // Backend parsing
-    func parseFromJSON() throws -> Recipe {
-        let json = try JSON(data: self.data, options: .fragmentsAllowed)
-        let dict = searchFor(keys: JSONKeys.allCases.map({$0.rawValue}),
-                                   excluding: ["review", "author"],
-                                   json: json)
         
-        return try createRecipe(json: dict)
-    }
-}
-
-// MARK: - Private Helpers
-extension RecipeJSONParser {
-    
-    // MARK: - Webscraping
-    private func soupify(html: String) throws -> Recipe {
         let doc: Document = try SwiftSoup.parse(html)
         let scripts = try doc.select(scriptTag).first()?.data()
         guard let jsonString = scripts?.data(using: .utf8, allowLossyConversion: false) else {
@@ -60,8 +31,21 @@ extension RecipeJSONParser {
         return try createRecipe(json: dict)
     }
     
+    static func parseFromJSON(data: Data) throws -> Recipe {
+        let json = try JSON(data: data, options: .fragmentsAllowed)
+        let dict = searchFor(keys: JSONKeys.allCases.map({$0.rawValue}),
+                                   excluding: ["review", "author"],
+                                   json: json)
+        
+        return try createRecipe(json: dict)
+    }
+}
+
+// MARK: - Private Helpers
+extension Recipe {
+    
     // MARK: - JSON Search
-    private func searchFor(keys: [String],
+    private static func searchFor(keys: [String],
                            excluding: [String] = [],
                            json: JSON) -> [String: JSON] {
         
@@ -93,7 +77,7 @@ extension RecipeJSONParser {
     }
     
     // MARK: - JSON Cleaning
-    private func createRecipe(json: [String:JSON]) throws -> Recipe {
+    private static func createRecipe(json: [String:JSON]) throws -> Recipe {
         guard let title: String =
                 json[RecipeKeys.title.rawValue]?
             .stringValue
@@ -177,14 +161,16 @@ extension RecipeJSONParser {
             throw NetworkError.recipeMissingItem("One or more properties are empty")
         }
         
-        return Recipe(title: title,
-                      description: description,
-                      ingredients: ingrd,
-                      instructions: instructions,
-                      img: img,
-                      url: nil,
-                      prepTime: prep,
-                      cookTime: cook)
+        return Self(
+            title: title,
+            description: description,
+            ingredients: ingrd,
+            instructions: instructions,
+            img: img,
+            url: nil,
+            prepTime: prep,
+            cookTime: cook
+        )
     }
     
     // MARK: - Keys

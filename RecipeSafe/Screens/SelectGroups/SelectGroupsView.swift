@@ -10,13 +10,22 @@ import SwiftUI
 struct SelectGroupsView: View {
     
     // MARK: - Environment
-    @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var groups: FetchedResults<GroupItem>
     
-    // MARK: - ViewModel
-    @StateObject var viewModel: SelectGroupsViewModel
+    @Environment(\.services.groupData) var groupDataService
+    
+    @State var editBinding: Bool = true
+    @State var notEditBinding: Bool = false
+    @State var newGroupSwitch: Bool = false
+    @State var newGroupText: String = ""
+    @State var selectedRecipes: [RecipeItem] = []
+    @State var newGroupColor: Int16?
+    
+    let selectionAction: (GroupItem) -> Void
+    let cancelAction: () -> Void
+    let newRecipe: RecipeItem
     
     // MARK: - Body
     var body: some View {
@@ -30,18 +39,18 @@ struct SelectGroupsView: View {
                             .padding()
                         Spacer()
                         Button("button.cancel".localized) {
-                            viewModel.cancelAction()
+                            cancelAction()
                         }
                         .padding()
                     }
                     // MARK: - Grid
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: (geo.size.width / 2.75)))]) {
-                            InsertGridButton(insertAction: { viewModel.addNewGroup() }, width: (geo.size.width / 2.75), height: (geo.size.width / 2.75))
+                            InsertGridButton(insertAction: { addNewGroup() }, width: (geo.size.width / 2.75), height: (geo.size.width / 2.75))
                             ForEach(groups) { item in
-                                GridButton(isEditing: $viewModel.notEditBinding, geoProxy: geo, group: item, deleteAction: {})
+                                GridButton(isEditing: $notEditBinding, geoProxy: geo, group: item, deleteAction: {})
                                     .onTapGesture {
-                                        viewModel.selectionAction(item)
+                                        selectionAction(item)
                                     }
                             }
                         }
@@ -49,24 +58,52 @@ struct SelectGroupsView: View {
                     .scrollContentBackground(.hidden)
                     .applyAppBackground(proxy: geo)
                 }
-                .popover(isPresented: $viewModel.newGroupSwitch) {
+                .popover(isPresented: $newGroupSwitch) {
                     NavigationStack {
                         NewGroupPopover(
-                            titleText: $viewModel.newGroupText,
-                            selectedRecipes: $viewModel.selectedRecipes,
-                            recipes: [viewModel.newRecipe],
-                            allowSelection: false, color: ColorSet.color(viewModel.newGroupColor)
+                            titleText: $newGroupText,
+                            selectedRecipes: $selectedRecipes,
+                            recipes: [newRecipe],
+                            allowSelection: false, color: ColorSet.color(newGroupColor)
                         )
-                        .toolbar {
-                            EditableToolbar(
-                                isEditing: $viewModel.editBinding,
-                                saveAction: { self.viewModel.saveNewGroup()}, 
-                                cancelAction: {self.viewModel.cancelNewGroup()}
-                            )
-                        }
+                        .editableToolbar(
+                            isEditing: $editBinding,
+                            save: { saveNewGroup() },
+                            cancel: { cancelNewGroup() }
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+extension SelectGroupsView {
+    
+    func addNewGroup() {
+        self.newGroupColor = try? groupDataService.getNewColor()
+        self.newGroupSwitch.toggle()
+    }
+    
+    func saveNewGroup() {
+        let newGroup = (title: newGroupText, recipes: selectedRecipes, color: self.newGroupColor)
+        try? groupDataService.create(newGroup)
+        newGroupSwitch = false
+        let groups: [GroupItem] = groups.filter { group in
+            if let recipes = group.recipes?.array as? [RecipeItem] {
+                return group.title == self.newGroupText && recipes == self.selectedRecipes
+            }
+            return false
+        }
+        newGroupText = ""
+        newGroupColor = nil
+        guard let group = groups.first else { return }
+        selectionAction(group)
+    }
+    
+    func cancelNewGroup() {
+        self.newGroupText = ""
+        self.newGroupSwitch = false
+        self.newGroupColor = nil
     }
 }

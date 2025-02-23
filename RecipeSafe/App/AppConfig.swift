@@ -7,17 +7,19 @@
 
 import Foundation
 import SwiftUI
-@preconcurrency import Injector
 
+@MainActor
 @Observable
-@Dependency
 final class AppConfig: Sendable {
-    
-    static let defaultValue: (any Dependency) = AppConfig()
     
     enum LoadState {
         case loaded, loading, failed
     }
+    
+    private init() {}
+    
+    static let shared = AppConfig()
+    
     
     private(set) var state: LoadState = .loading
     private(set) var model: AppConfigModel? = nil
@@ -25,28 +27,13 @@ final class AppConfig: Sendable {
     // TODO: - Return Model value once search functionality is ready
     var searchAvailable: Bool { false }
     
-    init() {
-        Task {
-            await fetchAppConfig()
-        }
+    func load(model: AppConfigModel) {
+        self.model = model
+        self.state = .loaded
     }
-}
-
-
-extension AppConfig {
     
-    private func fetchAppConfig() async {
-        let network = NetworkManager(configuration: .ephemeral)
-        let result = await network.executeRequest(request: AppConfigRequest(), retries: 1)
-        switch result {
-        case .success(let appconfig):
-            model = appconfig
-            withAnimation(.linear) {
-                state = .loaded
-            }
-        case .failure:
-            state = .failed
-        }
+    func loadFailed() {
+        self.state = .failed
     }
 }
 

@@ -16,12 +16,16 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         for i in 0..<10 {
             let newItem = RecipeItem(context: viewContext)
-            newItem.title = "Recipe"
+            newItem.title = "Recipe Number \(i)"
             let i1 = Ingredient(context: viewContext)
+            i1.value = "ingredient 1"
             let i2 = Ingredient(context: viewContext)
+            i2.value = "ingredient 2"
             let in1 = Instruction(context: viewContext)
+            in1.value = "step 1"
             let in2 = Instruction(context: viewContext)
-            newItem.desc = "Description"
+            in2.value = "step 2"
+            newItem.desc = "Description of recipe \(i)"
             newItem.ingredients = [i1, i2]
             newItem.instructions = [in1, in2]
         }

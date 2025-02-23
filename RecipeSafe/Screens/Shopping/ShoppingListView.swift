@@ -18,9 +18,9 @@ struct ShoppingListView: View {
         sortDescriptors: [SortDescriptor(\.title)],
         animation: .easeIn) private var recipes: FetchedResults<RecipeItem>
     
-    @FocusState var focused
+    @Environment(\.services.shoppingListData) var dataService
     
-    @Service var dataManager: DataManager!
+    @FocusState var focused
     
     @State var isEditing: Bool = false
 
@@ -137,7 +137,7 @@ struct ShoppingListView: View {
                             ) {
                                 self.focused = false
                                 if !self.text.removingWhitespace().isEmpty {
-                                    dataManager.addShoppingListItem($0, index: Int16(shoppingList.count))
+                                    try? dataService.createAndAdd($0, Int16(shoppingList.count))
                                     refreshRecipes()
                                 }
                                 withAnimation { addNewIngredient = false }
@@ -190,7 +190,7 @@ struct ShoppingListView: View {
                     }
                     if index < shoppingList.count {
                         shoppingList[index].selected.toggle()
-                        dataManager.save()
+                        try? dataService.saveContext()
                     }
                 }
             } label: {
@@ -214,7 +214,8 @@ struct ShoppingListView: View {
     func customRecipeItem(_ index: Int, _ item: Binding<RecipeItem>) -> some View {
         if let recipe = Recipe(dataItem: item.wrappedValue) {
             NavigationLink(recipe.title) {
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+                // RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
+                RecipeView(recipe: recipe, screen: .allRecipes)
             }
         }
     }
@@ -232,7 +233,7 @@ extension ShoppingListView {
         for index in indexSet {
             guard self.filteredRecipes.count > index else { continue }
             let recipe = self.filteredRecipes.remove(at: index)
-            dataManager.removeFromShoppingList(recipe: recipe)
+            try? dataService.removeRecipeFromList(recipe)
         }
         refreshRecipes()
     }
@@ -241,15 +242,15 @@ extension ShoppingListView {
         let list = Array(shoppingList)
         for index in indexSet {
             guard let item = list.safeValue(at: index) else { continue }
-            dataManager.removeFromShoppingList(shoppingListItem: item)
+            try? dataService.removeItemFromList(item)
         }
         refreshRecipes()
     }
 
     func saveAddedRecipes() {
         for recipe in recipesToAdd {
-            guard !dataManager.isInShoppingList(recipe) else { continue }
-            dataManager.addToShoppingList(recipe: recipe)
+            guard !dataService.isInList(recipe) else { continue }
+            try? dataService.addToList(recipe)
         }
         refreshRecipes()
         addRecipes = false
@@ -270,7 +271,7 @@ extension ShoppingListView {
         for item in ingredients {
             item.shoppingListItem.value = item.text
         }
-        dataManager.save()
+        try? dataService.saveContext()
         withAnimation { isEditing = false }
     }
     
@@ -291,7 +292,7 @@ extension ShoppingListView {
                 ingredients[i].selected = false
             }
         }
-        dataManager.save()
+        try? dataService.saveContext()
     }
     
     func clear() {

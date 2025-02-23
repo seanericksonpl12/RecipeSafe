@@ -10,20 +10,38 @@ import SwiftUI
 struct GroupGridView: View {
     
     // MARK: - Environment
-    @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [SortDescriptor(\.title)],
-        animation: .easeIn) private var groups: FetchedResults<GroupItem>
+        animation: .easeIn
+    ) private var groups: FetchedResults<GroupItem>
     
-    // MARK: - ViewModel
-    @StateObject var viewModel: GroupGridViewModel
+    @FetchRequest(
+        sortDescriptors: [],
+        predicate: NSPredicate(format: "group == nil")
+    ) private var recipes: FetchedResults<RecipeItem>
+    
+    @Environment(\.services.groupData) var groupDataService
+    @Environment(\.services.recipeData) var recipeDataService
+    
+    @Binding var navPath: NavigationPath
+    @Binding var newRecipe: Recipe?
+    @Binding var newRecipeSwitch: Bool
+    
+    @State var editingEnabled: Bool = false
+    @State var addGroupSwitch: Bool = false
+    @State var deleteGroupSwitch: Bool = false
+    @State var newGroupText: String = ""
+    @State var selectedRecipes: [RecipeItem] = []
+    @State var newGroupColor: Int16?
+    
+    @State private var onDeckToDelete: GroupItem?
     
     // MARK: - Body
     var body: some View {
-        NavigationStack(path: $viewModel.navPath) {
+        NavigationStack(path: $navPath) {
             GeometryReader { geo in
                 // MARK: - Empty View
-                if groups.isEmpty && !viewModel.editingEnabled {
+                if groups.isEmpty && !editingEnabled {
                     EmptyListView(description: "empty.desc.2".localized)
                         .frame(width: geo.size.width, height: geo.size.height)
                 }
@@ -31,25 +49,26 @@ struct GroupGridView: View {
                 // MARK: - Grid
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: (CGFloat(geo.size.width) / 2.75)))]) {
-                        if viewModel.editingEnabled {
-                            InsertGridButton(insertAction: { viewModel.addGroup() },
+                        if editingEnabled {
+                            InsertGridButton(insertAction: { addGroup() },
                                              width: (geo.size.width / 2.75),
                                              height: (geo.size.width / 2.75))
                         }
                         ForEach(groups) { item in
-                            if viewModel.editingEnabled {
-                                GridButton(isEditing: $viewModel.editingEnabled,
+                            if editingEnabled {
+                                GridButton(isEditing: $editingEnabled,
                                            geoProxy: geo,
                                            group: item,
-                                           deleteAction: { self.viewModel.toggleDeleteGroup(item) })
+                                           deleteAction: { toggleDeleteGroup(item) })
                             } else {
                                 NavigationLink {
-                                    GroupView(viewModel: GroupViewModel(group: item))
+                                    GroupView(group: GroupModel(dataEntity: item))
                                 } label: {
-                                    GridButton(isEditing: $viewModel.editingEnabled,
+                                    GridButton(isEditing: $editingEnabled,
                                                geoProxy: geo,
                                                group: item,
-                                               deleteAction: {self.viewModel.toggleDeleteGroup(item)})
+                                               deleteAction: { toggleDeleteGroup(item) }
+                                    )
                                 }
                             }
                         }
@@ -59,7 +78,7 @@ struct GroupGridView: View {
                 }
                 
                 // MARK: - Background
-                .scrollDisabled(groups.isEmpty && !viewModel.editingEnabled)
+                .scrollDisabled(groups.isEmpty && !editingEnabled)
                 .scrollContentBackground(.hidden)
                 .applyAppBackground(proxy: geo, isShown: !groups.isEmpty)
             }
@@ -67,8 +86,8 @@ struct GroupGridView: View {
             // MARK: - Toolbar
             .toolbar {
                 ToolbarItem {
-                    Button(viewModel.editingEnabled ? "button.done".localized : "button.edit".localized) {
-                        viewModel.toggleEdit()
+                    Button(editingEnabled ? "button.done".localized : "button.edit".localized) {
+                        toggleEdit()
                     }
                     .frame(width: 60, height: 60)
                     .contentShape(Rectangle())
@@ -77,45 +96,113 @@ struct GroupGridView: View {
             
             // MARK: - Navigation
             .navigationDestination(for: GroupItem.self) { group in
-                GroupView(viewModel: GroupViewModel(group: group, newRecipe: viewModel.newRecipe))
+                GroupView(group: GroupModel(dataEntity: group))
             }
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .groups))
+                RecipeView(recipe: recipe, screen: .groups)
             }
             .navigationBarTitleDisplayMode(.inline)
             
             // MARK: - Environment
-            .environment(\.editMode, .constant(viewModel.editingEnabled ? EditMode.active : EditMode.inactive))
+            .environment(\.editMode, .constant(editingEnabled ? EditMode.active : EditMode.inactive))
             
             // MARK: - Popups
-            .popover(isPresented: $viewModel.addGroupSwitch) {
+            .popover(isPresented: $addGroupSwitch) {
                 NavigationStack {
-                    NewGroupPopover(titleText: $viewModel.newGroupText,
-                                    selectedRecipes: $viewModel.selectedRecipes,
-                                    recipes: viewModel.getRecipes(),
-                                    color: ColorSet.color(viewModel.newGroupColor))
-                    .toolbar {
-                        EditableToolbar(
-                            isEditing: $viewModel.editingEnabled,
-                            saveAction: { self.viewModel.saveNewGroup() },
-                            cancelAction: { self.viewModel.cancelNewGroup() }
-                        )
-                    }
+                    NewGroupPopover(titleText: $newGroupText,
+                                    selectedRecipes: $selectedRecipes,
+                                    recipes: Array(recipes),
+                                    color: ColorSet.color(newGroupColor))
+                    .editableToolbar(
+                        isEditing: $editingEnabled,
+                        save: { saveNewGroup() },
+                        cancel: { cancelNewGroup() }
+                    )
                 }
             }
-            .popover(isPresented: $viewModel.newRecipeSwitch) {
-                if let recipeId = viewModel.newRecipe?.dataEntity, let recipe = viewContext.object(with: recipeId) as? RecipeItem {
-                    SelectGroupsView(viewModel: SelectGroupsViewModel(selectionAction: viewModel.selectionAction,
-                                                                      cancelAction: viewModel.cancelAction,
-                                                                      newRecipe: recipe))
-                    .environment(\.managedObjectContext, self.viewContext)
+            .popover(isPresented: $newRecipeSwitch) {
+                if let recipeId = newRecipe?.dataEntity, let recipe = recipeDataService.objectWithId(recipeId) {
+                    SelectGroupsView(
+                        selectionAction: selectGroup,
+                        cancelAction: cancel,
+                        newRecipe: recipe
+                    )
                 }
             }
-            .alert("group.alert.delete".localized, isPresented: $viewModel.deleteGroupSwitch) {
+            .alert("group.alert.delete".localized, isPresented: $deleteGroupSwitch) {
                 Button("button.delete".localized, role: .destructive) {
-                    viewModel.deleteOnDeck()
+                    deleteOnDeck()
                 }
             }
+        }
+    }
+}
+
+extension GroupGridView {
+    
+    func selectGroup(_ group: GroupItem) {
+        self.newRecipeSwitch = false
+        guard let recipe = self.newRecipe else { return }
+        
+        try? recipeDataService.addToGroup(recipe, group)
+        Task { @MainActor in
+            self.navPath.append(group)
+            self.navPath.append(recipe)
+        }
+    }
+    
+    func cancel() {
+        self.newRecipeSwitch = false
+        guard let recipe = self.newRecipe else { return }
+        Task {  @MainActor in
+            self.navPath.append(recipe)
+        }
+    }
+    
+    func toggleEdit() {
+        withAnimation { self.editingEnabled.toggle() }
+    }
+    
+    func addGroup() {
+        self.newGroupText = ""
+        self.selectedRecipes = []
+        self.newGroupColor = try? groupDataService.getNewColor()
+        withAnimation { addGroupSwitch = true }
+    }
+    
+    func toggleDeleteGroup(_ group: GroupItem) {
+        self.deleteGroupSwitch = true
+        self.onDeckToDelete = group
+    }
+    
+    func deleteOnDeck() {
+        if let item = self.onDeckToDelete {
+            groupDataService.viewContext.delete(item)
+        }
+    }
+    
+    func saveNewGroup() {
+        let newGroup = (title: newGroupText, recipes: selectedRecipes, color: self.newGroupColor)
+        try? groupDataService.create(newGroup)
+        addGroupSwitch = false
+    }
+    
+    func cancelNewGroup() {
+        addGroupSwitch = false
+        newGroupText = ""
+        newGroupColor = nil
+        selectedRecipes = []
+    }
+}
+
+// MARK: - New Recipe Handling
+extension GroupGridView {
+    
+    func handleNewRecipe(_ recipe: Recipe) {
+        self.navPath = .init()
+        self.newRecipe = recipe
+        Task { @MainActor in
+            self.newRecipeSwitch = true
         }
     }
 }
