@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Injector
 
 struct LaunchView: View {
     
