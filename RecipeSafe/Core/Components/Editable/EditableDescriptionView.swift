@@ -9,9 +9,7 @@ import SwiftUI
 
 struct EditableDescriptionView: View {
     
-    @Binding var descriptionText: String
-    @Binding var prepText: String
-    @Binding var cookText: String
+    @Binding var recipe: Recipe
     @Binding var editingEnabled: Bool
     
     var optionalDisplay: String?
@@ -20,9 +18,9 @@ struct EditableDescriptionView: View {
     var body: some View {
         Section {
             VStack {
-                if !descriptionText.isEmpty || editingEnabled {
+                if !recipe.description.isEmpty || editingEnabled {
                     CustomTextField(
-                        text: $descriptionText,
+                        text: $recipe.description,
                         prompt: optionalDisplay ?? "",
                         promptAlign: .center,
                         staticLabel: nil,
@@ -34,9 +32,9 @@ struct EditableDescriptionView: View {
                 }
                 HStack {
                     Spacer()
-                    if !prepText.isEmpty || editingEnabled {
+                    if !recipe.prepTime.isEmpty || editingEnabled {
                         CustomTextField(
-                            text: $prepText,
+                            text: $recipe.prepTime,
                             prompt: "recipe.preptime.label".localized,
                             promptAlign: .leading,
                             staticLabel: "recipe.preptime".localized,
@@ -47,9 +45,9 @@ struct EditableDescriptionView: View {
                         .disabled(!editingEnabled)
                     }
                     Spacer()
-                    if !cookText.isEmpty || editingEnabled {
+                    if !recipe.cookTime.isEmpty || editingEnabled {
                         CustomTextField(
-                            text: $cookText,
+                            text: $recipe.cookTime,
                             prompt: "recipe.preptime.label".localized,
                             promptAlign: .leading,
                             staticLabel: "recipe.cooktime".localized,

@@ -463,7 +463,7 @@
 		925DCBEA2A61D72200B84A38 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				92939FC62CA43B7D002DE8D0 /* Dependencies */,
+				92939FC62CA43B7D002DE8D0 /* Environment */,
 				925DCBF02A61D75400B84A38 /* Components */,
 				925DCBEF2A61D74B00B84A38 /* Extensions */,
 				925DCBEE2A61D74400B84A38 /* Network */,
@@ -747,13 +747,13 @@
 			path = Group;
 			sourceTree = "<group>";
 		};
-		92939FC62CA43B7D002DE8D0 /* Dependencies */ = {
+		92939FC62CA43B7D002DE8D0 /* Environment */ = {
 			isa = PBXGroup;
 			children = (
 				92939FC42CA30FC5002DE8D0 /* AppEnvironment.swift */,
 				9272A7D72CAED5990098724F /* Service.swift */,
 			);
-			path = Dependencies;
+			path = Environment;
 			sourceTree = "<group>";
 		};
 		92A0448A2D6538B400E0E237 /* Service */ = {

@@ -17,7 +17,7 @@ protocol Service {
 }
 
 enum Services {
-    static func resolve<T: Service>(_ service: T.Type = T.self, viewContext: NSManagedObjectContext, client: HttpClient) -> T {
+    static func resolve<T: Service>(_ service: T.Type = T.self, viewContext: NSManagedObjectContext, client: NetworkClient) -> T {
         AppEnvironment.shouldMock ? T.mock : T.live(viewContext: viewContext, client: client)
     }
 }
@@ -51,7 +51,7 @@ extension EnvironmentValues {
 private struct InjectServices: ViewModifier {
     
     let viewContext: NSManagedObjectContext
-    let client: HttpClient
+    let client: NetworkClient
     
     private var services: ServiceValues {
         .init(
@@ -71,7 +71,7 @@ private struct InjectServices: ViewModifier {
 }
 
 extension View {
-    func injectServices(viewContext: NSManagedObjectContext, client: HttpClient) -> some View {
+    func injectServices(viewContext: NSManagedObjectContext, client: NetworkClient) -> some View {
         self.modifier(InjectServices(viewContext: viewContext, client: client))
     }
 }

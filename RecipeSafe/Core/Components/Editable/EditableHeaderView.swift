@@ -29,7 +29,6 @@ struct EditableHeaderView: View {
 
     private var newToolbarActions: ToolbarActions {
         let entity = recipeDataService.objectWithId(recipe.dataEntity)
-        print("group: \(entity?.group)")
         return ToolbarActions(
             save: {
                 recipe.img = tempPhoto;

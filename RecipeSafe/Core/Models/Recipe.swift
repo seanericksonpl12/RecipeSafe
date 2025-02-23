@@ -14,7 +14,7 @@ import SwiftyJSON
 struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     
     // MARK: - Properties
-    var id: UUID = UUID()
+    let id: UUID
     var title: String
     var ingredients: [String]
     var img: ImageData
@@ -55,6 +55,7 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     
     // MARK: - Empty Init
     init() {
+        self.id = UUID()
         self.title = ""
         self.ingredients = []
         self.instructions = []
@@ -73,7 +74,7 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
          url: URL?,
          prepTime: String?,
          cookTime: String?) {
-        
+        self.id = UUID()
         self.title = title
         self.description = description ?? ""
         self.ingredients = ingredients
@@ -87,6 +88,7 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
     // MARK: - Coding Init
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = UUID()
         self.title = try container.decodeIfPresent(String.self, forKey: .title)?.recipeFormatted() ?? container.decode(String.self, forKey: .name).recipeFormatted()
         self.description = try container.decodeIfPresent(String.self, forKey: .description)?.recipeFormatted() ?? ""
         self.ingredients = try container.decode(Array<String>.self, forKey: .ingredients).map { $0.recipeFormatted() }
@@ -99,11 +101,6 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
         self.url = URL(string: try container.decodeIfPresent(String.self, forKey: .url) ?? "")
         self.cookTime = try container.decodeIfPresent(String.self, forKey: .cook_time)?.recipeFormatted() ?? ""
         self.prepTime = try container.decodeIfPresent(String.self, forKey: .prep_time)?.recipeFormatted() ?? ""
-    }
-    
-    // MARK: - Protocol Functions
-    static func == (lhs: Recipe, rhs: Recipe) -> Bool {
-        lhs.id == rhs.id
     }
     
     func hash(into hasher: inout Hasher) {
@@ -130,9 +127,4 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
 
 struct DecodableInstruction: Codable {
     var text: String?
-}
-
-class RecipeStore: ObservableObject {
-    @Published var recipe: Recipe
-    init(recipe: Recipe) { self.recipe = recipe }
 }
