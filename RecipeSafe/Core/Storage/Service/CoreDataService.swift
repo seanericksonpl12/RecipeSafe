@@ -24,8 +24,8 @@ extension CoreDataService {
     static var defaultValue: Self { .init(viewContext: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)) }
     static var mock: Self { .init(viewContext: PersistenceController.preview.container.viewContext) }
     
-    static func live(viewContext: NSManagedObjectContext, client: NetworkClient) -> Self {
-        .init(viewContext: viewContext)
+    static func live(_ dependencies: ServiceDependencies) -> Self {
+        .init(viewContext: dependencies.viewContext)
     }
     
     var saveContext: @Sendable () throws -> Void {

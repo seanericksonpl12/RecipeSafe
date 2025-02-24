@@ -33,6 +33,7 @@ protocol NetworkClient: Sendable {
 }
 
 struct HttpClient: NetworkClient {
+    
     let session: URLSession
     
     private let decoder = JSONDecoder()
@@ -128,4 +129,12 @@ struct HttpClient: NetworkClient {
             throw NetworkError.failedWithStatus(urlResponse.statusCode)
         }
     }
+}
+
+struct MockHttpClient: NetworkClient {
+    var session: URLSession
+    func request<T>(url: String) async throws -> T where T : Decodable { throw URLError(.cancelled) }
+    func request<T>(url: String, method: HttpMethod?, body: HttpBody?, queryItems: [String : String]?, headers: [String : String]?) async throws -> T where T : Decodable { throw URLError(.cancelled) }
+    func request(url: String) async throws -> Data { throw URLError(.cancelled) }
+    func request(url: String, method: HttpMethod?, body: HttpBody?, queryItems: [String : String]?, headers: [String : String]?) async throws -> Data { throw URLError(.cancelled) }
 }

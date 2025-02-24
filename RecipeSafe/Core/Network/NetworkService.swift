@@ -7,11 +7,16 @@
 
 import Foundation
 import CoreData
+import DeviceCheck
+import CryptoKit
 
 struct NetworkService: Sendable, Service {
 
+    private static let keyId = "RECIPE_SAFE_APP_ATTEST_KEY_ID"
     let buildRecipe: @Sendable (URL) async throws -> Recipe
     let fetchAppConfig: @Sendable () async -> Void
+    let attestApp: @Sendable () async throws -> Void
+    let recipeImage: @Sendable (Data) async throws -> Recipe
 }
 
 extension NetworkService {
@@ -21,11 +26,13 @@ extension NetworkService {
             buildRecipe: { _ in
                 throw URLError(.cancelled)
             },
-            fetchAppConfig: {}
+            fetchAppConfig: {},
+            attestApp: {},
+            recipeImage: { _ in throw URLError(.cancelled)}
         )
     }
     
-    static func live(viewContext: NSManagedObjectContext, client: NetworkClient) -> Self {
+    static func live(_ dependencies: ServiceDependencies) -> Self {
         .init(
             buildRecipe: { url in
                 guard url.scheme == "RecipeSafe" else {
@@ -47,7 +54,7 @@ extension NetworkService {
                 
                 let slicedURL = urlStr.replacing("RecipeSafe://", with: "")
                 
-                let data: Data = try await client.request(url: slicedURL)
+                let data: Data = try await dependencies.networkClient.request(url: slicedURL)
                 
                 var recipe = try Recipe.fromHtml(data)
                 recipe.url = URL(string: slicedURL)
@@ -58,7 +65,7 @@ extension NetworkService {
                 print("fetching config")
                 do {
                     let url = AppEnvironment.baseUrl.appending(Endpoints.appConfig.rawValue)
-                    let model: AppConfigModel = try await client.request(url: url)
+                    let model: AppConfigModel = try await dependencies.networkClient.request(url: url)
                     await AppConfig.shared.load(model: model)
                     print("success!")
                 } catch {
@@ -66,9 +73,46 @@ extension NetworkService {
                     await AppConfig.shared.loadFailed()
                     print("failed with error: \(error)")
                 }
+            },
+            attestApp: {
+                guard DCAppAttestService.shared.isSupported else { throw DCError(.featureUnsupported) }
+                var key = UserDefaults.standard.string(forKey: keyId)
+                if key == nil {
+                    key = try await DCAppAttestService.shared.generateKey()
+                    UserDefaults.standard.set(key, forKey: keyId)
+                }
+                guard let key else { throw DCError(.invalidKey) }
+                let url = AppEnvironment.baseUrl.appending(Endpoints.challenge.rawValue)
+                let challenge = try await dependencies.networkClient.request(url: url)
+                let clientDataHash = Data(SHA256.hash(data: challenge))
+                let attestation = try await DCAppAttestService.shared.attestKey(key, clientDataHash: clientDataHash)
+                let attestationString = attestation.base64EncodedString()
+                let attestUrl = AppEnvironment.baseUrl.appending(Endpoints.attest.rawValue)
+                let body: [String: Any] = ["attestation": attestationString, "challenge": String(data: challenge, encoding: .utf8) ?? Data(), "keyId": key]
+                let _ = try await dependencies.networkClient.request(
+                    url: attestUrl,
+                    method: .post,
+                    body: .json(body),
+                    queryItems: nil,
+                    headers: nil
+                )
+            },
+            recipeImage: { imageData in
+                guard let key = UserDefaults.standard.string(forKey: keyId) else { throw DCError(.invalidKey) }
+                let url = AppEnvironment.baseUrl.appending(Endpoints.challenge.rawValue)
+                let challenge = try await dependencies.networkClient.request(url: url)
+                let clientDataHash = Data(SHA256.hash(data: challenge))
+                let assertion = try await DCAppAttestService.shared.generateAssertion(key, clientDataHash: clientDataHash)
+                let imageUrl = AppEnvironment.baseUrl.appending(Endpoints.imageAnalysis.rawValue)
+                let body: [String: Any] = ["assertion": assertion, "challenge": String(data: challenge, encoding: .utf8) ?? Data(), "keyId": key, "image": imageData.base64EncodedString()]
+                return try await dependencies.networkClient.request(url: imageUrl, method: .post, body: .json(body), queryItems: nil, headers: nil)
             }
         )
     }
+}
+
+
+extension NetworkService {
     
     static var mock: Self {
         .init(
@@ -95,6 +139,25 @@ extension NetworkService {
             },
             fetchAppConfig: {
                 await AppConfig.shared.load(model: AppConfigModel(featureFlags: FeatureFlags(searchEnabled: false)))
+            },
+            attestApp: {},
+            recipeImage: { _ in
+                Recipe(
+                    title: "Image Created Recipe",
+                    description: "A recipe created from taking a picture",
+                    ingredients: [
+                        "mock 1",
+                        "mock 2"
+                    ],
+                    instructions: [
+                        "step 1",
+                        "step 2"
+                    ],
+                    img: .none,
+                    url: nil,
+                    prepTime: "20 min",
+                    cookTime: "30 min"
+                )
             }
         )
     }

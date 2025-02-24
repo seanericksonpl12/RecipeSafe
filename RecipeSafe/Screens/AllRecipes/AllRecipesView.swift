@@ -101,6 +101,6 @@ struct AllRecipesView: View {
 
 #Preview {
     AllRecipesView(navPath: .init())
-        .injectServices(viewContext: PersistenceController.preview.container.viewContext, client: HttpClient(session: .shared))
+        .injectServices(ServiceDependencies(session: URLSession.shared))
 }
 
