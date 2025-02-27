@@ -23,10 +23,7 @@ protocol CoreDataService<Item>: Sendable, Service {
 extension CoreDataService {
     static var defaultValue: Self { .init(viewContext: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)) }
     static var mock: Self { .init(viewContext: PersistenceController.preview.container.viewContext) }
-    
-    static func live(_ dependencies: ServiceDependencies) -> Self {
-        .init(viewContext: dependencies.viewContext)
-    }
+    static var live: Self { .init(viewContext: PersistenceController.shared.container.viewContext) }
     
     var saveContext: @Sendable () throws -> Void {
         { try self.viewContext.save() }

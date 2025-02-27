@@ -58,6 +58,7 @@ struct ShoppingListView: View {
             .task {
                 refreshRecipes()
             }
+            .pageLoad(.shoppingList)
         }
     }
     

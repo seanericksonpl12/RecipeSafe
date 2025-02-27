@@ -1,5 +1,5 @@
 {
-  "originHash" : "b80783f4f7003bd1ce55add0a80b021d0e6156db141d946b632948ed48168233",
+  "originHash" : "616b78a38a56e6fc2571033fb03eae80bf12b821accd5e10550713b5d0accb6a",
   "pins" : [
     {
       "identity" : "lottie-ios",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "0ead44350d2737db384908569c012fe67c421e4d",
         "version" : "12.8.0"
+      }
+    },
+    {
+      "identity" : "swift-package",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/simpleanalytics/swift-package.git",
+      "state" : {
+        "revision" : "df261f54f9813f0272f2d88effcf51d872504ca6",
+        "version" : "0.4.1"
       }
     },
     {

@@ -10,12 +10,10 @@ import SwiftUI
 @main
 struct RecipeSafeApp: App {
     
-    let session: URLSession = URLSession(configuration: .default)
-    
     var body: some Scene {
         WindowGroup {
             LaunchView()
-                .injectServices(ServiceDependencies(session: session))
+                .injectServices()
         }
     }
 }

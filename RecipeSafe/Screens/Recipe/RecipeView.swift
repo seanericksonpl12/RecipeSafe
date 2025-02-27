@@ -121,6 +121,7 @@ struct RecipeView: View {
             }
         }
         .environment(\.toolbarActions, toolbarActions)
+        .pageLoad(.recipe)
     }
     
 }

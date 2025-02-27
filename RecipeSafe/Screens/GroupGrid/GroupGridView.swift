@@ -135,6 +135,7 @@ struct GroupGridView: View {
                 }
             }
         }
+        .pageLoad(.groups)
     }
 }
 

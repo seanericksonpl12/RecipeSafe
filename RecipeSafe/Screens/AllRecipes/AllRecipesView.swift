@@ -15,10 +15,16 @@ struct AllRecipesView: View {
     ) private var recipeList: FetchedResults<RecipeItem>
     
     @Environment(\.services.recipeData.deleteRecipes) var delete
+    @Environment(\.services.network.recipeImage) var createRecipe
+    @Environment(\.appConfig.featureFlags.recipeAnalysisEnabled) var cameraEnabled
+    @Environment(\.services.analytics) var analytics
     
     @State var navPath: NavigationPath
     @State var searchText: String = ""
     @State var customRecipeSheet: Bool = false
+    @State var photoData: Data?
+    @State var isLoading: Bool = false
+    @State var isFromCreateNew: Bool = false
     
     var searchList: (any RandomAccessCollection<RecipeItem>) -> [RecipeItem] {
         { [self] list in
@@ -68,23 +74,42 @@ struct AllRecipesView: View {
                 }
                 .scrollContentBackground(.hidden)
                 .applyAppBackground(proxy: geo, isShown: !recipeList.isEmpty)
+                .disabled(isLoading)
                 .navigationTitle("content.nav.title".localized)
                 .toolbar {
                     ToolbarItem {
-                        Button{
-                            customRecipeSheet = true
-                        } label: {
-                            Label("content.toolbar.add".localized, systemImage: "plus")
-                                .frame(width: 40, height: 40)
-                                .contentShape(Rectangle())
+                        if cameraEnabled {
+                            CreateRecipeMenuView(createFromScratch: $customRecipeSheet, photoData: $photoData)
+                        } else {
+                            Button {
+                                customRecipeSheet = true
+                                 analytics.trackAction(.tappedCreateNewRecipe, analytics.currentPath)
+                            } label: {
+                                Label("content.toolbar.add".localized, systemImage: "plus")
+                                    .frame(width: 40, height: 40)
+                                    .contentShape(Rectangle())
+                            }
                         }
                     }
+                }
+                .onChange(of: self.photoData) { _, data in
+                    buildRecipeFromImage(image: data)
+                }
+            }
+            .overlay {
+                if isLoading {
+                    HStack {
+                        Spacer()
+                        LoadingView()
+                        Spacer()
+                    }
+                    
                 }
             }
             
             // MARK: - Navigation
             .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(recipe: recipe, screen: .allRecipes)
+                RecipeView(recipe: recipe, screen: .allRecipes, createNew: isFromCreateNew)
                     .navigationBarTitleDisplayMode(.inline)
             }
         }
@@ -94,13 +119,36 @@ struct AllRecipesView: View {
                 RecipeView(recipe: Recipe(), screen: .allRecipes, createNew: true)
             }
         }
+        .pageLoad(.allRecipes)
+    }
+    
+    func buildRecipeFromImage(image: Data?) {
+        guard let image else { return }
+        self.photoData = nil
+        Task {
+            self.isLoading = true
+            defer { self.isLoading = false }
+            
+            do {
+                let recipe = try await createRecipe(image)
+                self.isFromCreateNew = true
+                navPath.append(recipe)
+            } catch {
+                print("error building recipe: \(error)")
+            }
+        }
     }
 }
 
 // MARK: - Preview
 
-#Preview {
+#Preview("Camera disabled") {
     AllRecipesView(navPath: .init())
-        .injectServices(ServiceDependencies(session: URLSession.shared))
+        .injectServices()
 }
 
+#Preview("Camera Enabled") {
+    AllRecipesView(navPath: .init())
+        .injectServices()
+        .environment(\.appConfig.featureFlags.recipeAnalysisEnabled, true)
+}

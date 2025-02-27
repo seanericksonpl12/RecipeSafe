@@ -10,14 +10,14 @@ import SwiftUI
 import CoreData
 
 protocol Service {
-    static func live(_ dependencies: ServiceDependencies) -> Self
-    static var mock: Self { get }
     static var defaultValue: Self { get }
+    static var live: Self { get }
+    static var mock: Self { get }
 }
 
 enum Services {
-    static func resolve<T: Service>(_ service: T.Type = T.self, serviceDependencies: ServiceDependencies) -> T {
-        AppEnvironment.shouldMock ? T.mock : T.live(serviceDependencies)
+    static func resolve<T: Service>(_ service: T.Type = T.self) -> T {
+        AppEnvironment.shouldMock ? T.mock : T.live
     }
     
     static func resolveViewContext() -> NSManagedObjectContext {
@@ -25,72 +25,52 @@ enum Services {
     }
     
     static func resolveHttpClient(session: URLSession) -> NetworkClient {
-        AppEnvironment.shouldMock ? HttpClient(session: session) : MockHttpClient(session: session)
+        AppEnvironment.shouldMock ? MockHttpClient(session: session) : HttpClient(session: session)
     }
 }
 
-struct ServiceValues: Sendable {
+struct ServiceValues: Sendable, Injectable {
+    static var defaultValue: Self {
+        .init(
+            network: .defaultValue,
+            recipeData: .defaultValue,
+            groupData: .defaultValue,
+            shoppingListData: .defaultValue,
+            update: .defaultValue,
+            analytics: .defaultValue
+        )
+    }
+    
     var network: NetworkService
     var recipeData: RecipeDataService
     var groupData: GroupDataService
     var shoppingListData: ShoppingListDataService
     var update: UpdateService
-}
-
-struct ServiceDependencies: @unchecked Sendable {
-    init(session: URLSession = URLSession(configuration: .ephemeral)) {
-        self.networkClient = Services.resolveHttpClient(session: session)
-        self.viewContext = Services.resolveViewContext()
-    }
-    var networkClient: NetworkClient
-    var viewContext: NSManagedObjectContext
-}
-
-extension EnvironmentValues {
-    @Entry var services = ServiceValues(
-        network: .defaultValue,
-        recipeData: .defaultValue,
-        groupData: .defaultValue,
-        shoppingListData: .defaultValue,
-        update: .defaultValue
-    )
-    
-    @Entry var serviceDependencies = ServiceDependencies(
-        session: URLSession.shared
-    )
-    
-    @Entry var toolbarActions = ToolbarActions(
-        save: {},
-        delete: {},
-        cancel: {},
-        option1: {},
-        option2: {}
-    )
+    var analytics: AnalyticsService
 }
 
 private struct InjectServices: ViewModifier {
     
-    let dependencies: ServiceDependencies
-    
     private var services: ServiceValues {
         .init(
-            network: Services.resolve(serviceDependencies: dependencies),
-            recipeData: Services.resolve(serviceDependencies: dependencies),
-            groupData: Services.resolve(serviceDependencies: dependencies),
-            shoppingListData: Services.resolve(serviceDependencies: dependencies),
-            update: Services.resolve(serviceDependencies: dependencies)
+            network: Services.resolve(),
+            recipeData: Services.resolve(),
+            groupData: Services.resolve(),
+            shoppingListData: Services.resolve(),
+            update: Services.resolve(),
+            analytics: Services.resolve()
         )
     }
     
     func body(content: Content) -> some View {
         content
             .environment(\.services, services)
-            .environment(\.managedObjectContext, dependencies.viewContext)
+            .environment(\.managedObjectContext, Services.resolveViewContext())
     }
 }
 
 extension View {
-    func injectServices(_ dependencies: ServiceDependencies) -> some View {
-        self.modifier(InjectServices(dependencies: dependencies))
+    func injectServices() -> some View {
+        self.modifier(InjectServices())
     }
 }

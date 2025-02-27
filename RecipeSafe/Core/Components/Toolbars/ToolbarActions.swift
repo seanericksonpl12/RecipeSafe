@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct ToolbarActions: Sendable {
+struct ToolbarActions: Sendable, Injectable {
+    static var defaultValue: Self { .init() }
+    
     var save: @MainActor @Sendable () throws -> Void
     var delete: @MainActor @Sendable () throws -> Void
     var cancel: @MainActor @Sendable () throws -> Void

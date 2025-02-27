@@ -51,6 +51,7 @@ struct TutorialView: View {
         .onAppear {
             setColors(colorMode: colorMode)
         }
+        .pageLoad(.tutorial)
     }
     
     func toPage(_ page: Int) {
