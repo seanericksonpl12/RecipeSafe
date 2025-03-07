@@ -26,8 +26,10 @@ struct PersistenceController {
             let in2 = Instruction(context: viewContext)
             in2.value = "step 2"
             newItem.desc = "Description of recipe \(i)"
-            newItem.ingredients = [i1, i2]
-            newItem.instructions = [in1, in2]
+            newItem.addToIngredients(i1)
+            newItem.addToIngredients(i2)
+            newItem.addToInstructions(in1)
+            newItem.addToInstructions(in2)
         }
         do {
             try viewContext.save()

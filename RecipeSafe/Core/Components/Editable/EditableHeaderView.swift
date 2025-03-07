@@ -75,7 +75,7 @@ struct EditableHeaderView: View {
             isEditing: $editingEnabled,
             urlLink: recipe.url,
             option1Text: entity?.group == nil ? "recipe.group.add".localized : nil,
-            option2Text: dataService.isInList(entity) ? "Remove from Grocery List" : "Add to grocery list",
+            option2Text: dataService.isInList(entity) ? "Remove from Grocery List" : "Add to Shopping List",
             actions: newToolbarActions
         )
     }
@@ -90,4 +90,10 @@ struct EditableHeaderView: View {
             }
         }
     }
+}
+
+#Preview {
+    EditableHeaderView(recipe: .constant(Recipe(title: "ejklfs", description: "fdsafd", ingredients: [], instructions: [], img: .none, url: nil, prepTime: nil, cookTime: nil)), editingEnabled: .constant(true), optionalDisplay: nil)
+        .injectServices()
+        .environment(\.toolbarActions, .defaultValue)
 }

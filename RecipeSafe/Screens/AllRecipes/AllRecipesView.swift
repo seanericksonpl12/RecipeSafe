@@ -46,55 +46,51 @@ struct AllRecipesView: View {
                     .padding()
             }
             
-            GeometryReader { geo in
+            // MARK: - List
+            List {
+                ForEach(searchList(recipeList), id: \.id) { item in
+                    NavigationLink {
+                        if let recipe = Recipe(dataItem: item) {
+                            RecipeView(recipe: recipe, screen: .allRecipes)
+                                .navigationBarTitleDisplayMode(.inline)
+                        }
+                    } label: {
+                        Text(item.title ?? "")
+                    }
+                }
+                .onDelete {
+                    navPath = .init()
+                    try? delete($0, recipeList)
+                }
+                .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                 
-                // MARK: - List
-                List {
-                    ForEach(searchList(recipeList), id: \.id) { item in
-                        NavigationLink {
-                            if let recipe = Recipe(dataItem: item) {
-                                RecipeView(recipe: recipe, screen: .allRecipes)
-                                    .navigationBarTitleDisplayMode(.inline)
-                            }
+                if searchList(recipeList).isEmpty {
+                    Spacer()
+                        .listRowBackground(Color.clear)
+                }
+                
+            }
+            .scrollContentBackground(.hidden)
+            .disabled(isLoading)
+            .navigationTitle("content.nav.title".localized)
+            .toolbar {
+                ToolbarItem {
+                    if cameraEnabled {
+                        CreateRecipeMenuView(createFromScratch: $customRecipeSheet, photoData: $photoData)
+                    } else {
+                        Button {
+                            customRecipeSheet = true
+                            analytics.trackAction(.tappedCreateNewRecipe, analytics.currentPath)
                         } label: {
-                            Text(item.title ?? "")
-                        }
-                    }
-                    .onDelete {
-                        navPath = .init()
-                        try? delete($0, recipeList)
-                    }
-                    .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
-                    
-                    if searchList(recipeList).isEmpty {
-                        Spacer()
-                            .listRowBackground(Color.clear)
-                    }
-                    
-                }
-                .scrollContentBackground(.hidden)
-                .applyAppBackground(proxy: geo, isShown: !recipeList.isEmpty)
-                .disabled(isLoading)
-                .navigationTitle("content.nav.title".localized)
-                .toolbar {
-                    ToolbarItem {
-                        if cameraEnabled {
-                            CreateRecipeMenuView(createFromScratch: $customRecipeSheet, photoData: $photoData)
-                        } else {
-                            Button {
-                                customRecipeSheet = true
-                                 analytics.trackAction(.tappedCreateNewRecipe, analytics.currentPath)
-                            } label: {
-                                Label("content.toolbar.add".localized, systemImage: "plus")
-                                    .frame(width: 40, height: 40)
-                                    .contentShape(Rectangle())
-                            }
+                            Label("content.toolbar.add".localized, systemImage: "plus")
+                                .frame(width: 40, height: 40)
+                                .contentShape(Rectangle())
                         }
                     }
                 }
-                .onChange(of: self.photoData) { _, data in
-                    buildRecipeFromImage(image: data)
-                }
+            }
+            .onChange(of: self.photoData) { _, data in
+                buildRecipeFromImage(image: data)
             }
             .overlay {
                 if isLoading {
