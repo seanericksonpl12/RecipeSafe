@@ -4,15 +4,8 @@
 <dict>
 	<key>AnalyticsUrl</key>
 	<string>$(ANALYTICS_URL)</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Access camera to take photos of recipes to save.  Actual images never stored or saved.</string>
+	<string>RecipeSafe needs to access the camera to take photos of recipes.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
