@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct FileUtility {
     
@@ -43,6 +44,31 @@ struct FileUtility {
         } catch {
             print("error reading file!\nPath: \(path)\nError: \(error)")
             return nil
+        }
+    }
+    
+    static func compressImage(image: UIImage, toSize size: Int, jpegCompressionQuality: CGFloat = 0.25) -> Data? {
+        var newImage: UIImage? = image
+        
+        var data = newImage?.jpegData(compressionQuality: jpegCompressionQuality)
+        
+        while data != nil && data?.count ?? 0 > size {
+            newImage = UIImage(data: data!)?.resized(sizeReduce: 0.5)
+            data = newImage?.jpegData(compressionQuality: jpegCompressionQuality)
+        }
+        
+        return data
+    }
+}
+
+extension UIImage {
+    func resized(sizeReduce: CGFloat, isOpaque: Bool = false) -> UIImage? {
+        let canvas = CGSize(width: size.width * sizeReduce, height: size.height * sizeReduce)
+        let format = imageRendererFormat
+        format.opaque = isOpaque
+        
+        return UIGraphicsImageRenderer(size: canvas, format: format).image {
+            _ in draw(in: CGRect(origin: .zero, size: canvas))
         }
     }
 }

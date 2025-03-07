@@ -89,6 +89,7 @@ struct GroupView: View {
                 deleteSelf()
             }
         }
+        .pageLoad(.group)
     }
 }
 

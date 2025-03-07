@@ -129,4 +129,23 @@ extension String {
         }
         return str
     }
+    
+    func trimmingWhitespace() -> Self {
+        var str = self
+        while str.hasPrefix(" ") {
+            str.removeFirst()
+        }
+        while str.hasSuffix(" ") {
+            str.removeLast()
+        }
+        return str
+    }
+    
+    func removingNewLines() -> Self {
+        var str = ""
+        for char in self {
+            if char != "\n" { str.append(char) }
+        }
+        return str
+    }
 }

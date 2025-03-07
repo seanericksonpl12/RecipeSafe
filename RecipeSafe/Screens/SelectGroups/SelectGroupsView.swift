@@ -56,7 +56,6 @@ struct SelectGroupsView: View {
                         }
                     }
                     .scrollContentBackground(.hidden)
-                    .applyAppBackground(proxy: geo)
                 }
                 .popover(isPresented: $newGroupSwitch) {
                     NavigationStack {

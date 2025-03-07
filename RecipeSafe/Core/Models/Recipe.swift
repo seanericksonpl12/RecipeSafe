@@ -128,3 +128,10 @@ struct Recipe: Hashable, Decodable, Identifiable, Sendable {
 struct DecodableInstruction: Codable {
     var text: String?
 }
+
+struct RecipeFromImage: Codable {
+    let title: String
+    let description: String?
+    let ingredients: [String]
+    let instructions: [String]
+}

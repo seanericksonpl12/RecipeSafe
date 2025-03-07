@@ -7,11 +7,16 @@
 
 import Foundation
 import CoreData
+import DeviceCheck
+import CryptoKit
 
 struct NetworkService: Sendable, Service {
 
+    private static let keyId = "RECIPE_SAFE_APP_ATTEST_KEY_ID"
     let buildRecipe: @Sendable (URL) async throws -> Recipe
-    let fetchAppConfig: @Sendable () async -> Void
+    let fetchAppConfig: @Sendable () async throws -> AppConfig
+    let attestApp: @Sendable () async throws -> Void
+    let recipeImage: @Sendable (Data) async throws -> Recipe
 }
 
 extension NetworkService {
@@ -21,13 +26,17 @@ extension NetworkService {
             buildRecipe: { _ in
                 throw URLError(.cancelled)
             },
-            fetchAppConfig: {}
+            fetchAppConfig: { throw URLError(.cancelled) },
+            attestApp: {},
+            recipeImage: { _ in throw URLError(.cancelled)}
         )
     }
     
-    static func live(viewContext: NSManagedObjectContext, client: NetworkClient) -> Self {
-        .init(
+    static var live: Self {
+        let client = HttpClient(session: URLSession.shared)
+        return .init(
             buildRecipe: { url in
+                
                 guard url.scheme == "RecipeSafe" else {
                     throw NetworkError.invalidURL("Bad URL scheme")
                 }
@@ -55,20 +64,54 @@ extension NetworkService {
                 return recipe
             },
             fetchAppConfig: {
-                print("fetching config")
-                do {
-                    let url = AppEnvironment.baseUrl.appending(Endpoints.appConfig.rawValue)
-                    let model: AppConfigModel = try await client.request(url: url)
-                    await AppConfig.shared.load(model: model)
-                    print("success!")
-                } catch {
-                    
-                    await AppConfig.shared.loadFailed()
-                    print("failed with error: \(error)")
+                let key = UserDefaults.standard.string(forKey: keyId)
+                return try await client.request(
+                    url: Endpoints.appConfig.fullUrl,
+                    method: .post,
+                    body: .raw(AppConfig.Parameters(attestationKey: key)),
+                    queryItems: nil,
+                    headers: nil
+                )
+            },
+            attestApp: {
+                guard DCAppAttestService.shared.isSupported else { throw DCError(.featureUnsupported) }
+                var key = UserDefaults.standard.string(forKey: keyId)
+                if key == nil {
+                    key = try await DCAppAttestService.shared.generateKey()
+                    UserDefaults.standard.set(key, forKey: keyId)
                 }
+                guard let key else { throw DCError(.invalidKey) }
+                let challenge = try await client.request(url: Endpoints.challenge.fullUrl)
+                let clientDataHash = Data(SHA256.hash(data: challenge))
+                let attestation = try await DCAppAttestService.shared.attestKey(key, clientDataHash: clientDataHash)
+                let attestationString = attestation.base64EncodedString()
+                let body: [String: Any] = ["attestation": attestationString, "challenge": String(data: challenge, encoding: .utf8) ?? Data(), "keyId": key]
+                let _ = try await client.request(
+                    url: Endpoints.attest.fullUrl,
+                    method: .post,
+                    body: .json(body),
+                    queryItems: nil,
+                    headers: nil
+                )
+            },
+            recipeImage: { imageData in
+                guard let key = UserDefaults.standard.string(forKey: keyId) else { throw DCError(.invalidKey) }
+                let challenge = try await client.request(url: Endpoints.challenge.fullUrl)
+                let clientDataHash = Data(SHA256.hash(data: challenge))
+                let assertion = try await DCAppAttestService.shared.generateAssertion(key, clientDataHash: clientDataHash)
+                let headers = ["keyid": key, "assertion": assertion.base64EncodedString()]
+                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString(), "challenge": String(data: challenge, encoding: .utf8) ?? ""]), queryItems: nil, headers: headers)
+                return Recipe(title: temp.title, description: temp.description, ingredients: temp.ingredients, instructions: temp.instructions, img: .selected(imageData), url: nil, prepTime: nil, cookTime: nil)
             }
         )
     }
+}
+
+struct ImageRequest: Encodable {
+    let image: String
+}
+
+extension NetworkService {
     
     static var mock: Self {
         .init(
@@ -93,8 +136,26 @@ extension NetworkService {
                     cookTime: "30 min"
                 )
             },
-            fetchAppConfig: {
-                await AppConfig.shared.load(model: AppConfigModel(featureFlags: FeatureFlags(searchEnabled: false)))
+            fetchAppConfig: { .defaultValue },
+            attestApp: {},
+            recipeImage: { _ in
+                try await Task.sleep(nanoseconds: 2_000_000_000)
+                return Recipe(
+                    title: "Image Created Recipe",
+                    description: "A recipe created from taking a picture",
+                    ingredients: [
+                        "mock 1",
+                        "mock 2"
+                    ],
+                    instructions: [
+                        "step 1",
+                        "step 2"
+                    ],
+                    img: .none,
+                    url: nil,
+                    prepTime: "20 min",
+                    cookTime: "30 min"
+                )
             }
         )
     }

@@ -80,7 +80,6 @@ struct GroupGridView: View {
                 // MARK: - Background
                 .scrollDisabled(groups.isEmpty && !editingEnabled)
                 .scrollContentBackground(.hidden)
-                .applyAppBackground(proxy: geo, isShown: !groups.isEmpty)
             }
             
             // MARK: - Toolbar
@@ -135,6 +134,7 @@ struct GroupGridView: View {
                 }
             }
         }
+        .pageLoad(.groups)
     }
 }
 

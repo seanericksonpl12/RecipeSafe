@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CustomEditableSectionView<Content: View, Item: Any>: View {
     // MARK: - Wrapped
-    @Binding var list: [Item]
+    var list: [Item]
     @Binding var isEditing: Bool
     
     // MARK: - Properties
@@ -20,10 +20,10 @@ struct CustomEditableSectionView<Content: View, Item: Any>: View {
     var addAction: () -> Void
     var optionalDisplay: String
    
-    var content: (Int, Binding<Item>) -> Content
+    var content: (Int, Item) -> Content
     
     init(
-        list: Binding<[Item]>,
+        list: [Item],
         isEditing: Binding<Bool>,
         headerText: String,
         numbered: Bool = false,
@@ -31,9 +31,9 @@ struct CustomEditableSectionView<Content: View, Item: Any>: View {
         deleteAction: @escaping (IndexSet) -> Void,
         addAction: @escaping () -> Void,
         optionalDisplay: String = "",
-        @ViewBuilder _ content: @escaping (Int, Binding<Item>) -> Content
+        @ViewBuilder _ content: @escaping (Int, Item) -> Content
     ) {
-        self._list = list
+        self.list = list
         self._isEditing = isEditing
         self.headerText = headerText
         self.numbered = numbered
@@ -58,13 +58,10 @@ struct CustomEditableSectionView<Content: View, Item: Any>: View {
                     Spacer()
                 }
             }
-            ForEach(Array($list.enumerated()), id: \.offset) { index, $item in
-                content(index, $item)
+            ForEach(Array(list.enumerated()), id: \.offset) { index, item in
+                content(index, item)
             }
             .onDelete { deleteAction($0) }
-            .onMove { source, destination in
-                list.move(fromOffsets: source, toOffset: destination)
-            }
         } header: {
             HStack {
                 Text(headerText)

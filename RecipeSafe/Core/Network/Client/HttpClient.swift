@@ -33,6 +33,7 @@ protocol NetworkClient: Sendable {
 }
 
 struct HttpClient: NetworkClient {
+    
     let session: URLSession
     
     private let decoder = JSONDecoder()
@@ -53,7 +54,9 @@ struct HttpClient: NetworkClient {
         headers: [String : String]?
     ) async throws -> T {
         let request = try buildRequest(url: url, method: method, body: body, queryItems: queryItems, headers: headers)
+        Logger.logRequest(request)
         let (data, response) = try await session.data(for: request)
+        Logger.logResponse(response, data: data)
         try validateResponse(response)
         return try decoder.decode(T.self, from: data)
     }
@@ -70,7 +73,9 @@ struct HttpClient: NetworkClient {
         headers: [String : String]?
     ) async throws -> Data {
         let request = try buildRequest(url: url, method: method, body: body, queryItems: queryItems, headers: headers)
+        Logger.logRequest(request)
         let (data, response) = try await session.data(for: request)
+        Logger.logResponse(response, data: data)
         try validateResponse(response)
         return data
     }
@@ -115,7 +120,7 @@ struct HttpClient: NetworkClient {
         }
         
         urlRequest.httpBody = body?.data
-        
+
         return urlRequest
     }
     
@@ -128,4 +133,12 @@ struct HttpClient: NetworkClient {
             throw NetworkError.failedWithStatus(urlResponse.statusCode)
         }
     }
+}
+
+struct MockHttpClient: NetworkClient {
+    var session: URLSession
+    func request<T>(url: String) async throws -> T where T : Decodable { throw URLError(.cancelled) }
+    func request<T>(url: String, method: HttpMethod?, body: HttpBody?, queryItems: [String : String]?, headers: [String : String]?) async throws -> T where T : Decodable { throw URLError(.cancelled) }
+    func request(url: String) async throws -> Data { throw URLError(.cancelled) }
+    func request(url: String, method: HttpMethod?, body: HttpBody?, queryItems: [String : String]?, headers: [String : String]?) async throws -> Data { throw URLError(.cancelled) }
 }

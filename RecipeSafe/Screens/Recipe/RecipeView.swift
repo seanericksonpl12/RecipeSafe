@@ -121,6 +121,7 @@ struct RecipeView: View {
             }
         }
         .environment(\.toolbarActions, toolbarActions)
+        .pageLoad(.recipe)
     }
     
 }
@@ -183,4 +184,35 @@ extension RecipeView {
             }
         }
     }
+}
+
+#Preview {
+    RecipeView(
+        recipe: Recipe(
+            title: "Venison Stew",
+            description: "Tasty mock recipe with verison and stew",
+            ingredients: [
+                "1lb Vension chuck",
+                "12 carrots",
+                "one celery",
+                "beef stock",
+                "one onion"
+            ],
+            instructions: [
+                "chop up celery, carrots and onion",
+                "score venison chuck, and sear all sides - about 1 minute per side",
+                "mix water and beef stock in a large pot and bring to a boil",
+                "Reduce to simmer, add venison and vegetables and let simmer for about 45 minutes",
+                "Let cool and enjoy!"
+            ],
+            img: .downloaded(URL(string:"https://www.thespruceeats.com/thmb/TJONzQm5Met1xI81mPWIk8r5XBQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/venison-stew-recipe-1375519-step-010-4521974d8b0e44c7b6f59f474e552bad.jpg")!),
+            url: nil,
+            prepTime: "30 mn",
+            cookTime: "1 hr"),
+        screen: .allRecipes,
+        createNew: false
+    )
+    .injectServices()
+    .environment(\.toolbarActions, .defaultValue)
+    .navigationBarTitleDisplayMode(.inline)
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 extension ReferenceWritableKeyPath: @unchecked @retroactive Sendable {}
 
@@ -21,43 +22,50 @@ struct ShoppingListView: View {
     @Environment(\.services.shoppingListData) var dataService
     
     @FocusState var focused
+    @FocusState var lastItemFocusState
     
     @State var isEditing: Bool = false
-
     @State private var showRecipes: Bool = true
     @State private var addRecipes: Bool = false
-    @State private var addNewIngredient: Bool = false
     @State private var recipesToAdd: [RecipeItem] = []
     @State private var filteredRecipes: [RecipeItem] = []
-    @State private var ingredients: [IngredientGroup] = []
+    @State private var tempIngredients: [NSManagedObjectID : (String?, Int16)] = [:]
     @State private var text: String = ""
     @State private var showClearAlert = false
     
     var body: some View {
         NavigationStack {
             contentView
-            .navigationTitle("Grocery List")
-            .environment(\.editMode, .constant(isEditing ? EditMode.active : EditMode.inactive))
-            .toolbar { toolbar }
-            .sheet(isPresented: $addRecipes) {
-                AddRecipePopover(
-                    selectedRecipes: $recipesToAdd,
-                    saveAction: saveAddedRecipes,
-                    recipes: Array(recipes.filter({ !filteredRecipes.contains($0) }))
-                )
-            }
-            .alert(isPresented: $showClearAlert) {
-                Alert(
-                    title: Text("Are you sure you want to clear all recipes and ingredients?"),
-                    primaryButton: .destructive(Text("Clear")) {
-                        clearAction()
-                    },
-                    secondaryButton: .cancel()
-                )
-            }
-            .task {
-                refreshRecipes()
-            }
+                .navigationTitle("Grocery List")
+                .environment(\.editMode, .constant(isEditing ? EditMode.active : EditMode.inactive))
+                .toolbar { toolbar }
+                .sheet(isPresented: $addRecipes) {
+                    AddRecipePopover(
+                        selectedRecipes: $recipesToAdd,
+                        saveAction: saveAddedRecipes,
+                        recipes: Array(recipes.filter({ !filteredRecipes.contains($0) }))
+                    )
+                }
+                .alert(isPresented: $showClearAlert) {
+                    Alert(
+                        title: Text("Are you sure you want to clear all recipes and ingredients?"),
+                        primaryButton: .destructive(Text("Clear")) {
+                            clearAction()
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+                .onChange(of: isEditing) { _, value in
+                    if value {
+                        for item in shoppingList {
+                            self.tempIngredients[item.objectID] = (item.value, item.index)
+                        }
+                    } else {
+                        self.tempIngredients = [:]
+                    }
+                }
+            
+                .pageLoad(.shoppingList)
         }
     }
     
@@ -102,73 +110,88 @@ struct ShoppingListView: View {
     
     
     var contentView: some View {
-        GeometryReader { proxy in
-            VStack {
-                List {
-                    if showRecipes {
-                        CustomEditableSectionView(
-                            list: $filteredRecipes,
-                            isEditing: $isEditing,
-                            headerText: "Recipes",
-                            deleteAction: { deleteRecipe($0) },
-                            addAction: { addRecipes = true }
-                        ) {
-                            customRecipeItem($0, $1)
-                        }
-                        .moveDisabled(true)
-                        .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
+        VStack {
+            List {
+                if showRecipes {
+                    CustomEditableSectionView(
+                        list: recipes.filter { dataService.isInList($0) },
+                        isEditing: $isEditing,
+                        headerText: "Recipes",
+                        deleteAction: { deleteRecipe($0) },
+                        addAction: { addRecipes = true }
+                    ) {
+                        customRecipeItem($0, $1)
                     }
+                    .moveDisabled(true)
+                    .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
+                }
+                
+                if shoppingList.isEmpty {
+                    HStack {
+                        Spacer()
+                        EmptyListView(description: "Add some ingredients or a new recipe to get started!")
+                        Spacer()
+                    }
+                }
+                
+                Section {
                     
-                    Section {
-                        ForEach(Array($ingredients.enumerated()), id: \.offset) {
-                            customIngredientItem($0, $1)
-                        }
-                        .onDelete { deleteIngredient($0) }
-                        .moveDisabled(true)
-                        if addNewIngredient {
+                    ForEach(shoppingList) { item in
+                        HStack {
+                            Button {
+                                withAnimation(.linear(duration: 0.1)) {
+                                    item.selected.toggle()
+                                    try? dataService.saveContext()
+                                }
+                            } label: {
+                                Image(systemName: item.selected ? "checkmark.circle.fill" : "circle")
+                            }
+                            
                             CustomTextField(
-                                text: $text,
-                                prompt: "New Ingredient",
+                                text: .init(get: { item.value ?? "" }, set: { item.value = $0; if $0.contains("\n") {
+                                    submit(item: item)
+                                    print("submitting!")
+                                } }),
+                                prompt: "Ingredient",
                                 promptAlign: .leading,
                                 staticLabel: "",
                                 font: .callout,
                                 fontWeight: .light,
                                 axis: .vertical
-                            ) {
-                                self.focused = false
-                                if !self.text.removingWhitespace().isEmpty {
-                                    try? dataService.createAndAdd($0, Int16(shoppingList.count))
-                                    refreshRecipes()
-                                }
-                                withAnimation { addNewIngredient = false }
-                                self.text = ""
+                            ) { _ in
+                                submit(item: item)
                             }
-                            .disabled(!addNewIngredient)
-                            .focused($focused)
-                        }
-                    } header: {
-                        HStack {
-                            Text("Ingredients")
-                            if isEditing {
-                                Button {
-                                    
-                                } label: {
-                                    Image(systemName: "plus.app")
-                                        .tint(.green)
-                                }
+                            .onChange(of: item.value ?? "") {
+                                if $1.contains("\n") { submit(item: item) }
                             }
+                            .focused($lastItemFocusState, equals: item == shoppingList.last)
+                            .disabled(!isEditing)
                         }
                     }
-                    .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
-                    
-                    
+                    .onDelete { deleteIngredient($0) }
+                    .moveDisabled(true)
+                } header: {
+                    if !shoppingList.isEmpty {
+                        HStack {
+                            Text("Ingredients")
+                        }
+                    }
                 }
-                .scrollContentBackground(.hidden)
+                .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                 
+                
+            }
+            .scrollContentBackground(.hidden)
+            
+            if !self.lastItemFocusState {
                 HStack {
                     Button {
-                        withAnimation { self.addNewIngredient = true }
-                        self.focused = true
+                        try? dataService.createAndAdd("", Int16(shoppingList.count))
+                        Task { @MainActor in
+                            try? await Task.sleep(nanoseconds: 100_000_000)
+                            self.lastItemFocusState = true
+                        }
+                        
                     } label: {
                         Label("New Ingredient", systemImage: "plus.circle")
                     }
@@ -176,45 +199,13 @@ struct ShoppingListView: View {
                 }
                 .padding()
             }
-            .applyAppBackground(proxy: proxy)
-        }
-    }
-    
-    
-    func customIngredientItem(_ index: Int, _ item: Binding<IngredientGroup>) -> some View {
-        HStack {
-            Button {
-                withAnimation(.linear(duration: 0.1)) {
-                    if index < ingredients.count {
-                        ingredients[index].selected.toggle()
-                    }
-                    if index < shoppingList.count {
-                        shoppingList[index].selected.toggle()
-                        try? dataService.saveContext()
-                    }
-                }
-            } label: {
-                Image(systemName: item.wrappedValue.selected ? "checkmark.circle.fill" : "circle")
-            }
-            
-            CustomTextField(
-                text: item.text,
-                prompt: "Ingredient",
-                promptAlign: .leading,
-                staticLabel: "",
-                font: .callout,
-                fontWeight: .light,
-                axis: .vertical
-            )
-            .disabled(!isEditing)
         }
     }
     
     @ViewBuilder
-    func customRecipeItem(_ index: Int, _ item: Binding<RecipeItem>) -> some View {
-        if let recipe = Recipe(dataItem: item.wrappedValue) {
+    func customRecipeItem(_ index: Int, _ item: RecipeItem) -> some View {
+        if let recipe = Recipe(dataItem: item) {
             NavigationLink(recipe.title) {
-                // RecipeView(viewModel: RecipeViewModel(recipe: recipe, screen: .allRecipes))
                 RecipeView(recipe: recipe, screen: .allRecipes)
             }
         }
@@ -223,6 +214,17 @@ struct ShoppingListView: View {
 
 extension ShoppingListView {
     
+    func submit(item: ShoppingListItem) {
+        if item == shoppingList.last {
+            let trimmed = item.value?.trimmingWhitespace().removingNewLines() ?? ""
+            if trimmed.isEmpty { try? dataService.removeItemFromList(item) }
+            item.value = trimmed
+            try? dataService.saveContext()
+            lastItemFocusState = false
+        }
+        refreshIndices()
+    }
+    
     func save() {
         withAnimation {
             isEditing = false
@@ -230,12 +232,12 @@ extension ShoppingListView {
     }
     
     func deleteRecipe(_ indexSet: IndexSet) {
+        let recipes = recipes.filter { dataService.isInList($0) }
         for index in indexSet {
-            guard self.filteredRecipes.count > index else { continue }
-            let recipe = self.filteredRecipes.remove(at: index)
+            guard recipes.count > index else { continue }
+            let recipe = recipes[index]
             try? dataService.removeRecipeFromList(recipe)
         }
-        refreshRecipes()
     }
     
     func deleteIngredient(_ indexSet: IndexSet) {
@@ -244,52 +246,51 @@ extension ShoppingListView {
             guard let item = list.safeValue(at: index) else { continue }
             try? dataService.removeItemFromList(item)
         }
-        refreshRecipes()
+        refreshIndices()
     }
-
+    
     func saveAddedRecipes() {
         for recipe in recipesToAdd {
             guard !dataService.isInList(recipe) else { continue }
             try? dataService.addToList(recipe)
         }
-        refreshRecipes()
         addRecipes = false
         recipesToAdd = []
     }
     
-    func refreshRecipes() {
-        var set = Set<RecipeItem>()
-        shoppingList.forEach {
-            if let recipe = $0.recipe { set.insert(recipe) }
+    func refreshIndices() {
+        for (index, item) in shoppingList.enumerated() {
+            item.index = Int16(index)
         }
-        self.filteredRecipes = Array(set)
-        self.ingredients = shoppingList
-            .map { IngredientGroup(shoppingListItem: $0) }
+        try? dataService.saveContext()
     }
     
     func saveChanges() {
-        for item in ingredients {
-            item.shoppingListItem.value = item.text
-        }
         try? dataService.saveContext()
         withAnimation { isEditing = false }
     }
     
     func cancelChanges() {
-        for i in 0..<ingredients.count {
-            if let text = ingredients[i].shoppingListItem.value {
-                ingredients[i].text = text
+        withAnimation { isEditing = false }
+        for i in 0..<shoppingList.count {
+            let id = shoppingList[i].objectID
+            shoppingList[i].value = tempIngredients[id]?.0
+            tempIngredients[id] = nil
+        }
+        if tempIngredients.count > 0 {
+            for (key, val) in tempIngredients {
+                print(val)
+                try? dataService.createAndAdd(val.0, val.1)
+                tempIngredients[key] = nil
             }
         }
-        Task { @MainActor in
-            withAnimation { isEditing = false }
-        }
+        try? dataService.saveContext()
     }
     
     func resetSelected() {
         withAnimation {
-            for i in 0..<ingredients.count {
-                ingredients[i].selected = false
+            for i in 0..<shoppingList.count {
+                shoppingList[i].selected = false
             }
         }
         try? dataService.saveContext()
@@ -301,7 +302,7 @@ extension ShoppingListView {
     
     func clearAction() {
         deleteRecipe(IndexSet(0..<filteredRecipes.count))
-        deleteIngredient(IndexSet(0..<ingredients.count))
+        deleteIngredient(IndexSet(0..<shoppingList.count))
     }
 }
 

@@ -79,6 +79,8 @@
 		92939FC12CA2F864002DE8D0 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92939FC02CA2F864002DE8D0 /* AppConfig.swift */; };
 		92939FC52CA30FC5002DE8D0 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92939FC42CA30FC5002DE8D0 /* AppEnvironment.swift */; };
 		929E1E762A87FF9D00A0596D /* GroupGridViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */; };
+		929F12342D6F91CF0037F97A /* SimpleAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 929F12332D6F91CF0037F97A /* SimpleAnalytics */; };
+		929F12372D6F91E50037F97A /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929F12362D6F91E00037F97A /* AnalyticsService.swift */; };
 		92A044852D652DDF00E0E237 /* RecipeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044842D652DDA00E0E237 /* RecipeDataService.swift */; };
 		92A044872D652FD000E0E237 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044862D652FCD00E0E237 /* CoreDataService.swift */; };
 		92A044892D652FFB00E0E237 /* GroupDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044882D652FF600E0E237 /* GroupDataService.swift */; };
@@ -92,6 +94,10 @@
 		92A0449D2D67A14100E0E237 /* HttpBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A0449C2D67A13E00E0E237 /* HttpBody.swift */; };
 		92A044A12D67B64300E0E237 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044A02D67B64000E0E237 /* Lock.swift */; };
 		92A044A32D67BF0A00E0E237 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A044A22D67BF0600E0E237 /* Endpoints.swift */; };
+		92AB78502D6CF0AE0045EFA2 /* CreateRecipeMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB784F2D6CF0A00045EFA2 /* CreateRecipeMenuView.swift */; };
+		92AB78532D6CF5240045EFA2 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB78522D6CF5210045EFA2 /* CameraView.swift */; };
+		92AB78562D6D06720045EFA2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB78552D6D06630045EFA2 /* Logger.swift */; };
+		92AB78582D6D0EAC0045EFA2 /* Challenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92AB78572D6D0EAB0045EFA2 /* Challenge.swift */; };
 		92BD83A92C87829900C11C09 /* SearchRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BD83A82C87829900C11C09 /* SearchRecipeView.swift */; };
 		92D34D252CAAF17F00BFF22F /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D34D242CAAF17F00BFF22F /* LaunchScreen.swift */; };
 		92D34D272CAB47B600BFF22F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92D34D262CAB47B600BFF22F /* Launch Screen.storyboard */; };
@@ -235,6 +241,7 @@
 		92939FC02CA2F864002DE8D0 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		92939FC42CA30FC5002DE8D0 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		929E1E752A87FF9D00A0596D /* GroupGridViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGridViewModelTests.swift; sourceTree = "<group>"; };
+		929F12362D6F91E00037F97A /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		92A044842D652DDA00E0E237 /* RecipeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDataService.swift; sourceTree = "<group>"; };
 		92A044862D652FCD00E0E237 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		92A044882D652FF600E0E237 /* GroupDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDataService.swift; sourceTree = "<group>"; };
@@ -248,6 +255,10 @@
 		92A0449C2D67A13E00E0E237 /* HttpBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpBody.swift; sourceTree = "<group>"; };
 		92A044A02D67B64000E0E237 /* Lock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
 		92A044A22D67BF0600E0E237 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
+		92AB784F2D6CF0A00045EFA2 /* CreateRecipeMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeMenuView.swift; sourceTree = "<group>"; };
+		92AB78522D6CF5210045EFA2 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		92AB78552D6D06630045EFA2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		92AB78572D6D0EAB0045EFA2 /* Challenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Challenge.swift; sourceTree = "<group>"; };
 		92BD83A82C87829900C11C09 /* SearchRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecipeView.swift; sourceTree = "<group>"; };
 		92D34D242CAAF17F00BFF22F /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		92D34D262CAB47B600BFF22F /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -280,6 +291,7 @@
 				92F09A272C9C6E660038A031 /* NukeUI in Frameworks */,
 				926687A02A6094CB00117A59 /* SwiftyJSON in Frameworks */,
 				9266879B2A608E3D00117A59 /* SwiftSoup in Frameworks */,
+				929F12342D6F91CF0037F97A /* SimpleAnalytics in Frameworks */,
 				920DA35E2A6F0EF70086ADB5 /* Lottie in Frameworks */,
 				92F09A252C9C6E660038A031 /* Nuke in Frameworks */,
 			);
@@ -454,7 +466,6 @@
 			children = (
 				92A0448B2D653F1A00E0E237 /* LaunchView.swift */,
 				9266876A2A608C9200117A59 /* RecipeSafeApp.swift */,
-				92939FC02CA2F864002DE8D0 /* AppConfig.swift */,
 				92D34D282CAB495700BFF22F /* ContentView.swift */,
 			);
 			path = App;
@@ -463,6 +474,7 @@
 		925DCBEA2A61D72200B84A38 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				929F12352D6F91DA0037F97A /* Analytics */,
 				92939FC62CA43B7D002DE8D0 /* Environment */,
 				925DCBF02A61D75400B84A38 /* Components */,
 				925DCBEF2A61D74B00B84A38 /* Extensions */,
@@ -477,6 +489,7 @@
 		925DCBEB2A61D72B00B84A38 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				92AB78552D6D06630045EFA2 /* Logger.swift */,
 				92A044A02D67B64000E0E237 /* Lock.swift */,
 				92F09A102C98E42D0038A031 /* recipes_with_images.json */,
 				92F09A092C98866D0038A031 /* recipe_titles.json */,
@@ -495,6 +508,7 @@
 		925DCBEC2A61D73500B84A38 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				92AB78572D6D0EAB0045EFA2 /* Challenge.swift */,
 				92EF6E502D1B1761000B27C0 /* IngredientGroup.swift */,
 				926687A12A60A26600117A59 /* Recipe.swift */,
 				9201F9842A7AF14800A6021A /* Recipe+DataParsing.swift */,
@@ -504,6 +518,7 @@
 				9272DD242A86D1E800DD4549 /* GroupModel.swift */,
 				92F09A122C98E6080038A031 /* RecipeSuggestion.swift */,
 				92F09A1D2C9A18930038A031 /* RecentSearchStack.swift */,
+				92939FC02CA2F864002DE8D0 /* AppConfig.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -536,6 +551,7 @@
 		925DCBF02A61D75400B84A38 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				92AB78512D6CF5190045EFA2 /* Camera */,
 				92F099F82C94F1BE0038A031 /* Toolbars */,
 				929316FB2A818B610089A55D /* Custom */,
 				920DA36E2A702EA90086ADB5 /* Placeholders */,
@@ -705,6 +721,7 @@
 		92924CD82A673B33000EC3B8 /* AllRecipes */ = {
 			isa = PBXGroup;
 			children = (
+				92AB784F2D6CF0A00045EFA2 /* CreateRecipeMenuView.swift */,
 				9266876C2A608C9200117A59 /* AllRecipesView.swift */,
 			);
 			path = AllRecipes;
@@ -756,6 +773,14 @@
 			path = Environment;
 			sourceTree = "<group>";
 		};
+		929F12352D6F91DA0037F97A /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				929F12362D6F91E00037F97A /* AnalyticsService.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 		92A0448A2D6538B400E0E237 /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -776,6 +801,14 @@
 				92A044972D67A06200E0E237 /* HttpClient.swift */,
 			);
 			path = Client;
+			sourceTree = "<group>";
+		};
+		92AB78512D6CF5190045EFA2 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				92AB78522D6CF5210045EFA2 /* CameraView.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		92E706012A8BB9B300ACA24C /* SelectGroups */ = {
@@ -820,6 +853,7 @@
 				920DA35D2A6F0EF70086ADB5 /* Lottie */,
 				92F09A242C9C6E660038A031 /* Nuke */,
 				92F09A262C9C6E660038A031 /* NukeUI */,
+				929F12332D6F91CF0037F97A /* SimpleAnalytics */,
 			);
 			productName = RecipeSafe;
 			productReference = 926687672A608C9200117A59 /* RecipeSafe.app */;
@@ -918,6 +952,7 @@
 				9266879E2A6094CB00117A59 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				920DA35C2A6F0EF70086ADB5 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				92F09A232C9C6E660038A031 /* XCRemoteSwiftPackageReference "Nuke" */,
+				929F12322D6F91CF0037F97A /* XCRemoteSwiftPackageReference "swift-package" */,
 			);
 			productRefGroup = 926687682A608C9200117A59 /* Products */;
 			projectDirPath = "";
@@ -992,6 +1027,7 @@
 				9293171B2A819FA30089A55D /* CustomTextField.swift in Sources */,
 				926687742A608C9200117A59 /* Persistence.swift in Sources */,
 				92F09A132C98E6080038A031 /* RecipeSuggestion.swift in Sources */,
+				92AB78532D6CF5240045EFA2 /* CameraView.swift in Sources */,
 				92A044A32D67BF0A00E0E237 /* Endpoints.swift in Sources */,
 				925DCBF32A65F40A00B84A38 /* ErrorTypes.swift in Sources */,
 				92A0449D2D67A14100E0E237 /* HttpBody.swift in Sources */,
@@ -1005,12 +1041,14 @@
 				9268BDCA2A8D18C700366964 /* UserDefaultsExtensions.swift in Sources */,
 				9276896F2A93C735002C1525 /* EmptyGroupView.swift in Sources */,
 				92D34D292CAB495700BFF22F /* ContentView.swift in Sources */,
+				92AB78582D6D0EAC0045EFA2 /* Challenge.swift in Sources */,
 				927689612A8FEE69002C1525 /* TabbedList.swift in Sources */,
 				92A044872D652FD000E0E237 /* CoreDataService.swift in Sources */,
 				920DA3592A6F053A0086ADB5 /* LoadingView.swift in Sources */,
 				92939FC52CA30FC5002DE8D0 /* AppEnvironment.swift in Sources */,
 				92F09A082C97641B0038A031 /* SearchView.swift in Sources */,
 				9272A7D82CAED5990098724F /* Service.swift in Sources */,
+				92AB78562D6D06720045EFA2 /* Logger.swift in Sources */,
 				929317202A828E2D0089A55D /* IconImage.swift in Sources */,
 				9272DD212A8691E600DD4549 /* InsertGridButton.swift in Sources */,
 				9247212C2A75B06500D879CA /* EmptyListView.swift in Sources */,
@@ -1034,6 +1072,7 @@
 				920DA35B2A6F0B7E0086ADB5 /* ViewState.swift in Sources */,
 				920DA3682A70269F0086ADB5 /* ViewExtensions.swift in Sources */,
 				92F09A062C97507B0038A031 /* SuggestionTile.swift in Sources */,
+				92AB78502D6CF0AE0045EFA2 /* CreateRecipeMenuView.swift in Sources */,
 				9293171E2A81EB630089A55D /* ImageData.swift in Sources */,
 				920DA3602A6F0F8C0086ADB5 /* LottieView.swift in Sources */,
 				92F09A2B2C9C8B840038A031 /* PreferenceKeys.swift in Sources */,
@@ -1047,6 +1086,7 @@
 				9268BDC62A8C73AB00366964 /* TutorialView.swift in Sources */,
 				9272DD232A86944000DD4549 /* NewGroupPopover.swift in Sources */,
 				92D34D252CAAF17F00BFF22F /* LaunchScreen.swift in Sources */,
+				929F12372D6F91E50037F97A /* AnalyticsService.swift in Sources */,
 				92E705FE2A8A9A8600ACA24C /* SelectGroupsView.swift in Sources */,
 				9272DD252A86D1E800DD4549 /* GroupModel.swift in Sources */,
 				920DA36D2A702B830086ADB5 /* EditableDescriptionView.swift in Sources */,
@@ -1234,6 +1274,7 @@
 			baseConfigurationReference = 926A4A952A748AD100457935 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ANALYTICS_URL = com.seane.recipesafe.dev;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -1274,6 +1315,7 @@
 			baseConfigurationReference = 926A4A952A748AD100457935 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ANALYTICS_URL = com.seane.recipesafe;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -1508,6 +1550,7 @@
 			baseConfigurationReference = 926A4A952A748AD100457935 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ANALYTICS_URL = com.seane.recipesafe.dev;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -1669,6 +1712,7 @@
 			baseConfigurationReference = 926A4A952A748AD100457935 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ANALYTICS_URL = com.seane.recipesafe.dev;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -1836,6 +1880,7 @@
 			baseConfigurationReference = 926A4A952A748AD100457935 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ANALYTICS_URL = com.seane.recipesafe.dev;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -1997,6 +2042,7 @@
 			baseConfigurationReference = 926A4A952A748AD100457935 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ANALYTICS_URL = com.seane.recipesafe.dev;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -2194,6 +2240,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		929F12322D6F91CF0037F97A /* XCRemoteSwiftPackageReference "swift-package" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simpleanalytics/swift-package.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
 		92F09A232C9C6E660038A031 /* XCRemoteSwiftPackageReference "Nuke" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kean/Nuke";
@@ -2219,6 +2273,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9266879E2A6094CB00117A59 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		929F12332D6F91CF0037F97A /* SimpleAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 929F12322D6F91CF0037F97A /* XCRemoteSwiftPackageReference "swift-package" */;
+			productName = SimpleAnalytics;
 		};
 		92F09A242C9C6E660038A031 /* Nuke */ = {
 			isa = XCSwiftPackageProductDependency;

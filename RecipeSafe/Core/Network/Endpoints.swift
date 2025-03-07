@@ -7,4 +7,10 @@
 
 enum Endpoints: String {
     case appConfig = "/api/recipe-safe/appConfig"
+    case challenge = "/api/recipe-safe/challenge"
+    case attest = "/api/recipe-safe/attest"
+    case imageAnalysis = "/api/recipe-safe/imageAnalysis"
+    case healthCheck = "/api/recipe-safe/healthCheck"
+    
+    var fullUrl: String { AppEnvironment.baseUrl.appending(self.rawValue) }
 }
