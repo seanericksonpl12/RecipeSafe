@@ -13,6 +13,7 @@ struct AppEnvironment {
     private static let defaultAnalyticsUrl = "com.seane.recipesafe.dev"
     
     static let analyticsHostname = Bundle.main.infoDictionary?["AnalyticsUrl"] as? String
+    static let serverApiKey = Bundle.main.infoDictionary?["ServerApiKey"] as? String ?? ""
     static let baseUrl: String = Bundle.main.infoDictionary?["ServerUrl"] as? String ?? defaultUrl
     static var shouldMock: Bool { ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" }
 }

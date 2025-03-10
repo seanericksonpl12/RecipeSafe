@@ -92,7 +92,7 @@ extension NetworkService {
 //                let assertion = try await DCAppAttestService.shared.generateAssertion(key, clientDataHash: clientDataHash)
 //                let headers = ["keyid": key, "assertion": assertion.base64EncodedString()]
 //                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString(), "challenge": String(data: challenge, encoding: .utf8) ?? ""]), queryItems: nil, headers: headers)
-                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString()]), queryItems: nil, headers: nil)
+                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString()]), queryItems: nil, headers: ["apikey": AppEnvironment.serverApiKey])
                 return Recipe(title: temp.title, description: temp.description, ingredients: temp.ingredients, instructions: temp.instructions, img: .selected(imageData), url: nil, prepTime: nil, cookTime: nil)
             }
         )
