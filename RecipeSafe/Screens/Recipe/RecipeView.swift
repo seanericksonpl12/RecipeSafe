@@ -74,7 +74,7 @@ struct RecipeView: View {
                         isEditing: $editingEnabled,
                         headerText: "recipe.ingredients.title".localized,
                         deleteAction: { self.recipe.ingredients.remove(atOffsets: $0) },
-                        addAction: { recipe.ingredients.insert("", at: 0) },
+                        addAction: { recipe.ingredients.append("") },
                         optionalDisplay: "recipe.ingredients.new".localized
                     )
                 }
@@ -122,6 +122,7 @@ struct RecipeView: View {
         }
         .environment(\.toolbarActions, toolbarActions)
         .pageLoad(.recipe)
+        .keepScreenAlive()
     }
     
 }

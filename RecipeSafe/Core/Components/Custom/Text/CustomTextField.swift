@@ -20,6 +20,7 @@ struct CustomTextField: View {
     let font: Font
     let fontWeight: Font.Weight
     let axis: Axis
+    let lineLimit: Int?
     var onSubmitAction: (String) -> Void = { _ in }
     
     // MARK: - Body
@@ -42,6 +43,7 @@ struct CustomTextField: View {
                 }
                 
                 TextField("", text: $text, axis: axis)
+                    .lineLimit(lineLimit)
                     .multilineTextAlignment(staticLabel == nil ? .center : .leading)
                     .font(font)
                     .fontWeight(fontWeight)

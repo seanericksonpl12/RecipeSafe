@@ -20,6 +20,7 @@ struct LaunchView: View {
                 .task { await setup() }
         } else {
             ContentView()
+                .addKeyboardToEnvironment()
                 .environment(\.appConfig, self.appConfig)
         }
     }

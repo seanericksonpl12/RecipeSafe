@@ -26,7 +26,8 @@ struct EditableDescriptionView: View {
                         staticLabel: nil,
                         font: .callout,
                         fontWeight: .light,
-                        axis: .vertical
+                        axis: .vertical,
+                        lineLimit: nil
                     )
                     .disabled(!editingEnabled)
                 }
@@ -40,7 +41,8 @@ struct EditableDescriptionView: View {
                             staticLabel: "recipe.preptime".localized,
                             font: .footnote,
                             fontWeight: .light,
-                            axis: .horizontal
+                            axis: .horizontal,
+                            lineLimit: 1
                         )
                         .disabled(!editingEnabled)
                     }
@@ -53,7 +55,8 @@ struct EditableDescriptionView: View {
                             staticLabel: "recipe.cooktime".localized,
                             font: .footnote,
                             fontWeight: .light,
-                            axis: .horizontal
+                            axis: .horizontal,
+                            lineLimit: 1
                         )
                         .disabled(!editingEnabled)
                     }

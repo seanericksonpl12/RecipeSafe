@@ -12,6 +12,7 @@ struct EditableToolbar: ToolbarContent {
     
     @Environment(\.toolbarActions) var actions
     @Environment(\.editMode) var editMode
+    @Environment(\.services.analytics) var analytics
     
     @Binding var isEditing: Bool
     
@@ -39,6 +40,7 @@ struct EditableToolbar: ToolbarContent {
                 ToolbarItem {
                     Menu {
                         Button("button.edit".localized) {
+                            analytics.trackAction(.tappedEdit)
                             Task { @MainActor in
                                 withAnimation {
                                     isEditing = true

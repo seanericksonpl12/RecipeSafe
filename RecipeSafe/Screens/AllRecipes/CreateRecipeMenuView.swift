@@ -25,19 +25,19 @@ struct CreateRecipeMenuView: View {
         Menu {
             Button {
                 createFromScratch = true
-                analytics.trackAction(.tappedCreateNewRecipe, analytics.currentPath)
+                analytics.trackAction(.tappedCreateNewRecipe)
             } label: {
                 Label("Create", systemImage: "square.and.pencil")
             }
             Button {
                 showingCamera = true
-                analytics.trackAction(.tappedCreateNewRecipeFromCamera, analytics.currentPath)
+                analytics.trackAction(.tappedCreateNewRecipeFromCamera)
             } label: {
                 Label("Camera", systemImage: "camera.viewfinder")
             }
             Button {
                 showingPhotosPicker = true
-                analytics.trackAction(.tappedCreateNewRecipeFromPhotos, analytics.currentPath)
+                analytics.trackAction(.tappedCreateNewRecipeFromPhotos)
             } label: {
                 Label("Photos", systemImage: "photo.on.rectangle.angled")
             }

@@ -33,6 +33,14 @@ struct AnalyticsService: Service {
     
     enum Metadata: String {
         case userId
+        case deviceModel
+        case deviceName
+        case deviceLocalizedModel
+        case deviceSystemName
+        case deviceSystemVersion
+        case deviceType
+        case screenWidth
+        case screenHeight
     }
     
     static var uniqueId: String {
@@ -46,7 +54,7 @@ struct AnalyticsService: Service {
         }
     }
     
-    let trackAction: (AnalyticsAction, [PageName]) -> Void
+    let trackAction: (AnalyticsAction, [String: String], [PageName]) -> Void
     let trackPageLoad: ([PageName]) -> Void
     var currentPath: [PageName] = []
 }
@@ -57,30 +65,54 @@ extension AnalyticsService {
     static var live: Self {
         let client = SimpleAnalytics(hostname: AppEnvironment.analyticsHostname!)
         return .init(
-            trackAction: { action, path in
-                Logger.log("tracking action: \(action)")
-                client.track(event: action.rawValue, path: path.map(\.rawValue), metadata: metadata())
+            trackAction: { action, data, path in
+                Task { @Sendable in
+                    client.track(event: action.rawValue, path: path.map(\.rawValue), metadata: await metadata(adding: data))
+                    Logger.log("tracking action: \(action) for path: \(path.map(\.rawValue))")
+                }
             },
             trackPageLoad: { pages in
-                Logger.log("tracking path: \(pages.map(\.rawValue))")
-                client.track(path: pages.map(\.rawValue), metadata: metadata())
+                Task { @Sendable in
+                    client.track(path: pages.map(\.rawValue), metadata: await metadata(adding: [:]))
+                    Logger.log("tracking path: \(pages.map(\.rawValue))")
+                }
             }
         )
     }
     
-    static func metadata() -> [String: String] {
-        [Metadata.userId.rawValue: uniqueId]
+    static func metadata(adding dictionary: [String: String]) async -> [String: String] {
+        let device = await UIDevice.current
+        let screen = await UIScreen.main.bounds
+        return await [
+            Metadata.userId.rawValue: uniqueId,
+            Metadata.deviceName.rawValue: device.name,
+            Metadata.deviceType.rawValue: device.userInterfaceIdiom == .phone ? "iPhone" : "iPad",
+            Metadata.deviceModel.rawValue: device.model,
+            Metadata.deviceLocalizedModel.rawValue: device.localizedModel,
+            Metadata.deviceSystemName.rawValue: device.systemName,
+            Metadata.deviceSystemVersion.rawValue: device.systemVersion,
+            Metadata.screenWidth.rawValue: "\(screen.width)",
+            Metadata.screenHeight.rawValue: "\(screen.height)"
+        ]
+            .merging(dictionary, uniquingKeysWith: { "\($0)/\($1)" })
     }
     
     static var mock: Self {
         .init(
-            trackAction: {
-                Logger.log("Event tracked: \($0) with path: \($1)")
+            trackAction: { event, data, path in
+                Logger.log("Event tracked: \(event) with path: \(path)")
             },
             trackPageLoad: {
                 Logger.log("Page loaded: \($0)")
             }
         )
+    }
+}
+
+extension AnalyticsService {
+    
+    func trackAction(_ action: AnalyticsAction, metadata: [String: String] = [:], path: [PageName]? = nil) {
+        self.trackAction(action, metadata, path ?? self.currentPath)
     }
 }
 
@@ -96,45 +128,9 @@ struct TrackPageLoadModifier: ViewModifier {
     }
 }
 
-struct TrackTappedActionModifier: ViewModifier {
-    @Environment(\.services.analytics) var analytics
-    
-    let action: AnalyticsAction
-    
-    func body(content: Content) -> some View {
-        content.buttonStyle(.additionAction {
-            analytics.trackAction(action, analytics.currentPath)
-        })
-    }
-}
-
 extension View {
     
     func pageLoad(_ pageName: PageName) -> some View {
         self.modifier(TrackPageLoadModifier(page: pageName))
-    }
-    
-    func sendAction(_ action: AnalyticsAction) -> some View {
-        self.modifier(TrackTappedActionModifier(action: action)).buttonStyle(.automatic)
-    }
-}
-
-
-extension ButtonStyle where Self == AdditionalActionButtonStyle {
-    static func additionAction(_ action: @escaping () -> Void) -> Self {
-        return Self(action: action)
-    }
-}
-
-struct AdditionalActionButtonStyle: ButtonStyle {
-    
-    let action: () -> Void
-    
-    public func makeBody(configuration: Configuration) -> some View {
-        configuration.label.onChange(of: configuration.isPressed) { _, newValue in
-            if newValue {
-                self.action()
-            }
-        }
     }
 }

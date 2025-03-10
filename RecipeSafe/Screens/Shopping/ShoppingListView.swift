@@ -20,6 +20,7 @@ struct ShoppingListView: View {
         animation: .easeIn) private var recipes: FetchedResults<RecipeItem>
     
     @Environment(\.services.shoppingListData) var dataService
+    @Environment(\.keyboardShowing) var isKeyboardShowing
     
     @FocusState var focused
     @FocusState var lastItemFocusState
@@ -110,94 +111,108 @@ struct ShoppingListView: View {
     
     
     var contentView: some View {
-        VStack {
-            List {
-                if showRecipes {
-                    CustomEditableSectionView(
-                        list: recipes.filter { dataService.isInList($0) },
-                        isEditing: $isEditing,
-                        headerText: "Recipes",
-                        deleteAction: { deleteRecipe($0) },
-                        addAction: { addRecipes = true }
-                    ) {
-                        customRecipeItem($0, $1)
+        ScrollViewReader { scrollProxy in
+            VStack {
+                List {
+                    if showRecipes {
+                        CustomEditableSectionView(
+                            list: recipes.filter { dataService.isInList($0) },
+                            isEditing: $isEditing,
+                            headerText: "Recipes",
+                            deleteAction: { deleteRecipe($0) },
+                            addAction: { addRecipes = true }
+                        ) {
+                            customRecipeItem($0, $1)
+                        }
+                        .moveDisabled(true)
+                        .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                     }
-                    .moveDisabled(true)
-                    .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
-                }
-                
-                if shoppingList.isEmpty {
-                    HStack {
-                        Spacer()
-                        EmptyListView(description: "Add some ingredients or a new recipe to get started!")
-                        Spacer()
-                    }
-                }
-                
-                Section {
                     
-                    ForEach(shoppingList) { item in
+                    if shoppingList.isEmpty {
                         HStack {
-                            Button {
-                                withAnimation(.linear(duration: 0.1)) {
-                                    item.selected.toggle()
-                                    try? dataService.saveContext()
+                            Spacer()
+                            EmptyListView(description: "Add some ingredients or a new recipe to get started!")
+                                .listRowBackground(Color(uiColor: .clear))
+                            Spacer()
+                        }
+                    }
+                    
+                    Section {
+                        
+                        ForEach(shoppingList) { item in
+                            HStack {
+                                Button {
+                                    withAnimation(.linear(duration: 0.1)) {
+                                        item.selected.toggle()
+                                        try? dataService.saveContext()
+                                    }
+                                } label: {
+                                    Image(systemName: item.selected ? "checkmark.circle.fill" : "circle")
                                 }
-                            } label: {
-                                Image(systemName: item.selected ? "checkmark.circle.fill" : "circle")
+                                .disabled(isKeyboardShowing)
+                                
+                                CustomTextField(
+                                    text: .init(get: { item.value ?? "" }, set: { item.value = $0; if $0.contains("\n") {
+                                        submit(item: item)
+                                    } }),
+                                    prompt: "Ingredient",
+                                    promptAlign: .leading,
+                                    staticLabel: "",
+                                    font: .callout,
+                                    fontWeight: .light,
+                                    axis: .vertical,
+                                    lineLimit: 1
+                                ) { _ in
+                                    submit(item: item)
+                                }
+                                .focused($lastItemFocusState, equals: item == shoppingList.last && item.value?.isEmpty ?? false)
+                                .disabled(!isEditing)
+                            }
+                        }
+                        .onDelete { deleteIngredient($0) }
+                        .moveDisabled(true)
+                    } header: {
+                        if !shoppingList.isEmpty {
+                            HStack {
+                                Text("Ingredients")
+                            }
+                        }
+                    }
+                    .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
+                    Rectangle().id(999).frame(height: 0).foregroundStyle(.clear)
+                }
+                .scrollContentBackground(.hidden)
+                
+                
+                if !isKeyboardShowing {
+                    HStack {
+                        Button {
+                            scrollProxy.scrollTo(999, anchor: .bottom)
+                            try? dataService.createAndAdd("", Int16(shoppingList.count))
+                            Task { @MainActor in
+                                self.lastItemFocusState = true
+                                
                             }
                             
-                            CustomTextField(
-                                text: .init(get: { item.value ?? "" }, set: { item.value = $0; if $0.contains("\n") {
-                                    submit(item: item)
-                                    print("submitting!")
-                                } }),
-                                prompt: "Ingredient",
-                                promptAlign: .leading,
-                                staticLabel: "",
-                                font: .callout,
-                                fontWeight: .light,
-                                axis: .vertical
-                            ) { _ in
-                                submit(item: item)
-                            }
-                            .onChange(of: item.value ?? "") {
-                                if $1.contains("\n") { submit(item: item) }
-                            }
-                            .focused($lastItemFocusState, equals: item == shoppingList.last)
-                            .disabled(!isEditing)
+                        } label: {
+                            Label("New Ingredient", systemImage: "plus.circle")
                         }
+                        Spacer()
                     }
-                    .onDelete { deleteIngredient($0) }
-                    .moveDisabled(true)
-                } header: {
-                    if !shoppingList.isEmpty {
-                        HStack {
-                            Text("Ingredients")
+                    .padding()
+                } else {
+                    HStack {
+                        Button {
+                            try? dataService.removeItemFromList(shoppingList.last)
+                            lastItemFocusState = false
+                        } label: {
+                            Text("Cancel")
                         }
+                        Spacer()
                     }
+                    .padding()
                 }
-                .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                 
-                
-            }
-            .scrollContentBackground(.hidden)
-            
-            if !self.lastItemFocusState {
-                HStack {
-                    Button {
-                        try? dataService.createAndAdd("", Int16(shoppingList.count))
-                        Task { @MainActor in
-                            try? await Task.sleep(nanoseconds: 100_000_000)
-                            self.lastItemFocusState = true
-                        }
-                        
-                    } label: {
-                        Label("New Ingredient", systemImage: "plus.circle")
-                    }
-                    Spacer()
-                }
-                .padding()
             }
         }
     }
@@ -217,11 +232,22 @@ extension ShoppingListView {
     func submit(item: ShoppingListItem) {
         if item == shoppingList.last {
             let trimmed = item.value?.trimmingWhitespace().removingNewLines() ?? ""
-            if trimmed.isEmpty { try? dataService.removeItemFromList(item) }
-            item.value = trimmed
-            try? dataService.saveContext()
-            lastItemFocusState = false
+            
+            if trimmed.isEmpty {
+                try? dataService.removeItemFromList(item)
+                lastItemFocusState = false
+            } else {
+                item.value = trimmed
+                try? dataService.saveContext()
+                if !isEditing {
+                    try? dataService.createAndAdd("", Int16(shoppingList.count))
+                    Task { @MainActor in
+                        self.lastItemFocusState = true
+                    }
+                }
+            }
         }
+        
         refreshIndices()
     }
     
