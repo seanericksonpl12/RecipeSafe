@@ -80,7 +80,7 @@ struct AllRecipesView: View {
                     } else {
                         Button {
                             customRecipeSheet = true
-                            analytics.trackAction(.tappedCreateNewRecipe, analytics.currentPath)
+                            analytics.trackAction(.tappedCreateNewRecipe)
                         } label: {
                             Label("content.toolbar.add".localized, systemImage: "plus")
                                 .frame(width: 40, height: 40)

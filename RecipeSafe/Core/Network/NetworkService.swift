@@ -63,16 +63,7 @@ extension NetworkService {
                 
                 return recipe
             },
-            fetchAppConfig: {
-                let key = UserDefaults.standard.string(forKey: keyId)
-                return try await client.request(
-                    url: Endpoints.appConfig.fullUrl,
-                    method: .post,
-                    body: .raw(AppConfig.Parameters(attestationKey: key)),
-                    queryItems: nil,
-                    headers: nil
-                )
-            },
+            fetchAppConfig: { try await client.request(url: Endpoints.appConfig.fullUrl) },
             attestApp: {
                 guard DCAppAttestService.shared.isSupported else { throw DCError(.featureUnsupported) }
                 var key = UserDefaults.standard.string(forKey: keyId)
@@ -95,12 +86,13 @@ extension NetworkService {
                 )
             },
             recipeImage: { imageData in
-                guard let key = UserDefaults.standard.string(forKey: keyId) else { throw DCError(.invalidKey) }
-                let challenge = try await client.request(url: Endpoints.challenge.fullUrl)
-                let clientDataHash = Data(SHA256.hash(data: challenge))
-                let assertion = try await DCAppAttestService.shared.generateAssertion(key, clientDataHash: clientDataHash)
-                let headers = ["keyid": key, "assertion": assertion.base64EncodedString()]
-                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString(), "challenge": String(data: challenge, encoding: .utf8) ?? ""]), queryItems: nil, headers: headers)
+//                guard let key = UserDefaults.standard.string(forKey: keyId) else { throw DCError(.invalidKey) }
+//                let challenge = try await client.request(url: Endpoints.challenge.fullUrl)
+//                let clientDataHash = Data(SHA256.hash(data: challenge))
+//                let assertion = try await DCAppAttestService.shared.generateAssertion(key, clientDataHash: clientDataHash)
+//                let headers = ["keyid": key, "assertion": assertion.base64EncodedString()]
+//                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString(), "challenge": String(data: challenge, encoding: .utf8) ?? ""]), queryItems: nil, headers: headers)
+                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString()]), queryItems: nil, headers: nil)
                 return Recipe(title: temp.title, description: temp.description, ingredients: temp.ingredients, instructions: temp.instructions, img: .selected(imageData), url: nil, prepTime: nil, cookTime: nil)
             }
         )

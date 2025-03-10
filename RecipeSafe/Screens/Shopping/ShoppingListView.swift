@@ -20,6 +20,7 @@ struct ShoppingListView: View {
         animation: .easeIn) private var recipes: FetchedResults<RecipeItem>
     
     @Environment(\.services.shoppingListData) var dataService
+    @Environment(\.keyboardShowing) var isKeyboardShowing
     
     @FocusState var focused
     @FocusState var lastItemFocusState
@@ -150,21 +151,18 @@ struct ShoppingListView: View {
                             CustomTextField(
                                 text: .init(get: { item.value ?? "" }, set: { item.value = $0; if $0.contains("\n") {
                                     submit(item: item)
-                                    print("submitting!")
                                 } }),
                                 prompt: "Ingredient",
                                 promptAlign: .leading,
                                 staticLabel: "",
                                 font: .callout,
                                 fontWeight: .light,
-                                axis: .vertical
+                                axis: .vertical,
+                                lineLimit: 1
                             ) { _ in
                                 submit(item: item)
                             }
-                            .onChange(of: item.value ?? "") {
-                                if $1.contains("\n") { submit(item: item) }
-                            }
-                            .focused($lastItemFocusState, equals: item == shoppingList.last)
+                            .focused($lastItemFocusState, equals: item == shoppingList.last && item.value?.isEmpty ?? false)
                             .disabled(!isEditing)
                         }
                     }
@@ -183,12 +181,12 @@ struct ShoppingListView: View {
             }
             .scrollContentBackground(.hidden)
             
-            if !self.lastItemFocusState {
+            
+            if !isKeyboardShowing {
                 HStack {
                     Button {
                         try? dataService.createAndAdd("", Int16(shoppingList.count))
                         Task { @MainActor in
-                            try? await Task.sleep(nanoseconds: 100_000_000)
                             self.lastItemFocusState = true
                         }
                         
@@ -217,11 +215,22 @@ extension ShoppingListView {
     func submit(item: ShoppingListItem) {
         if item == shoppingList.last {
             let trimmed = item.value?.trimmingWhitespace().removingNewLines() ?? ""
-            if trimmed.isEmpty { try? dataService.removeItemFromList(item) }
-            item.value = trimmed
-            try? dataService.saveContext()
-            lastItemFocusState = false
+            
+            if trimmed.isEmpty {
+                try? dataService.removeItemFromList(item)
+                lastItemFocusState = false
+            } else {
+                item.value = trimmed
+                try? dataService.saveContext()
+                if !isEditing {
+                    try? dataService.createAndAdd("", Int16(shoppingList.count))
+                    Task { @MainActor in
+                        self.lastItemFocusState = true
+                    }
+                }
+            }
         }
+        
         refreshIndices()
     }
     

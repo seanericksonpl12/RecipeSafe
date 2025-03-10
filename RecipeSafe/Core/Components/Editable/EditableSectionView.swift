@@ -12,6 +12,8 @@ struct EditableSectionView: View {
     @Binding var list: [String]
     @Binding var isEditing: Bool
     
+    @FocusState var focusState
+    
     // MARK: - Properties
     var headerText: String
     var numbered: Bool = false
@@ -46,6 +48,15 @@ struct EditableSectionView: View {
                         }
                     }
                     TextField(item == "" ? optionalDisplay : "", text: $list[index], axis: isEditing ? .horizontal : .vertical)
+                        .onSubmit {
+                            if !item.trimmingWhitespace().isEmpty {
+                                addAction()
+                                Task { focusState = true }
+                            } else {
+                                list.remove(at: index)
+                            }
+                        }
+                        .focused($focusState, equals: index == list.count - 1 && item.isEmpty)
                         .font(font)
                         .disabled(!isEditing)
                 }
