@@ -180,6 +180,7 @@ struct ShoppingListView: View {
                     }
                     .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                     Rectangle().id(999).frame(height: 0).foregroundStyle(.clear)
+                        .listRowBackground(Color(uiColor: .clear))
                 }
                 .scrollContentBackground(.hidden)
                 
