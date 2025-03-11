@@ -23,7 +23,7 @@ struct ShoppingListView: View {
     @Environment(\.keyboardShowing) var isKeyboardShowing
     
     @FocusState var focused
-    @FocusState var lastItemFocusState
+    @FocusState var itemFocus: ShoppingListItem?
     
     @State var isEditing: Bool = false
     @State private var showRecipes: Bool = true
@@ -51,7 +51,8 @@ struct ShoppingListView: View {
                     Alert(
                         title: Text("Are you sure you want to clear all recipes and ingredients?"),
                         primaryButton: .destructive(Text("Clear")) {
-                            clearAction()
+                            deleteRecipe(IndexSet(0..<filteredRecipes.count))
+                            deleteIngredient(IndexSet(0..<shoppingList.count))
                         },
                         secondaryButton: .cancel()
                     )
@@ -97,7 +98,7 @@ struct ShoppingListView: View {
                         resetSelected()
                     }
                     Button("Clear", role: .destructive) {
-                        clear()
+                        self.showClearAlert = true
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -153,6 +154,9 @@ struct ShoppingListView: View {
                                 
                                 CustomTextField(
                                     text: .init(get: { item.value ?? "" }, set: { item.value = $0; if $0.contains("\n") {
+                                        withAnimation {
+                                            scrollProxy.scrollTo(999, anchor: .bottom)
+                                        }
                                         submit(item: item)
                                     } }),
                                     prompt: "Ingredient",
@@ -163,9 +167,12 @@ struct ShoppingListView: View {
                                     axis: .vertical,
                                     lineLimit: 1
                                 ) { _ in
+                                    withAnimation {
+                                        scrollProxy.scrollTo(999, anchor: .bottom)
+                                    }
                                     submit(item: item)
                                 }
-                                .focused($lastItemFocusState, equals: item == shoppingList.last && item.value?.isEmpty ?? false)
+                                .focused($itemFocus, equals: item)
                                 .disabled(!isEditing)
                             }
                         }
@@ -191,8 +198,7 @@ struct ShoppingListView: View {
                             scrollProxy.scrollTo(999, anchor: .bottom)
                             try? dataService.createAndAdd("", Int16(shoppingList.count))
                             Task { @MainActor in
-                                self.lastItemFocusState = true
-                                
+                                itemFocus = shoppingList.last
                             }
                             
                         } label: {
@@ -205,7 +211,7 @@ struct ShoppingListView: View {
                     HStack {
                         Button {
                             try? dataService.removeItemFromList(shoppingList.last)
-                            lastItemFocusState = false
+                            itemFocus = nil
                         } label: {
                             Text("Cancel")
                         }
@@ -236,14 +242,14 @@ extension ShoppingListView {
             
             if trimmed.isEmpty {
                 try? dataService.removeItemFromList(item)
-                lastItemFocusState = false
+                itemFocus = nil
             } else {
                 item.value = trimmed
                 try? dataService.saveContext()
                 if !isEditing {
                     try? dataService.createAndAdd("", Int16(shoppingList.count))
                     Task { @MainActor in
-                        self.lastItemFocusState = true
+                        itemFocus = shoppingList.last
                     }
                 }
             }
@@ -321,15 +327,6 @@ extension ShoppingListView {
             }
         }
         try? dataService.saveContext()
-    }
-    
-    func clear() {
-        self.showClearAlert = true
-    }
-    
-    func clearAction() {
-        deleteRecipe(IndexSet(0..<filteredRecipes.count))
-        deleteIngredient(IndexSet(0..<shoppingList.count))
     }
 }
 
