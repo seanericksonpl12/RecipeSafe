@@ -2,12 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ServerApiKey</key>
-	<string>$(SERVER_API_KEY)</string>
 	<key>AnalyticsUrl</key>
 	<string>$(ANALYTICS_URL)</string>
-	<key>NSCameraUsageDescription</key>
-	<string>RecipeSafe needs to access the camera to take photos of recipes.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -23,6 +19,8 @@
 	</array>
 	<key>OpenAIKey</key>
 	<string>$(OPENAI_API_KEY)</string>
+	<key>ServerApiKey</key>
+	<string>$(SERVER_API_KEY)</string>
 	<key>ServerUrl</key>
 	<string>$(SERVER_API_URL)</string>
 	<key>UILaunchScreen</key>

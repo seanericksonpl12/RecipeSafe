@@ -10,12 +10,13 @@ import SwiftUI
 struct LaunchView: View {
     
     @Environment(\.services.network) var network
+    @State var animationFinished: Bool = false
     @State var isLoaded = false
     @State var appConfig: AppConfig = .defaultValue
     
     var body: some View {
-        if !isLoaded  {
-            LaunchScreen()
+        if !isLoaded || !animationFinished {
+            LaunchScreen(didFinishPlayingAnimation: $animationFinished)
                 .ignoresSafeArea()
                 .task { await setup() }
         } else {
