@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Launch Screen View Controller-->
         <scene sceneID="EHf-IW-A2E">
             <objects>
-                <viewController storyboardIdentifier="LaunchScreen" id="01J-lp-oVM" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                <viewController storyboardIdentifier="LaunchScreen" id="01J-lp-oVM" customClass="LaunchScreenViewController" customModule="RecipeSafe" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="igo-Po-GDK"/>
+                        <viewControllerLayoutGuide type="bottom" id="rEh-2L-gaR"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch-screen" translatesAutoresizingMaskIntoConstraints="NO" id="szG-Zx-gps">
-                                <rect key="frame" x="50" y="312" width="293" height="228"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NzX-b0-rGL" customClass="LottieAnimationView" customModule="Lottie">
+                                <rect key="frame" x="106" y="74" width="181" height="744"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="centerY" secondItem="szG-Zx-gps" secondAttribute="centerY" id="98m-3V-nkJ"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="szG-Zx-gps" secondAttribute="trailing" constant="50" id="NP7-gw-I9H"/>
-                            <constraint firstItem="szG-Zx-gps" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="50" id="jhP-OE-Chw"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NzX-b0-rGL" secondAttribute="trailing" constant="90" id="PL5-7Z-NQ0"/>
+                            <constraint firstItem="rEh-2L-gaR" firstAttribute="top" secondItem="NzX-b0-rGL" secondAttribute="bottom" id="SOx-MJ-gNZ"/>
+                            <constraint firstItem="NzX-b0-rGL" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="20" id="kpA-QA-Ixj"/>
+                            <constraint firstItem="NzX-b0-rGL" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="90" id="ocW-re-hRO"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="animationView" destination="NzX-b0-rGL" id="nGp-Lm-Bzz"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -34,6 +42,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launch-screen" width="228" height="228"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>
