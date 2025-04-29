@@ -16,7 +16,7 @@ struct LaunchView: View {
     
     var body: some View {
         if !isLoaded || !animationFinished {
-            LaunchScreen(didFinishPlayingAnimation: $animationFinished)
+            LaunchScreen(didFinishPlayingAnimation: $animationFinished, playAnimation: $isLoaded)
                 .ignoresSafeArea()
                 .task { await setup() }
         } else {

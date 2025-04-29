@@ -41,10 +41,10 @@ struct GroupGridView: View {
         NavigationStack(path: $navPath) {
             GeometryReader { geo in
                 // MARK: - Empty View
-                if groups.isEmpty && !editingEnabled {
-                    EmptyListView(description: "empty.desc.2".localized)
-                        .frame(width: geo.size.width, height: geo.size.height)
-                }
+//                if groups.isEmpty && !editingEnabled {
+//                    EmptyListView(description: "empty.desc.2".localized)
+//                        .frame(width: geo.size.width, height: geo.size.height)
+//                }
                 
                 // MARK: - Grid
                 ScrollView {
@@ -135,6 +135,7 @@ struct GroupGridView: View {
             }
         }
         .pageLoad(.groups)
+        .emptyModifier(isHidden: groups.isEmpty && !editingEnabled, description: "empty.desc.2".localized)
     }
 }
 

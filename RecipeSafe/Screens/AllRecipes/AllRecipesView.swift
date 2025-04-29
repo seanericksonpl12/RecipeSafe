@@ -41,10 +41,10 @@ struct AllRecipesView: View {
         
         NavigationStack(path: $navPath) {
             
-            if recipeList.isEmpty {
-                EmptyListView(description: "empty.desc.1".localized)
-                    .padding()
-            }
+//            if recipeList.isEmpty {
+//                EmptyListView(description: "empty.desc.1".localized)
+//                    .padding()
+//            }
             
             // MARK: - List
             List {
@@ -115,6 +115,7 @@ struct AllRecipesView: View {
                 RecipeView(recipe: Recipe(), screen: .allRecipes, createNew: true)
             }
         }
+        .emptyModifier(isHidden: recipeList.isEmpty, description: "empty.desc.1".localized)
         .pageLoad(.allRecipes)
     }
     

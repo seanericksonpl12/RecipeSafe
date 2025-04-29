@@ -66,9 +66,10 @@ struct ShoppingListView: View {
                         self.tempIngredients = [:]
                     }
                 }
-            
+                
                 .pageLoad(.shoppingList)
         }
+        .emptyModifier(isHidden: shoppingList.isEmpty, description: "Add some ingredients or a new recipe to get started!")
     }
     
     @ToolbarContentBuilder
@@ -129,14 +130,14 @@ struct ShoppingListView: View {
                         .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
                     }
                     
-                    if shoppingList.isEmpty {
-                        HStack {
-                            Spacer()
-                            EmptyListView(description: "Add some ingredients or a new recipe to get started!")
-                                .listRowBackground(Color(uiColor: .clear))
-                            Spacer()
-                        }
-                    }
+//                    if shoppingList.isEmpty {
+//                        HStack {
+//                            Spacer()
+//                            EmptyListView(description: "Add some ingredients or a new recipe to get started!")
+//                                .listRowBackground(Color(uiColor: .clear))
+//                            Spacer()
+//                        }
+//                    }
                     
                     Section {
                         

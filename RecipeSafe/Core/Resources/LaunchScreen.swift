@@ -7,10 +7,13 @@
 import UIKit
 import Lottie
 import SwiftUI
+import Combine
 
 struct LaunchScreen: UIViewControllerRepresentable {
     
+    @Environment(\.colorScheme) var colorScheme
     @Binding var didFinishPlayingAnimation: Bool
+    @Binding var playAnimation: Bool
     
     private let animationCutTime: UInt64 = 1_200_000_000
     private let storyboardName = "Launch Screen"
@@ -23,7 +26,7 @@ struct LaunchScreen: UIViewControllerRepresentable {
             didFinishPlayingAnimation = true
             return LaunchScreenViewController()
         }
-        
+        viewController.colorScheme = colorScheme
         viewController.didFinishAnimationAction = {
             didFinishPlayingAnimation = true
         }
@@ -39,7 +42,11 @@ struct LaunchScreen: UIViewControllerRepresentable {
         return viewController
     }
     
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
+    func updateUIViewController(_ uiViewController: LaunchScreenViewController, context: Context) {
+        if self.playAnimation {
+            uiViewController.playAnimation()
+        }
+    }
 }
 
 class LaunchScreenViewController: UIViewController {
@@ -47,14 +54,21 @@ class LaunchScreenViewController: UIViewController {
     @IBOutlet weak var animationView: LottieAnimationView?
     var didFinishAnimationAction: () -> Void = {}
     var animationStarting: () -> Void = {}
+    var colorScheme: ColorScheme = .light
+    var playingAnimation = false
     
     override func viewDidLoad() {
-        animationView?.animation = LottieAnimation.named("LockAnimation")
+        self.view.backgroundColor = .systemBackground
+        animationView?.animation = LottieAnimation.named(colorScheme == .light ? "LockAnimation" : "LockAnimationDark")
+        super.viewDidLoad()
+    }
+    
+    func playAnimation() {
+        if playingAnimation { return }
+        playingAnimation = true
         animationView?.play { [weak self] _ in
             self?.didFinishAnimationAction()
         }
-        
-        super.viewDidLoad()
         animationStarting()
     }
 }
