@@ -14,9 +14,7 @@ enum HttpBody {
     var data: Data? {
         switch self {
         case .json(let dictionary):
-            print("body dictionary for request: \(dictionary)")
             let data = dictionary.percentEscaped().data(using: .utf8)
-            print(String(data: data!, encoding: .utf8))
             return data
         case .raw(let encodable):
             return try? JSONEncoder().encode(encodable)
