@@ -1,25 +1,36 @@
-//
-//  GroupModel.swift
-//  RecipeSafe
-//
-//  Created by Sean Erickson on 8/11/23.
-//
-
+import Dependencies
 import Foundation
+import CoreData
 
-struct GroupModel: Hashable {
-    
-    var recipes: [RecipeItem]
-    var title: String
-    var dataEntity: GroupItem
-    
-    var imgUrl: URL? {
-        self.recipes.first(where: { $0.imageUrl != nil })?.imageUrl
+struct GroupModel: Hashable, Equatable, Identifiable, Sendable {
+  
+  var recipes: [Recipe]
+  var title: String
+  var color: Int16
+  var dataEntityID: NSManagedObjectID
+  
+  var id: NSManagedObjectID { dataEntityID }
+  
+  var imgUrl: URL? {
+    self.recipes.first(where: {
+      if case .downloaded(let url) = $0.img {
+        return url != nil
+      }
+      return false
+    }).flatMap {
+      if case .downloaded(let url) = $0.img {
+        return url
+      }
+      return nil
     }
-    
-    init(dataEntity: GroupItem) {
-        self.recipes = dataEntity.recipes?.array as? [RecipeItem] ?? []
-        self.title = dataEntity.title ?? "group.default".localized
-        self.dataEntity = dataEntity
-    }
+  }
+  
+  init(dataEntity: GroupItem) {
+    let recipeItems = dataEntity.recipes?.array as? [RecipeItem] ?? []
+    self.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
+    self.title = dataEntity.title ?? "group.default".localized
+    self.color = dataEntity.color
+    self.dataEntityID = dataEntity.objectID
+  }
 }
+

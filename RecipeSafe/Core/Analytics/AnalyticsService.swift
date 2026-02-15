@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Dependencies
 
 @preconcurrency import SimpleAnalytics
 
@@ -29,7 +30,7 @@ enum PageName: String {
     case recipe
 }
 
-struct AnalyticsService: Service {
+public struct AnalyticsService: Sendable {
     
     enum Metadata: String {
         case userId
@@ -54,31 +55,44 @@ struct AnalyticsService: Service {
         }
     }
     
-    let trackAction: (AnalyticsAction, [String: String], [PageName]) -> Void
-    let trackPageLoad: ([PageName]) -> Void
+    var trackAction: @Sendable (AnalyticsAction, [String: String], [PageName]) -> Void
+    var trackPageLoad: @Sendable ([PageName]) -> Void
     var currentPath: [PageName] = []
 }
 
 extension AnalyticsService {
-    static var defaultValue: Self { .mock }
     
-    static var live: Self {
-        let client = SimpleAnalytics(hostname: AppEnvironment.analyticsHostname!)
-        return .init(
-            trackAction: { action, data, path in
-                Task { @Sendable in
-                    client.track(event: action.rawValue, path: path.map(\.rawValue), metadata: await metadata(adding: data))
-                    Logger.log("tracking action: \(action) for path: \(path.map(\.rawValue))")
-                }
-            },
-            trackPageLoad: { pages in
-                Task { @Sendable in
-                    client.track(path: pages.map(\.rawValue), metadata: await metadata(adding: [:]))
-                    Logger.log("tracking path: \(pages.map(\.rawValue))")
-                }
-            }
-        )
+    func trackAction(_ action: AnalyticsAction, metadata: [String: String] = [:], path: [PageName]? = nil) {
+        self.trackAction(action, metadata, path ?? self.currentPath)
     }
+}
+
+extension AnalyticsService: DependencyKey {
+    public static let liveValue = AnalyticsService(
+        trackAction: { action, data, path in
+            Task { @Sendable in
+                let client = SimpleAnalytics(hostname: AppEnvironment.analyticsHostname ?? "com.seane.recipesafe.dev")
+                client.track(event: action.rawValue, path: path.map(\.rawValue), metadata: await metadata(adding: data))
+                Logger.log("tracking action: \(action) for path: \(path.map(\.rawValue))")
+            }
+        },
+        trackPageLoad: { pages in
+            Task { @Sendable in
+                let client = SimpleAnalytics(hostname: AppEnvironment.analyticsHostname ?? "com.seane.recipesafe.dev")
+                client.track(path: pages.map(\.rawValue), metadata: await metadata(adding: [:]))
+                Logger.log("tracking path: \(pages.map(\.rawValue))")
+            }
+        }
+    )
+    
+    public static let testValue = AnalyticsService(
+        trackAction: { event, data, path in
+            Logger.log("Event tracked: \(event) with path: \(path)")
+        },
+        trackPageLoad: {
+            Logger.log("Page loaded: \($0)")
+        }
+    )
     
     static func metadata(adding dictionary: [String: String]) async -> [String: String] {
         let device = await UIDevice.current
@@ -96,35 +110,23 @@ extension AnalyticsService {
         ]
             .merging(dictionary, uniquingKeysWith: { "\($0)/\($1)" })
     }
-    
-    static var mock: Self {
-        .init(
-            trackAction: { event, data, path in
-                Logger.log("Event tracked: \(event) with path: \(path)")
-            },
-            trackPageLoad: {
-                Logger.log("Page loaded: \($0)")
-            }
-        )
-    }
 }
 
-extension AnalyticsService {
-    
-    func trackAction(_ action: AnalyticsAction, metadata: [String: String] = [:], path: [PageName]? = nil) {
-        self.trackAction(action, metadata, path ?? self.currentPath)
+extension DependencyValues {
+    var analyticsService: AnalyticsService {
+        get { self[AnalyticsService.self] }
+        set { self[AnalyticsService.self] = newValue }
     }
 }
 
 struct TrackPageLoadModifier: ViewModifier {
-    @Environment(\.services.analytics) var analytics
+    @Dependency(\.analyticsService) var analytics
     
     let page: PageName
     
     func body(content: Content) -> some View {
         content
             .onAppear { analytics.trackPageLoad(analytics.currentPath + [page]) }
-            .environment(\.services.analytics.currentPath, analytics.currentPath + [page])
     }
 }
 

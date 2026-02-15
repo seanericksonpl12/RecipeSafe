@@ -1,10 +1,3 @@
-//
-//  FileUtility.swift
-//  RecipeSafe
-//
-//  Created by Sean Erickson on 9/17/24.
-//
-
 import Foundation
 import UIKit
 

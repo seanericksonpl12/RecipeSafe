@@ -13,7 +13,7 @@ struct LaunchScreen: UIViewControllerRepresentable {
     
     @Environment(\.colorScheme) var colorScheme
     @Binding var didFinishPlayingAnimation: Bool
-    @Binding var playAnimation: Bool
+    let playAnimation: Bool
     
     private let animationCutTime: UInt64 = 1_200_000_000
     private let storyboardName = "Launch Screen"

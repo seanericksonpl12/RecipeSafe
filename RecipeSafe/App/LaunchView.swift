@@ -5,37 +5,30 @@
 //  Created by Sean Erickson on 2/18/25.
 //
 
+import ComposableArchitecture
 import SwiftUI
 
 struct LaunchView: View {
-    
-    @Environment(\.services.network) var network
-    @State var animationFinished: Bool = false
-    @State var isLoaded = false
-    @State var appConfig: AppConfig = .defaultValue
-    
-    var body: some View {
-        if !isLoaded || !animationFinished {
-            LaunchScreen(didFinishPlayingAnimation: $animationFinished, playAnimation: $isLoaded)
-                .ignoresSafeArea()
-                .task { await setup() }
-        } else {
-            ContentView()
-                .addKeyboardToEnvironment()
-                .environment(\.appConfig, self.appConfig)
+  
+  @Bindable private var store: StoreOf<LaunchReducer>
+  
+  init(store: StoreOf<LaunchReducer>) {
+    self.store = store
+  }
+  
+  var body: some View {
+    if store.animationFinished {
+      ContentView(store: store.scope(state: \.contentState, action: \.content))
+        .addKeyboardToEnvironment()
+    } else {
+      LaunchScreen(
+        didFinishPlayingAnimation: $store.animationFinished.sending(\.didFinishPlayingAnimation),
+        playAnimation: store.loadState == .loaded
+      )
+        .ignoresSafeArea()
+        .task {
+          store.send(.fetchAppConfig)
         }
     }
-    
-    func setup() async {
-        defer { withAnimation { self.isLoaded = true } }
-        do {
-            self.appConfig = try await network.fetchAppConfig()
-            
-            if appConfig.appHealth.needsAttestation {
-                try await network.attestApp()
-            }
-        } catch {
-            Logger.log("Failed to load app config with error: \(error)")
-        }
-    }
+  }
 }

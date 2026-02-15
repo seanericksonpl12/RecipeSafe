@@ -13,60 +13,99 @@ import Combine
 
 
 private struct KeyboardListenerModifier: ViewModifier {
-    
-    @State var isKeyboardShowing:Bool = false
-    
-    private var keyboardPublisher: AnyPublisher<Bool, Never> {
-        Publishers.Merge(
-                NotificationCenter
-                    .default
-                    .publisher(for: UIResponder.keyboardWillShowNotification)
-                    .map { _ in true },
-                NotificationCenter
-                    .default
-                    .publisher(for: UIResponder.keyboardWillHideNotification)
-                    .map { _ in false }
-            )
-            .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
-            .eraseToAnyPublisher()
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .environment(\.keyboardShowing, isKeyboardShowing)
-            .onReceive(keyboardPublisher) { isKeyboardShowing = $0 }
-    }
+  
+  @State var isKeyboardShowing:Bool = false
+  
+  private var keyboardPublisher: AnyPublisher<Bool, Never> {
+    Publishers.Merge(
+      NotificationCenter
+        .default
+        .publisher(for: UIResponder.keyboardWillShowNotification)
+        .map { _ in true },
+      NotificationCenter
+        .default
+        .publisher(for: UIResponder.keyboardWillHideNotification)
+        .map { _ in false }
+    )
+    .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
+    .eraseToAnyPublisher()
+  }
+  
+  func body(content: Content) -> some View {
+    content
+      .environment(\.keyboardShowing, isKeyboardShowing)
+      .onReceive(keyboardPublisher) { isKeyboardShowing = $0 }
+  }
 }
 
 extension View {
-    @MainActor func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-    
-    func addKeyboardToEnvironment() -> some View {
-        self
-            .modifier(KeyboardListenerModifier())
-    }
+  @MainActor func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+  }
+  
+  func addKeyboardToEnvironment() -> some View {
+    self
+      .modifier(KeyboardListenerModifier())
+  }
 }
 
 
 extension View {
-    func applyAppBackground(proxy geo: GeometryProxy, isShown: Bool = true) -> some View {
-        self.background {
-            Image("logo-background")
-                .resizable()
-                .scaledToFill()
-                .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
-                .ignoresSafeArea(.all)
-                .opacity(isShown ? 0.05 : 0.0)
-        }
+  func applyAppBackground(proxy geo: GeometryProxy, isShown: Bool = true) -> some View {
+    self.background {
+      Image("logo-background")
+        .resizable()
+        .scaledToFill()
+        .frame(width: geo.size.width + geo.safeAreaInsets.leading + geo.safeAreaInsets.trailing)
+        .ignoresSafeArea(.all)
+        .opacity(isShown ? 0.05 : 0.0)
     }
+  }
 }
 
 extension View {
-    func keepScreenAlive() -> some View {
-        self
-            .onAppear { UIApplication.shared.isIdleTimerDisabled = true }
-            .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
+  func keepScreenAlive() -> some View {
+    self
+      .onAppear { UIApplication.shared.isIdleTimerDisabled = true }
+      .onDisappear { UIApplication.shared.isIdleTimerDisabled = false }
+  }
+}
+
+extension ToolbarContent {
+  @ToolbarContentBuilder
+  func removeLiquidGlassEffect() -> some ToolbarContent {
+    if #available(iOS 26.0, *) {
+      sharedBackgroundVisibility(.hidden)
+    } else {
+      self
     }
+  }
+}
+
+extension View {
+  @ViewBuilder
+  func topBar(
+    alignment: HorizontalAlignment = .center,
+    spacing: CGFloat? = nil,
+    @ViewBuilder content: () -> some View
+  ) -> some View {
+    if #available(iOS 26.0, *) {
+      safeAreaBar(edge: .top, alignment: alignment, spacing: spacing, content: content)
+    } else {
+      safeAreaInset(edge: .top, alignment: alignment, spacing: spacing, content: content)
+    }
+  }
+  
+  @ViewBuilder
+  func bottomBar(
+    alignment: HorizontalAlignment = .center,
+    spacing: CGFloat? = nil,
+    @ViewBuilder content: () -> some View
+  ) -> some View {
+    if #available(iOS 26.0, *) {
+      safeAreaBar(edge: .bottom, alignment: alignment, spacing: spacing, content: content)
+    } else {
+      safeAreaInset(edge: .bottom, alignment: alignment, spacing: spacing, content: content)
+    }
+  }
 }

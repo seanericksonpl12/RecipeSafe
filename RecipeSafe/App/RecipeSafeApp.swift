@@ -6,14 +6,16 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct RecipeSafeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LaunchView()
-                .injectServices()
+            LaunchView(store: Store(initialState: LaunchReducer.LaunchState()) {
+                LaunchReducer()
+            })
         }
     }
 }

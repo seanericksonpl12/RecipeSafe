@@ -8,15 +8,15 @@ import Foundation
 import SwiftUI
 
 struct IngredientGroup: Identifiable {
-    var shoppingListItem: ShoppingListItem?
+    var shoppingListItem: ShoppingListModel?
     var text: String
     var selected: Bool
     var isFresh: Bool
     let id: UUID = UUID()
     
-    init(shoppingListItem: ShoppingListItem, isFresh: Bool = false) {
+    init(shoppingListItem: ShoppingListModel, isFresh: Bool = false) {
         self.shoppingListItem = shoppingListItem
-        self.text = shoppingListItem.value ?? ""
+        self.text = shoppingListItem.value
         self.selected = shoppingListItem.selected
         self.isFresh = isFresh
     }

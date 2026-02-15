@@ -9,9 +9,8 @@ import SwiftUI
 
 struct IconImage: View {
     
-    // MARK: - Binding
-    @Binding var isEditing: Bool
-    @Binding var img: ImageData
+    let isEditing: Bool
+    let img: ImageData
     
     // MARK: - Body
     var body: some View {
@@ -21,7 +20,7 @@ struct IconImage: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: 70, maxHeight: 70)
+                    .frame(maxWidth: 60, maxHeight: 60)
                     .clipShape(Circle())
                     .padding(.leading)
                     .opacity(isEditing ? 0.5 : 1)
@@ -35,7 +34,7 @@ struct IconImage: View {
             AsyncImage(url: url) { img in
                 img.resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: 70, maxHeight: 70)
+                    .frame(maxWidth: 60, maxHeight: 60)
                     .clipShape(Circle())
                     .padding(.leading)
                     .opacity(isEditing ? 0.5 : 1)
@@ -46,7 +45,7 @@ struct IconImage: View {
                     }
             } placeholder: {
                 LoadingView()
-                    .frame(maxWidth: 70, maxHeight: 70)
+                    .frame(maxWidth: 60, maxHeight: 60)
                     .padding(.leading)
             }
         case .none:
@@ -59,7 +58,7 @@ struct IconImage: View {
         Image(systemName: "plus.circle")
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(maxWidth: 70, maxHeight: 70)
+            .frame(maxWidth: 60, maxHeight: 60)
             .clipShape(Circle())
             .padding(.leading)
     }

@@ -7,12 +7,13 @@
 
 import Foundation
 import SwiftUI
+import Dependencies
 
 struct EditableToolbar: ToolbarContent {
     
     @Environment(\.toolbarActions) var actions
     @Environment(\.editMode) var editMode
-    @Environment(\.services.analytics) var analytics
+    @Dependency(\.analyticsService) var analytics
     
     @Binding var isEditing: Bool
     

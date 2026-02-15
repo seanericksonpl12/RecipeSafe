@@ -7,10 +7,11 @@
 
 import SwiftUI
 import PhotosUI
+import Dependencies
 
 struct CreateRecipeMenuView: View {
     
-    @Environment(\.services.analytics) var analytics
+    @Dependency(\.analyticsService) var analytics
     
     let imageCompressionQuality: CGFloat = 0.25
     
@@ -45,7 +46,7 @@ struct CreateRecipeMenuView: View {
             Image(systemName: "plus")
         }
         .sheet(isPresented: $showingCamera) {
-            CameraView(capturedImage: $capturedPhoto)
+          CameraView { capturedPhoto = $0 }
         }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $selectedPhoto, matching: .any(of: [.images, .screenshots, .livePhotos]))
         .onChange(of: selectedPhoto) { _, newPhoto in

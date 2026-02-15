@@ -7,7 +7,7 @@
 
 @preconcurrency import CoreData
 
-struct ShoppingListDataService: CoreDataService {
+struct ShoppingListDataService {
     
     typealias Item = ShoppingListItem
     

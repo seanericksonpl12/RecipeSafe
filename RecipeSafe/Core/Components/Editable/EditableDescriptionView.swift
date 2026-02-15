@@ -10,7 +10,7 @@ import SwiftUI
 struct EditableDescriptionView: View {
     
     @Binding var recipe: Recipe
-    @Binding var editingEnabled: Bool
+    var editingEnabled: Bool
     
     var optionalDisplay: String?
     
@@ -31,6 +31,7 @@ struct EditableDescriptionView: View {
                     )
                     .disabled(!editingEnabled)
                 }
+              IconImage(isEditing: false, img: recipe.img)
                 HStack {
                     Spacer()
                     if !recipe.prepTime.isEmpty || editingEnabled {

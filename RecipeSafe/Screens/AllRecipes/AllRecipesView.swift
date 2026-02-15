@@ -1,151 +1,99 @@
-//
-//  ContentView.swift
-//  RecipeSafe
-//
-//  Created by Sean Erickson on 7/13/23.
-//
-
+import ComposableArchitecture
 import SwiftUI
-import CoreData
 
 struct AllRecipesView: View {
-    
-    @FetchRequest(
-        sortDescriptors: [SortDescriptor(\.title)]
-    ) private var recipeList: FetchedResults<RecipeItem>
-    
-    @Environment(\.services.recipeData.deleteRecipes) var delete
-    @Environment(\.services.network.recipeImage) var createRecipe
-    @Environment(\.appConfig.featureFlags.recipeAnalysisEnabled) var cameraEnabled
-    @Environment(\.services.analytics) var analytics
-    
-    @State var navPath: NavigationPath
-    @State var searchText: String = ""
-    @State var customRecipeSheet: Bool = false
-    @State var photoData: Data?
-    @State var isLoading: Bool = false
-    @State var isFromCreateNew: Bool = false
-    
-    var searchList: (any RandomAccessCollection<RecipeItem>) -> [RecipeItem] {
-        { [self] list in
-            if searchText.isEmpty {
-                return Array(list)
-            } else {
-                return list.filter({ $0.title?.lowercased().contains(searchText.lowercased()) ?? false })
-            }
+  
+  @Bindable private var store: StoreOf<AllRecipesReducer>
+  
+  init(store: StoreOf<AllRecipesReducer>) {
+    self.store = store
+  }
+  
+  var body: some View {
+    NavigationStack(path: $store.scope(state: \.navPath, action: \.navPath)) {
+      content
+      .rootToolbar(title: "content.nav.title".localized) {
+        if let createRecipeStore = store.scope(state: \.createRecipeState, action: \.createRecipe) {
+          CreateRecipeView(store: createRecipeStore)
+        } else {
+          Button {
+            store.send(.createCustomRecipe)
+          } label: {
+            Label("content.toolbar.add".localized, systemImage: "plus")
+              .frame(width: 44, height: 44)
+          }
         }
+      }
+      .fullScreenCover(
+        item: $store.scope(state: \.destination?.recipe, action: \.destination.recipe)
+      ) {
+        CustomRecipeView(store: $0)
+      }
+      .task { store.send(.task) }
+      .pageLoad(.allRecipes)
+
+    } destination: { path in
+      switch path.case {
+      case let .recipe(store):
+        RecipeView(store: store)
+      }
     }
-    
-    // MARK: - Body
-    var body: some View {
+  }
+}
+
+private extension AllRecipesView {
+  var content: some View {
+    List {
+      if store.recipeList.isEmpty {
+        EmptyListView(description: "empty.desc.1".localized)
+      } else {
+        ForEach(store.searchList) { item in
+          Button {
+            store.send(.recipeTapped(item))
+          } label: {
+            Text(item.title)
+          }
+        }
+        .onDelete { store.send(.deleteRecipes($0)) }
+        .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
         
-        NavigationStack(path: $navPath) {
-            
-//            if recipeList.isEmpty {
-//                EmptyListView(description: "empty.desc.1".localized)
-//                    .padding()
-//            }
-            
-            // MARK: - List
-            List {
-                ForEach(searchList(recipeList), id: \.id) { item in
-                    NavigationLink {
-                        if let recipe = Recipe(dataItem: item) {
-                            RecipeView(recipe: recipe, screen: .allRecipes)
-                                .navigationBarTitleDisplayMode(.inline)
-                        }
-                    } label: {
-                        Text(item.title ?? "")
-                    }
-                }
-                .onDelete {
-                    navPath = .init()
-                    try? delete($0, recipeList)
-                }
-                .listRowBackground(Color(uiColor: UIColor.secondarySystemBackground))
-                
-                if searchList(recipeList).isEmpty {
-                    Spacer()
-                        .listRowBackground(Color.clear)
-                }
-                
-            }
-            .scrollContentBackground(.hidden)
-            .disabled(isLoading)
-            .navigationTitle("content.nav.title".localized)
-            .toolbar {
-                ToolbarItem {
-                    if cameraEnabled {
-                        CreateRecipeMenuView(createFromScratch: $customRecipeSheet, photoData: $photoData)
-                    } else {
-                        Button {
-                            customRecipeSheet = true
-                            analytics.trackAction(.tappedCreateNewRecipe)
-                        } label: {
-                            Label("content.toolbar.add".localized, systemImage: "plus")
-                                .frame(width: 40, height: 40)
-                                .contentShape(Rectangle())
-                        }
-                    }
-                }
-            }
-            .onChange(of: self.photoData) { _, data in
-                buildRecipeFromImage(image: data)
-            }
-            .overlay {
-                if isLoading {
-                    HStack {
-                        Spacer()
-                        LoadingView()
-                        Spacer()
-                    }
-                    
-                }
-            }
-            
-            // MARK: - Navigation
-            .navigationDestination(for: Recipe.self) { recipe in
-                RecipeView(recipe: recipe, screen: .allRecipes, createNew: isFromCreateNew)
-                    .navigationBarTitleDisplayMode(.inline)
-            }
+        if store.searchList.isEmpty {
+          Spacer()
+            .listRowBackground(Color.clear)
         }
-        .searchable(text: $searchText, prompt: "content.search.prompt".localized)
-        .sheet(isPresented: $customRecipeSheet) {
-            NavigationView {
-                RecipeView(recipe: Recipe(), screen: .allRecipes, createNew: true)
-            }
-        }
-        .emptyModifier(isHidden: recipeList.isEmpty, description: "empty.desc.1".localized)
-        .pageLoad(.allRecipes)
+      }
     }
-    
-    func buildRecipeFromImage(image: Data?) {
-        guard let image else { return }
-        self.photoData = nil
-        Task {
-            self.isLoading = true
-            defer { self.isLoading = false }
-            
-            do {
-                let recipe = try await createRecipe(image)
-                self.isFromCreateNew = true
-                navPath.append(recipe)
-            } catch {
-                print("error building recipe: \(error)")
-            }
+    .searchable(
+      text: $store.searchText.sending(\.searchTextUpdated),
+      prompt: "content.search.prompt".localized
+    )
+    .scrollContentBackground(.hidden)
+    .disabled(store.isLoading)
+    .overlay {
+      if store.isLoading {
+        HStack {
+          Spacer()
+          LoadingView()
+          Spacer()
         }
+      }
     }
+  }
 }
 
-// MARK: - Preview
-
-#Preview("Camera disabled") {
-    AllRecipesView(navPath: .init())
-        .injectServices()
+struct TestingView: View {
+  var body: some View {
+    VStack {
+      Text("testing...")
+    }
+    .modalToolbar {
+      print("dismiss")
+    }
+  }
 }
 
-#Preview("Camera Enabled") {
-    AllRecipesView(navPath: .init())
-        .injectServices()
-        .environment(\.appConfig.featureFlags.recipeAnalysisEnabled, true)
+#if DEBUG
+#Preview {
+  AllRecipesView(store: .init(initialState: AllRecipesState(), reducer: AllRecipesReducer.init))
 }
+#endif

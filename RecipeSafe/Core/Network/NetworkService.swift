@@ -10,7 +10,7 @@ import CoreData
 import DeviceCheck
 import CryptoKit
 
-struct NetworkService: Sendable, Service {
+struct NetworkService: Sendable {
 
     private static let keyId = "RECIPE_SAFE_APP_ATTEST_KEY_ID"
     let buildRecipe: @Sendable (URL) async throws -> Recipe
@@ -36,7 +36,6 @@ extension NetworkService {
         let client = HttpClient(session: URLSession.shared)
         return .init(
             buildRecipe: { url in
-                
                 guard url.scheme == "RecipeSafe" else {
                     throw NetworkError.invalidURL("Bad URL scheme")
                 }

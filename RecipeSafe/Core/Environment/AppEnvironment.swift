@@ -23,8 +23,7 @@ protocol Injectable {
 }
 
 extension EnvironmentValues {
-    @Entry var services: ServiceValues = .defaultValue
-    @Entry var appConfig: AppConfig = .defaultValue
+//    @Entry var appConfig: AppConfig = .defaultValue
     @Entry var toolbarActions: ToolbarActions = .defaultValue
     @Entry var keyboardShowing: Bool = false
 }

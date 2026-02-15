@@ -11,11 +11,11 @@ struct NewGroupPopover: View {
     
     // MARK: - Binding
     @Binding var titleText: String
-    @Binding var selectedRecipes: [RecipeItem]
+    @Binding var selectedRecipes: [Recipe]
     @State var editBind: Bool = true
     
     // MARK: - Properties
-    var recipes: [RecipeItem]
+    var recipes: [Recipe]
     var allowSelection: Bool = true
     var color: Color
     
