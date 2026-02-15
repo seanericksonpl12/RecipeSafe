@@ -61,7 +61,7 @@ extension CoreDataService: DependencyKey {
     viewContext: PersistenceController.shared.container.viewContext
   )
   static let testValue = CoreDataService(
-    viewContext: PersistenceController.preview.container.viewContext
+    viewContext: PersistenceController(inMemory: true).container.viewContext
   )
 }
 
