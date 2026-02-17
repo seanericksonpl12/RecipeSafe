@@ -45,43 +45,12 @@ struct RecipeView: View {
         
       }
       .alert($store.scope(state: \.alert, action: \.alert))
-      .popover(item: $store.scope(state: \.destination?.selectGroups, action: \.destination.selectGroups)) { store in
-        SelectGroupsViewTCA(store: store)
-      }
+//      .popover(item: $store.scope(state: \.destination?.selectGroups, action: \.destination.selectGroups)) { store in
+//        SelectGroupsViewTCA(store: store)
+//      }
       .environment(\.editMode, .constant(store.editingEnabled ? EditMode.active : EditMode.inactive))
       .navigationBarTitleDisplayMode(.inline)
-//      .toolbar {
-//        ToolbarItem {
-//          if store.editingEnabled {
-//            Button("button.save".localized) {
-//              store.send(.saveChanges)
-//            }
-//          } else {
-//            Menu {
-//              Button("button.edit".localized) {
-//                store.send(.binding(.set(\.editingEnabled, true)))
-//              }
-//              if store.recipe.dataEntity != nil {
-//                Button("group.add".localized) {
-//                  store.send(.showSelectGroups)
-//                }
-//                Button("button.delete".localized, role: .destructive) {
-//                  store.send(.showAlert)
-//                }
-//              }
-//            } label: {
-//              Image(systemName: "ellipsis.circle")
-//            }
-//          }
-//        }
-//        if store.editingEnabled {
-//          ToolbarItem {
-//            Button("button.cancel".localized) {
-//              store.send(.cancelChanges)
-//            }
-//          }
-//        }
-//      }
+
     }
     .navigationTitle(store.recipe.title)
     .toolbar(.hidden, for: .tabBar)
@@ -142,16 +111,7 @@ struct RecipeView: View {
     RecipeView(
       store: .init(
         initialState: RecipeState(
-          recipe: Recipe(
-            title: "My Recipe",
-            description: "This is a some description of this recipe, .....",
-            ingredients: ["1 egg", "2 lbs butter", "6 oz lime juice", "3 lbs turkey brains", "1 onion"],
-            instructions: ["Boil the egg till hard", "Sauté the turkey brains", "Fry the onion"],
-            img: .none,
-            url: nil,
-            prepTime: "20 min",
-            cookTime: "45 min"
-          ),
+          recipe: .recipeMockChicken,
           editingEnabled: false
         ),
         reducer: RecipeReducer.init

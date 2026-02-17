@@ -40,5 +40,5 @@ struct SearchRecipeView: View {
 }
 
 #Preview {
-    SearchRecipeView(recipe: Recipe(title: "Mexican Street Tacos", description: "Mexican Street Tacos - Easy, quick, authentic carne asada street tacos you can now make right at home! Top with onion, cilantro + fresh lime juice! SO GOOD!", ingredients: [], instructions: [], img: .downloaded(URL(string: "https://feelgoodfoodie.net/wp-content/uploads/2017/04/Ground-Beef-Tacos-9.jpg?")!), url: URL(string: "https://feelgoodfoodie.net/recipe/ground-beef-tacos-napa-cabbage-guacamole/"), prepTime: nil, cookTime: nil))
+//    SearchRecipeView(recipe: Recipe(title: "Mexican Street Tacos", description: "Mexican Street Tacos - Easy, quick, authentic carne asada street tacos you can now make right at home! Top with onion, cilantro + fresh lime juice! SO GOOD!", ingredients: [], instructions: [], img: .downloaded(URL(string: "https://feelgoodfoodie.net/wp-content/uploads/2017/04/Ground-Beef-Tacos-9.jpg?")!), url: URL(string: "https://feelgoodfoodie.net/recipe/ground-beef-tacos-napa-cabbage-guacamole/"), prepTime: nil, cookTime: nil))
 }

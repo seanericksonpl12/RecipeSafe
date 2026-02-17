@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "mcp__claude_ai_Notion__notion-search",
-      "mcp__claude_ai_Notion__notion-fetch"
+      "mcp__claude_ai_Notion__notion-fetch",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.pointfree.co)",
+      "WebFetch(domain:swiftpackageindex.com)"
     ]
   }
 }

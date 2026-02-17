@@ -1,21 +1,21 @@
-//
-//  RecipeSafeApp.swift
-//  RecipeSafe
-//
-//  Created by Sean Erickson on 7/13/23.
-//
-
 import SwiftUI
+import SQLiteData
 import ComposableArchitecture
 
 @main
 struct RecipeSafeApp: App {
-    
-    var body: some Scene {
-        WindowGroup {
-            LaunchView(store: Store(initialState: LaunchReducer.LaunchState()) {
-                LaunchReducer()
-            })
-        }
+  
+  init() {
+    prepareDependencies {
+      $0.defaultDatabase = try! PersistenceController.appDatabase()
     }
+  }
+  
+  var body: some Scene {
+    WindowGroup {
+      LaunchView(store: Store(initialState: LaunchReducer.LaunchState()) {
+        LaunchReducer()
+      })
+    }
+  }
 }

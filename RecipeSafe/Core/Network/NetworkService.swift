@@ -91,8 +91,9 @@ extension NetworkService {
 //                let assertion = try await DCAppAttestService.shared.generateAssertion(key, clientDataHash: clientDataHash)
 //                let headers = ["keyid": key, "assertion": assertion.base64EncodedString()]
 //                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString(), "challenge": String(data: challenge, encoding: .utf8) ?? ""]), queryItems: nil, headers: headers)
-                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString()]), queryItems: nil, headers: ["apikey": AppEnvironment.serverApiKey])
-                return Recipe(title: temp.title, description: temp.description, ingredients: temp.ingredients, instructions: temp.instructions, img: .selected(imageData), url: nil, prepTime: nil, cookTime: nil)
+              throw URLError(.cancelled)
+//                let temp: RecipeFromImage = try await client.request(url: Endpoints.imageAnalysis.fullUrl, method: .post, body: .json(["image": imageData.base64EncodedString()]), queryItems: nil, headers: ["apikey": AppEnvironment.serverApiKey])
+//                return Recipe(title: temp.title, description: temp.description, ingredients: temp.ingredients, instructions: temp.instructions, img: .selected(imageData), url: nil, prepTime: nil, cookTime: nil)
             }
         )
     }
@@ -102,52 +103,52 @@ struct ImageRequest: Encodable {
     let image: String
 }
 
-extension NetworkService {
-    
-    static var mock: Self {
-        .init(
-            buildRecipe: { url in
-                try await Task.sleep(nanoseconds: 1_000_000_000)
-                return Recipe(
-                    title: "Mock Recipe",
-                    description: "Mock Description",
-                    ingredients: [
-                        "Ingredient 1",
-                        "Ingredient 2",
-                        "Ingredient 3"
-                    ],
-                    instructions: [
-                        "Step 1",
-                        "Step 2",
-                        "Step 3"
-                    ],
-                    img: .none,
-                    url: nil,
-                    prepTime: "10 min",
-                    cookTime: "30 min"
-                )
-            },
-            fetchAppConfig: { .defaultValue },
-            attestApp: {},
-            recipeImage: { _ in
-                try await Task.sleep(nanoseconds: 2_000_000_000)
-                return Recipe(
-                    title: "Image Created Recipe",
-                    description: "A recipe created from taking a picture",
-                    ingredients: [
-                        "mock 1",
-                        "mock 2"
-                    ],
-                    instructions: [
-                        "step 1",
-                        "step 2"
-                    ],
-                    img: .none,
-                    url: nil,
-                    prepTime: "20 min",
-                    cookTime: "30 min"
-                )
-            }
-        )
-    }
-}
+//extension NetworkService {
+//    
+//    static var mock: Self {
+//        .init(
+//            buildRecipe: { url in
+//                try await Task.sleep(nanoseconds: 1_000_000_000)
+//                return Recipe(
+//                    title: "Mock Recipe",
+//                    description: "Mock Description",
+//                    ingredients: [
+//                        "Ingredient 1",
+//                        "Ingredient 2",
+//                        "Ingredient 3"
+//                    ],
+//                    instructions: [
+//                        "Step 1",
+//                        "Step 2",
+//                        "Step 3"
+//                    ],
+//                    img: .none,
+//                    url: nil,
+//                    prepTime: "10 min",
+//                    cookTime: "30 min"
+//                )
+//            },
+//            fetchAppConfig: { .defaultValue },
+//            attestApp: {},
+//            recipeImage: { _ in
+//                try await Task.sleep(nanoseconds: 2_000_000_000)
+//                return Recipe(
+//                    title: "Image Created Recipe",
+//                    description: "A recipe created from taking a picture",
+//                    ingredients: [
+//                        "mock 1",
+//                        "mock 2"
+//                    ],
+//                    instructions: [
+//                        "step 1",
+//                        "step 2"
+//                    ],
+//                    img: .none,
+//                    url: nil,
+//                    prepTime: "20 min",
+//                    cookTime: "30 min"
+//                )
+//            }
+//        )
+//    }
+//}

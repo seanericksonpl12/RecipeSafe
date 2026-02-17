@@ -8,6 +8,21 @@ struct RecipeReducer: Sendable {
   typealias State = RecipeState
   typealias Action = RecipeAction
   
+  @Reducer
+  struct Destination {
+    enum State: Equatable, Sendable {
+      case selectCategories(SelectCategoriesState)
+    }
+    enum Action: Equatable, Sendable {
+      case selectCategories(SelectCategoriesAction)
+    }
+    var body: some ReducerOf<Self> {
+      Scope(state: \.selectCategories, action: \.selectCategories) {
+        SelectCategoriesReducer()
+      }
+    }
+  }
+  
   var body: some ReducerOf<Self> {
     BindingReducer()
     Reduce { state, action in
@@ -20,20 +35,39 @@ struct RecipeReducer: Sendable {
         state.recipe.ingredients.append("")
       case .addInstruction:
         state.recipe.instructions.append("")
-        
+      case let .toggleIngredientChecked(ingredient):
+        if state.checkedIngredients[ingredient.id] == true {
+          state.checkedIngredients[ingredient.id] = nil
+        } else {
+          state.checkedIngredients[ingredient.id] = true
+        }
+        return .none
+      case .favoriteRecipe:
+        let currentState = state.recipe.isFavorite
+        state.recipe.isFavorite.toggle()
+        do {
+          try recipeManager.update(recipe: state.recipe)
+        } catch {
+          state.recipe.isFavorite = currentState
+        }
+      case .editRecipeTapped:
+        state.editRecipe = EditRecipeState(state.recipe)
+        return .none
+      case .addTagTapped:
+        return .none
       case .saveChanges:
         return saveChanges(&state)
       case .cancelChanges:
         return cancelChanges(&state)
       case .deleteSelf:
         try? recipeManager.delete(state.recipe)
-        state.recipe.dataEntity = nil
+//        state.recipe.dataEntity = nil
         return .run { _ in await dismiss() }
         
       case .showAlert:
         state.alert = .deleteRecipe()
-      case .showSelectGroups:
-        state.destination = .selectGroups(SelectGroupsState(recipe: state.recipe))
+      case .showSelectCategories:
+        state.destination = .selectCategories(.init(recipe: state.recipe))
         return .none
       case let .alert(.presented(action)):
         switch action {
@@ -44,14 +78,9 @@ struct RecipeReducer: Sendable {
         }
       case let .destination(.presented(action)):
         switch action {
-        case .selectGroups(.groupSelected(let group)):
-          if let recipeId = state.recipe.dataEntity, let recipeItem = recipeManager.getRecipe(for: recipeId) {
-            if let groupItem = groupManager.getGroup(for: group.dataEntityID) {
-              try? recipeManager.addToGroup(state.recipe, group: groupItem)
-            }
-          }
-          return .none
-        case .selectGroups(.cancel):
+        case let .selectCategories(.delegate(.selectedTags(tags))):
+          state.recipe.tags = tags
+          try? recipeManager.update(recipe: state.recipe)
           return .none
         default:
           return .none
@@ -60,6 +89,9 @@ struct RecipeReducer: Sendable {
         return .none
       }
       return .none
+    }
+    .ifLet(\.editRecipe, action: \.editRecipe) {
+      EditRecipeReducer()
     }
     .ifLet(\.alert, action: \.alert)
     .ifLet(\.$destination, action: \.destination) { Destination() }
@@ -73,52 +105,38 @@ struct RecipeReducer: Sendable {
 }
 
 extension RecipeReducer {
-  @Reducer
-  struct Destination {
-    enum State: Equatable, Sendable {
-      case selectGroups(SelectGroupsState)
-    }
-    enum Action: Equatable, Sendable {
-      case selectGroups(SelectGroupsAction)
-    }
-    var body: some ReducerOf<Self> {
-      Scope(state: \.selectGroups, action: \.selectGroups) { SelectGroupsReducer() }
-    }
-  }
-}
-
-extension RecipeReducer {
   private func saveChanges(
     _ state: inout State
   ) -> Effect<Action> {
     state.recipe.instructions.removeAll { $0 == "" }
     state.recipe.ingredients.removeAll { $0 == "" }
-    try? recipeManager.updateRecipe(&state.recipe)
+    try? recipeManager.update(recipe: state.recipe)
     return .send(.binding(.set(\.editingEnabled, false)), animation: .default)
   }
   
   private func cancelChanges(
     _ state: inout State
   ) -> Effect<Action> {
-    let effect: Effect<Action> = .send(.binding(.set(\.editingEnabled, false)), animation: .default)
-    guard let id = state.recipe.dataEntity, let entity = recipeManager.getRecipe(for: id) else {
-      return effect
-    }
-    state.recipe.title = entity.title ?? state.recipe.title
-    state.recipe.description = entity.desc ?? ""
-    if let data = entity.photoData { state.recipe.img = .selected(data) }
-    guard
-      var ingredientArr = entity.ingredients?.array as? [Ingredient],
-      var instructionArr = entity.instructions?.array as? [Instruction]
-    else {
-      return effect
-    }
-    ingredientArr = ingredientArr.filter { $0.value != nil }
-    instructionArr = instructionArr.filter { $0.value != nil }
-    
-    state.recipe.ingredients = ingredientArr.map { $0.value! }
-    state.recipe.instructions = instructionArr.map { $0.value! }
-    return effect
+    return .none
+//    let effect: Effect<Action> = .send(.binding(.set(\.editingEnabled, false)), animation: .default)
+//    guard let id = state.recipe.dataEntity, let entity = recipeManager.getRecipe(for: id) else {
+//      return effect
+//    }
+//    state.recipe.title = entity.title ?? state.recipe.title
+//    state.recipe.description = entity.desc ?? ""
+//    if let data = entity.photoData { state.recipe.img = .selected(data) }
+//    guard
+//      var ingredientArr = entity.ingredients?.array as? [Ingredient],
+//      var instructionArr = entity.instructions?.array as? [Instruction]
+//    else {
+//      return effect
+//    }
+//    ingredientArr = ingredientArr.filter { $0.value != nil }
+//    instructionArr = instructionArr.filter { $0.value != nil }
+//    
+//    state.recipe.ingredients = ingredientArr.map { $0.value! }
+//    state.recipe.instructions = instructionArr.map { $0.value! }
+//    return effect
   }
   
   private func saveNewRecipe(
@@ -134,7 +152,10 @@ extension RecipeReducer {
 
 @ObservableState
 struct RecipeState: Sendable, Equatable {
+  var editRecipe: EditRecipeState?
+
   var recipe: Recipe
+  var checkedIngredients: [UUID: Bool] = [:]
   var editingEnabled: Bool
   
   @Presents
@@ -151,13 +172,19 @@ enum RecipeAction: Sendable, Equatable, BindableAction {
   case deleteInstructions(IndexSet)
   case addIngredient
   case addInstruction
+  case toggleIngredientChecked(IdentifiedString)
+  case favoriteRecipe
+  case editRecipeTapped
+  case addTagTapped
   
   case saveChanges
   case cancelChanges
   case deleteSelf
   
   case showAlert
-  case showSelectGroups
+  case showSelectCategories
+  
+  case editRecipe(EditRecipeAction)
   case alert(PresentationAction<AlertAction>)
   case destination(PresentationAction<RecipeReducer.Destination.Action>)
   

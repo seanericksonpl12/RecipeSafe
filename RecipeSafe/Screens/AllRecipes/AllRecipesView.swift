@@ -13,7 +13,7 @@ struct AllRecipesView: View {
   var body: some View {
     NavigationStack(path: $store.scope(state: \.navPath, action: \.navPath)) {
       content
-        .background(Color(uiColor: UIColor.quaternarySystemFill))
+        .animation(.bouncy, value: store.recipeList)
         .navigationTitle("content.nav.title".localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -48,13 +48,18 @@ struct AllRecipesView: View {
         ) {
           CustomRecipeView(store: $0)
         }
+        .alert($store.scope(state: \.alert, action: \.alert))
         .task { store.send(.task) }
         .pageLoad(.allRecipes)
       
     } destination: { path in
       switch path.case {
       case let .recipe(store):
-        RecipeView(store: store)
+        if #available(iOS 18.0, *) {
+          NewRecipeView(store: store)
+        } else {
+          RecipeView(store: store)
+        }
       }
     }
     
@@ -67,13 +72,23 @@ private extension AllRecipesView {
       if store.recipeList.isEmpty {
         EmptyListView(description: "empty.desc.1".localized)
       } else {
-        ForEach(store.searchList) { recipe in
-          Button {
-            store.send(.recipeTapped(recipe))
-          } label: {
-            RecipeListCard(recipe: recipe)
+        LazyVStack {
+          ForEach(Array(store.searchList.enumerated()), id: \.element.id) { index, recipe in
+            Button {
+              store.send(.recipeTapped(recipe))
+            } label: {
+              RecipeListCard(recipe: recipe)
+            }
+            .padding(.horizontal)
+            .contextMenu {
+              Button(recipe.isFavorite ? "Unfavorite" : "Favorite", systemImage: "heart") {
+                store.send(.favoriteRecipe(index))
+              }
+              Button("Delete", systemImage: "trash", role: .destructive) {
+                store.send(.deleteRecipe(recipe))
+              }
+            }
           }
-          .padding(.horizontal)
         }
       }
     }

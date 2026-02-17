@@ -13,10 +13,10 @@ struct NewGroupReducer: Reducer {
       switch action {
       case .task:
         do {
-          let recipeItems = try coreDataService.fetchAll(RecipeItem.self)
-          state.availableRecipes = recipeItems
-            .filter { $0.group == nil }
-            .compactMap { Recipe(dataItem: $0) }
+//          let recipeItems = try coreDataService.fetchAll(RecipeItem.self)
+//          state.availableRecipes = recipeItems
+//            .filter { $0.group == nil }
+//            .compactMap { Recipe(dataItem: $0) }
         } catch {
           state.availableRecipes = []
         }

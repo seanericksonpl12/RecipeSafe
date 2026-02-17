@@ -12,31 +12,38 @@ struct RecipeListCard: View {
       VStack(alignment: .leading, spacing: 2) {
         Text(recipe.title)
           .font(.body)
-          .foregroundStyle(Color.black)
+          .foregroundStyle(Color.Text.primary)
           .lineLimit(1)
-
-        // TODO: Add category property to Recipe model
-        // Text(recipe.category)
-        //   .font(.caption)
-        //   .foregroundStyle(.secondary)
+      
+        if !recipe.tags.isEmpty {
+          HStack(spacing: 8) {
+            ForEach(recipe.tags) { tag in
+              Text(tag.label)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Color.Text.primary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(ColorSet.color(tag.color).opacity(0.5), in: Capsule())
+            }
+          }
+          .padding(.vertical, 6)
+        }
       }
 
       Spacer()
 
-      // TODO: Add isFavorite property to Recipe model
-      // if recipe.isFavorite {
-      //   Image(systemName: "heart.fill")
-      //     .font(.caption)
-      //     .foregroundStyle(.red)
-      // }
+      if recipe.isFavorite {
+        Image(systemName: "heart.fill")
+          .foregroundStyle(Color.red)
+      }
 
       Image(systemName: "chevron.right")
         .font(.caption)
-        .foregroundStyle(.tertiary)
+        .foregroundStyle(Color.Icon.default)
     }
     .padding(8)
-    .background(Color.white)
-    .clipShape(RoundedRectangle(cornerRadius: 15))
+    .background(Color.Card.background, in: RoundedRectangle(cornerRadius: 15))
   }
 }
 

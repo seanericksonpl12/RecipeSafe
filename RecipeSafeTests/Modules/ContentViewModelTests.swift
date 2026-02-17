@@ -9,7 +9,6 @@ import XCTest
 @testable import RecipeSafe
 import SwiftUI
 import CoreData
-import Injector
 @MainActor final class ContentViewModelTests: XCTestCase {
 
     var viewModel: AllRecipesViewModel!

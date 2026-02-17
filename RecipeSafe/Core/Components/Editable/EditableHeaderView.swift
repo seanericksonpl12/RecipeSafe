@@ -94,7 +94,7 @@ struct EditableHeaderView: View {
     }
 }
 
-#Preview {
-    EditableHeaderView(recipe: .constant(Recipe(title: "ejklfs", description: "fdsafd", ingredients: [], instructions: [], img: .none, url: nil, prepTime: nil, cookTime: nil)), editingEnabled: .constant(true), optionalDisplay: nil)
-        .environment(\.toolbarActions, .defaultValue)
-}
+//#Preview {
+//    EditableHeaderView(recipe: .constant(Recipe(title: "ejklfs", description: "fdsafd", ingredients: [], instructions: [], img: .none, url: nil, prepTime: nil, cookTime: nil)), editingEnabled: .constant(true), optionalDisplay: nil)
+//        .environment(\.toolbarActions, .defaultValue)
+//}

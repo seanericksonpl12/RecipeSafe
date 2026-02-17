@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ImageData: Equatable {
+enum ImageData: Equatable, Hashable {
     
     case downloaded(URL)
     case selected(Data)

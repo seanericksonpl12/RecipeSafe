@@ -33,7 +33,7 @@ struct GroupGridReducer: Reducer {
           let groupItems = try coreDataService.fetchAll(GroupItem.self)
           state.groups = groupItems.map { GroupModel(dataEntity: $0) }
           let recipeItems = try coreDataService.fetchAll(RecipeItem.self)
-          state.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
+//          state.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
         } catch {
           state.groups = []
           state.recipes = []

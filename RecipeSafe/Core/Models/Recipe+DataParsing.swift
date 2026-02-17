@@ -87,7 +87,7 @@ extension Recipe {
             .htmlFormatted()
                 
         else { throw NetworkError.recipeMissingItem("No Title") }
-        
+        print("FOUND YIELD: \(json["recipeYield"])")
         guard let ingrd: [String] =
                 json[RecipeKeys.ingredient.rawValue]?
             .arrayValue
@@ -160,17 +160,23 @@ extension Recipe {
         if title == "" || ingrd.isEmpty || instructions.isEmpty  {
             throw NetworkError.recipeMissingItem("One or more properties are empty")
         }
-        
-        return Self(
-            title: title,
-            description: description,
-            ingredients: ingrd,
-            instructions: instructions,
-            img: img,
-            url: nil,
-            prepTime: prep,
-            cookTime: cook
-        )
+      return .init(
+        id: UUID(),
+        title: title,
+        description: description ?? "",
+        ingredients: ingrd.map { .init(id: UUID(), value: $0) },
+        instructions: instructions.map { .init(id: UUID(), value: $0) },
+      )
+//        return Self(
+//            title: title,
+//            description: description,
+//            ingredients: ingrd,
+//            instructions: instructions,
+//            img: img,
+//            url: nil,
+//            prepTime: prep,
+//            cookTime: cook
+//        )
     }
     
     // MARK: - Keys

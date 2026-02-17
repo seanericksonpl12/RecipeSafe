@@ -30,7 +30,7 @@ struct RecipeManager {
     return recipe
   }
   
-  func save(recipe: Recipe) throws -> RecipeItem {
+  func save(recipe: Recipe) throws {
     try saveRecipe(recipe)
   }
   
@@ -39,19 +39,25 @@ struct RecipeManager {
     return coreDataService.fetch(id: id) as? RecipeItem
   }
   
-  func updateRecipe(_ recipe: inout Recipe) throws {
-    guard let id = recipe.dataEntity else { return }
-    if let object = coreDataService.fetch(id: id) as? RecipeItem {
-      try coreDataService.delete(object)
+  func update(recipe: Recipe, sendUpdateMessage: Bool = false) throws {
+    try databaseService.updateRecipe(recipe)
+    if sendUpdateMessage {
+      eventBus.send(.recipeDatabaseUpdated)
     }
-    let entity = try saveRecipe(recipe)
-    try coreDataService.save()
-    recipe.dataEntity = entity.objectID
+//    guard let id = recipe.dataEntity else { return }
+//    if let object = coreDataService.fetch(id: id) as? RecipeItem {
+//      try coreDataService.delete(object)
+//    }
+//    let entity = try saveRecipe(recipe)
+//    try coreDataService.save()
+//    recipe.dataEntity = entity.objectID
   }
   
   func delete(_ recipe: Recipe) throws {
-    guard let id = recipe.dataEntity else { return }
-    try coreDataService.delete(id: id)
+    try databaseService.deleteRecipe(recipe)
+    eventBus.send(.recipeDatabaseUpdated)
+//    guard let id = recipe.dataEntity else { return }
+//    try coreDataService.delete(id: id)
   }
   
   @MainActor
@@ -66,55 +72,22 @@ struct RecipeManager {
   }
   
   func addToGroup(_ recipe: Recipe, group: GroupItem) throws {
-    if let id = recipe.dataEntity, let data = coreDataService.fetch(id: id) as? RecipeItem {
-      group.addToRecipes(data)
-      if let recipes = group.recipes?.array as? [RecipeItem] {
-        group.imgUrl = recipes.first(where: {$0.imageUrl != nil })?.imageUrl
-      }
-      try coreDataService.save()
-    }
+//    if let id = recipe.dataEntity, let data = coreDataService.fetch(id: id) as? RecipeItem {
+//      group.addToRecipes(data)
+//      if let recipes = group.recipes?.array as? [RecipeItem] {
+//        group.imgUrl = recipes.first(where: {$0.imageUrl != nil })?.imageUrl
+//      }
+//      try coreDataService.save()
+//    }
   }
   
   func fetchAll() throws -> [Recipe] {
-    try coreDataService.fetchAll(RecipeItem.self).compactMap { Recipe(dataItem: $0) }
+    try databaseService.getRecipes()
   }
   
-  private func saveRecipe(_ recipe: Recipe) throws -> RecipeItem {
-    guard let newRecipe = coreDataService.create(RecipeItem.self) else {
-      throw NSError(domain: "RecipeError", code: 0)
-    }
-    newRecipe.id = recipe.id
-    newRecipe.title = recipe.title
-    newRecipe.desc = recipe.description
-    newRecipe.cookTime = recipe.cookTime
-    newRecipe.prepTime = recipe.prepTime
-    newRecipe.url = recipe.url
-    newRecipe.ingredients = []
-    newRecipe.instructions = []
-    switch recipe.img {
-    case .downloaded(let url):
-      newRecipe.imageUrl = url
-    case .selected(let data):
-      newRecipe.photoData = data
-    case .none:
-      newRecipe.photoData = nil
-      newRecipe.imageUrl = nil
-    }
-    recipe.ingredients.forEach { item in
-      if let i = coreDataService.create(Ingredient.self) {
-        i.value = item
-        newRecipe.addToIngredients(i)
-      }
-    }
-    recipe.instructions.forEach { item in
-      if let i = coreDataService.create(Instruction.self) {
-        i.value = item
-        newRecipe.addToInstructions(i)
-      }
-    }
-    
-    try coreDataService.save()
-    return newRecipe
+  private func saveRecipe(_ recipe: Recipe) throws {
+    try databaseService.saveRecipe(recipe)
+    eventBus.send(.recipeDatabaseUpdated)
   }
   
   @Dependency(\.recipeDataService)
@@ -122,6 +95,12 @@ struct RecipeManager {
   
   @Dependency(\.coreDataService)
   private var coreDataService
+  
+  @Dependency(\.databaseService)
+  private var databaseService
+  
+  @Dependency(\.eventBus)
+  private var eventBus
   
   private enum Constants {
     static let scheme = "RecipeSafe"

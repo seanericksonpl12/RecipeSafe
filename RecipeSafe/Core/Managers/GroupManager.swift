@@ -29,11 +29,11 @@ struct GroupManager {
       try getNewColor()
     }
     // Convert Recipe to RecipeItem for storage
-    for recipe in recipes {
-      if let recipeId = recipe.dataEntity, let recipeItem = coreDataService.fetch(id: recipeId) as? RecipeItem {
-        group.addToRecipes(recipeItem)
-      }
-    }
+//    for recipe in recipes {
+//      if let recipeId = recipe.dataEntity, let recipeItem = coreDataService.fetch(id: recipeId) as? RecipeItem {
+//        group.addToRecipes(recipeItem)
+//      }
+//    }
     try coreDataService.save()
   }
   
@@ -50,11 +50,11 @@ struct GroupManager {
         groupItem.color = try getNewColor()
     }
     // Convert Recipe back to RecipeItem for storage
-    for recipe in group.recipes {
-      if let recipeId = recipe.dataEntity, let recipeItem = coreDataService.fetch(id: recipeId) as? RecipeItem {
-        groupItem.addToRecipes(recipeItem)
-      }
-    }
+//    for recipe in group.recipes {
+//      if let recipeId = recipe.dataEntity, let recipeItem = coreDataService.fetch(id: recipeId) as? RecipeItem {
+//        groupItem.addToRecipes(recipeItem)
+//      }
+//    }
     try coreDataService.save()
   }
   

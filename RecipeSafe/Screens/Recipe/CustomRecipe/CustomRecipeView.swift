@@ -71,11 +71,12 @@ extension CustomRecipeView {
               Spacer()
             }
           }
-          ForEach(Array($store.recipe.ingredients.enumerated()), id: \.offset) { index, $item in
+          ForEach(Array(store.recipe.ingredients.enumerated()), id: \.element.id) { index, item in
+            let binding = $store.recipe.ingredients[index]
             HStack {
-              TextField(item == "" ? "optionalDisplay" : "", text: $item, axis: .horizontal)
+              TextField(item.value.isEmpty ? "optionalDisplay" : "", text: binding.value, axis: .horizontal)
                 .onSubmit {
-                  if !item.trimmingWhitespace().isEmpty {
+                  if !item.value.trimmingWhitespace().isEmpty {
                     store.send(.addIngredient)
                     Task { ingredientFocusState = true }
                   } else {
@@ -83,11 +84,11 @@ extension CustomRecipeView {
                   }
                 }
                 .onChange(of: ingredientFocusState) { oldValue, newValue in
-                  if oldValue, !newValue, item.trimmingWhitespace().isEmpty {
+                  if oldValue, !newValue, item.value.trimmingWhitespace().isEmpty {
                     store.send(.removeIngredients(.init(integer: index)), animation: .bouncy)
                   }
                 }
-                .focused($ingredientFocusState, equals: index == store.recipe.ingredients.count - 1 && item.isEmpty)
+                .focused($ingredientFocusState, equals: index == store.recipe.ingredients.count - 1 && item.value.isEmpty)
                 .font(.callout)
             }
           }
@@ -117,7 +118,8 @@ extension CustomRecipeView {
               Spacer()
             }
           }
-          ForEach(Array($store.recipe.instructions.enumerated()), id: \.offset) { index, $item in
+          ForEach(Array(store.recipe.instructions.enumerated()), id: \.element.id) { index, item in
+            let binding = $store.recipe.instructions[index]
             HStack {
               VStack {
                 Text((index + 1).formatted())
@@ -125,16 +127,16 @@ extension CustomRecipeView {
                   .fontWeight(.bold)
                 Spacer()
               }
-              TextField(item == "" ? "optionalDisplay" : "", text: $item, axis: .horizontal)
+              TextField(item.value.isEmpty ? "optionalDisplay" : "", text: binding.value, axis: .horizontal)
                 .onSubmit {
-                  if !item.trimmingWhitespace().isEmpty {
+                  if !item.value.trimmingWhitespace().isEmpty {
                     store.send(.addInstruction)
                     Task { instructionFocusState = true }
                   } else {
                     store.send(.removeInstructions(.init(integer: index)))
                   }
                 }
-                .focused($instructionFocusState, equals: index == store.recipe.instructions.count - 1 && item.isEmpty)
+                .focused($instructionFocusState, equals: index == store.recipe.instructions.count - 1 && item.value.isEmpty)
                 .font(.callout)
             }
           }
@@ -161,16 +163,7 @@ extension CustomRecipeView {
   CustomRecipeView(
     store: .init(
       initialState: CustomRecipeState(
-        recipe: Recipe(
-          //          title: "My Recipe",
-          //          description: "This is a some description of this recipe, .....",
-          //          ingredients: ["1 egg", "2 lbs butter", "6 oz lime juice", "3 lbs turkey brains", "1 onion"],
-          //          instructions: ["Boil the egg till hard", "Sauté the turkey brains", "Fry the onion"],
-          //          img: .none,
-          //          url: nil,
-          //          prepTime: "20 min",
-          //          cookTime: "45 min"
-        )
+        recipe: .recipeMockChicken
       ),
       reducer: CustomRecipeReducer.init
     )

@@ -113,12 +113,12 @@ public struct RecipeUtil {
       throw NetworkError.recipeMissingItem("No Instructions")
     }
     
-    var img: ImageData = .none
+    var imageUrl: URL?
     
     if let imgUrl = json[RecipeKeys.imageUrl.rawValue]?.url {
       var components = URLComponents(url: imgUrl, resolvingAgainstBaseURL: false)
       components?.query = ""
-      img = .downloaded(components?.url ?? imgUrl)
+      imageUrl = components?.url
     }
     
     let description = json[RecipeKeys.description.rawValue]?
@@ -140,14 +140,15 @@ public struct RecipeUtil {
     }
     
     return Recipe(
+      id: UUID(),
       title: title,
-      description: description,
-      ingredients: ingrd,
-      instructions: instructions,
-      img: img,
+      description: description ?? "",
+      ingredients: ingrd.map { .init(value: $0) },
+      instructions: instructions.map { .init(value: $0) },
+      imageUrl: imageUrl,
       url: nil,
-      prepTime: prep,
-      cookTime: cook
+      prepTime: prep ?? "",
+      cookTime: cook ?? ""
     )
   }
   

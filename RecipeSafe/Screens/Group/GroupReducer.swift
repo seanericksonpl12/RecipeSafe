@@ -28,11 +28,11 @@ struct GroupReducer: Reducer {
           return .none
         }
         let recipeItems = groupItem.recipes?.array as? [RecipeItem] ?? []
-        state.group.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
+//        state.group.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
         state.group.title = groupItem.title ?? "group.default".localized
         do {
           let allRecipeItems = try coreDataService.fetchAll(RecipeItem.self)
-          state.availableRecipes = allRecipeItems.filter { $0.group == nil }.compactMap(Recipe.init)
+//          state.availableRecipes = allRecipeItems.filter { $0.group == nil }.compactMap(Recipe.init)
         } catch {
           state.availableRecipes = []
         }
@@ -55,7 +55,7 @@ struct GroupReducer: Reducer {
         }
         state.group.title = groupItem.title ?? state.group.title
         let recipeItems = groupItem.recipes?.array as? [RecipeItem] ?? []
-        state.group.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
+//        state.group.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
         return .none
       case let .removeRecipe(offsets):
         state.group.recipes.remove(atOffsets: offsets)

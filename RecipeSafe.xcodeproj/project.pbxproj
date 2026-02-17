@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		920C39EE2F4250C80035D576 /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = 920C39ED2F4250C80035D576 /* SQLiteData */; };
+		920C39F02F4250C80035D576 /* SQLiteDataTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 920C39EF2F4250C80035D576 /* SQLiteDataTestSupport */; };
 		920DA35E2A6F0EF70086ADB5 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 920DA35D2A6F0EF70086ADB5 /* Lottie */; };
 		9266879B2A608E3D00117A59 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 9266879A2A608E3D00117A59 /* SwiftSoup */; };
 		926687A02A6094CB00117A59 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 9266879F2A6094CB00117A59 /* SwiftyJSON */; };
@@ -97,6 +99,7 @@
 			files = (
 				92F09A272C9C6E660038A031 /* NukeUI in Frameworks */,
 				926687A02A6094CB00117A59 /* SwiftyJSON in Frameworks */,
+				920C39EE2F4250C80035D576 /* SQLiteData in Frameworks */,
 				926D78C32ECA695B00CAC75C /* ComposableArchitecture in Frameworks */,
 				926D78CC2ECA6C0000CAC75C /* Dependencies in Frameworks */,
 				9266879B2A608E3D00117A59 /* SwiftSoup in Frameworks */,
@@ -111,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				920C39F02F4250C80035D576 /* SQLiteDataTestSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +197,7 @@
 				926D78C22ECA695B00CAC75C /* ComposableArchitecture */,
 				926D78CB2ECA6C0000CAC75C /* Dependencies */,
 				926D78CD2ECA6C0000CAC75C /* DependenciesMacros */,
+				920C39ED2F4250C80035D576 /* SQLiteData */,
 			);
 			productName = RecipeSafe;
 			productReference = 926687672A608C9200117A59 /* RecipeSafe.app */;
@@ -300,6 +305,7 @@
 				929F12322D6F91CF0037F97A /* XCRemoteSwiftPackageReference "swift-package" */,
 				926D78C12ECA695B00CAC75C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				926D78C92ECA6A9500CAC75C /* XCRemoteSwiftPackageReference "swift-dependencies" */,
+				920C39EC2F4250C80035D576 /* XCRemoteSwiftPackageReference "sqlite-data" */,
 			);
 			productRefGroup = 926687682A608C9200117A59 /* Products */;
 			projectDirPath = "";
@@ -1455,6 +1461,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		920C39EC2F4250C80035D576 /* XCRemoteSwiftPackageReference "sqlite-data" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/sqlite-data";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.2;
+			};
+		};
 		920DA35C2A6F0EF70086ADB5 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
@@ -1514,6 +1528,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		920C39ED2F4250C80035D576 /* SQLiteData */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 920C39EC2F4250C80035D576 /* XCRemoteSwiftPackageReference "sqlite-data" */;
+			productName = SQLiteData;
+		};
+		920C39EF2F4250C80035D576 /* SQLiteDataTestSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 920C39EC2F4250C80035D576 /* XCRemoteSwiftPackageReference "sqlite-data" */;
+			productName = SQLiteDataTestSupport;
+		};
 		920DA35D2A6F0EF70086ADB5 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 920DA35C2A6F0EF70086ADB5 /* XCRemoteSwiftPackageReference "lottie-ios" */;

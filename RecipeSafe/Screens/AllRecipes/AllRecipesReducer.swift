@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import Dependencies
 import Foundation
+import SQLiteData
 
 struct AllRecipesReducer: Reducer {
   typealias State = AllRecipesState
@@ -19,7 +20,16 @@ struct AllRecipesReducer: Reducer {
     Reduce { state, action in
       switch action {
       case .task:
-        return reduce(into: &state, action: .reloadRecipeList)
+        return .merge(
+          reduce(into: &state, action: .reloadRecipeList),
+          .run { send in
+            for await event in eventBus.stream {
+              if event == .recipeDatabaseUpdated {
+                await send(.reloadRecipeList)
+              }
+            }
+          }.cancellable(id: "AllRecipesViewDatabaseListener", cancelInFlight: true)
+        )
       case .reloadRecipeList:
         do {
           state.recipeList = try recipeManager.fetchAll()
@@ -33,22 +43,42 @@ struct AllRecipesReducer: Reducer {
       case let .recipeTapped(recipe):
         state.navPath.append(.recipe(RecipeState(recipe: recipe, editingEnabled: false)))
         return .none
+      case let .favoriteRecipe(index):
+        state.recipeList[index].isFavorite.toggle()
+        try? recipeManager.update(recipe: state.recipeList[index])
+        return .none
       case .createCustomRecipe:
         state.destination = .recipe(CustomRecipeState())
         return .none
-      case let .fetchRecipe(imgData):
-        print("get recipe from camera")
+      case let .deleteRecipe(recipe):
+        state.recipeToDelete = recipe
+        state.alert = .deleteRecipe()
+        return .none
+      case .alert(.presented(.deleteRecipeOk)):
+        if let recipe = state.recipeToDelete {
+          try? recipeManager.delete(recipe)
+          state.recipeToDelete = nil
+        }
+        return .none
+      case .alert(.presented(.deleteRecipeCancel)):
+        state.recipeToDelete = nil
+        return .none
+      case .alert:
         return .none
       default:
         return .none
       }
     }
+    .ifLet(\.$alert, action: \.alert)
     .ifLet(\.$destination, action: \.destination)
     .ifLet(\.createRecipeState, action: \.createRecipe) { CreateRecipeReducer() }
     .forEach(\.navPath, action: \.navPath)
   }
   
   private let recipeManager = RecipeManager()
+  
+  @Dependency(\.eventBus)
+  private var eventBus
   
 }
 
@@ -59,6 +89,9 @@ struct AllRecipesState: Sendable, Equatable {
   var searchText: String = ""
   var isLoading: Bool = false
   
+  var recipeToDelete: Recipe?
+  @Presents
+  var alert: AlertState<AllRecipesAction.AlertAction>?
   @Presents
   var destination: AllRecipesReducer.Destination.State?
   var navPath: StackState<AllRecipesReducer.NavPath.State> = .init()
@@ -85,11 +118,18 @@ enum AllRecipesAction: Sendable, Equatable {
   case task
   case reloadRecipeList
   case searchTextUpdated(String)
-  case deleteRecipes(IndexSet)
+  case deleteRecipe(Recipe)
   case recipeTapped(Recipe)
+  case favoriteRecipe(Int)
   case createCustomRecipe
-  case fetchRecipe(Data)
   
+  case alert(PresentationAction<AlertAction>)
+  @CasePathable
+  enum AlertAction: Equatable, Sendable {
+    case deleteRecipeOk
+    case deleteRecipeCancel
+  }
+
   case createRecipe(CreateRecipeReducer.Action)
   case navPath(StackActionOf<AllRecipesReducer.NavPath>)
   case destination(PresentationAction<AllRecipesReducer.Destination.Action>)
@@ -99,3 +139,16 @@ extension AllRecipesReducer.NavPath.State: Equatable, Sendable {}
 extension AllRecipesReducer.NavPath.Action: Equatable, Sendable {}
 extension AllRecipesReducer.Destination.State: Equatable, Sendable {}
 extension AllRecipesReducer.Destination.Action: Equatable, Sendable {}
+
+extension AlertState where Action == AllRecipesAction.AlertAction {
+  static func deleteRecipe() -> Self {
+    AlertState {
+      TextState("recipe.alert.delete.title".localized)
+    } actions: {
+      ButtonState(role: .destructive, action: .deleteRecipeOk, label: { TextState("button.delete".localized) })
+      ButtonState(role: .cancel, action: .deleteRecipeCancel, label: { TextState("button.cancel".localized) })
+    } message: {
+      TextState("recipe.alert.delete.desc".localized)
+    }
+  }
+}

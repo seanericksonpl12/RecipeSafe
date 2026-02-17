@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EditableSectionView: View {
   // MARK: - Wrapped
-  @Binding var list: [String]
+  @Binding var list: [IdentifiedString]
   let isEditing: Bool
   
   @FocusState var focusState
@@ -37,7 +37,7 @@ struct EditableSectionView: View {
           Spacer()
         }
       }
-      ForEach(Array(list.enumerated()), id: \.offset) { index, item in
+      ForEach(Array(list.enumerated()), id: \.element.id) { index, item in
         HStack {
           if numbered {
             VStack {
@@ -47,18 +47,22 @@ struct EditableSectionView: View {
               Spacer()
             }
           }
-          TextField(item == "" ? optionalDisplay : "", text: $list[index], axis: isEditing ? .horizontal : .vertical)
-            .onSubmit {
-              if !item.trimmingWhitespace().isEmpty {
-                addAction()
-                Task { focusState = true }
-              } else {
-                list.remove(at: index)
+          if isEditing {
+            TextField(item.value.isEmpty ? optionalDisplay : "", text: $list[index].value, axis: .horizontal)
+              .onSubmit {
+                if !item.value.trimmingWhitespace().isEmpty {
+                  addAction()
+                  Task { focusState = true }
+                } else {
+                  list.remove(at: index)
+                }
               }
-            }
-            .focused($focusState, equals: index == list.count - 1 && item.isEmpty)
-            .font(font)
-            .disabled(!isEditing)
+              .focused($focusState, equals: index == list.count - 1 && item.value.isEmpty)
+              .font(font)
+          } else {
+            Text(item.value)
+              .font(font)
+          }
         }
       }
       .onDelete { deleteAction($0) }

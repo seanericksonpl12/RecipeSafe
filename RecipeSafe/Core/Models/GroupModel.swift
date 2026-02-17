@@ -27,7 +27,8 @@ struct GroupModel: Hashable, Equatable, Identifiable, Sendable {
   
   init(dataEntity: GroupItem) {
     let recipeItems = dataEntity.recipes?.array as? [RecipeItem] ?? []
-    self.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
+//    self.recipes = recipeItems.compactMap { Recipe(dataItem: $0) }
+    self.recipes = []
     self.title = dataEntity.title ?? "group.default".localized
     self.color = dataEntity.color
     self.dataEntityID = dataEntity.objectID

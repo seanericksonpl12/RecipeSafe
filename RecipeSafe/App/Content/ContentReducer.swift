@@ -25,28 +25,24 @@ struct ContentReducer: Reducer {
         state.viewState = .loading
         return .run { send in
           let recipe = try await recipeManager.buildRecipe(url: url)
+          try recipeManager.save(recipe: recipe)
           await send(.handleNewRecipe(recipe))
         } catch: { _, send in
           await send(.showFailedAlert)
         }
       case let .handleNewRecipe(recipe):
         state.viewState = .successfullyLoaded
-        var newRecipe = recipe
-        if let duplicateItem = try? recipeManager.findDuplicates(of: newRecipe), let duplicate = Recipe(dataItem: duplicateItem) {
-          return reduce(into: &state, action: .showDuplicateFoundAlert(new: recipe, duplicate: duplicate))
-        } else {
-          newRecipe.dataEntity = try? recipeManager.save(recipe: recipe).objectID
-          return reduce(into: &state, action: .openRecipe(newRecipe))
-        }
+        return reduce(into: &state, action: .openRecipe(recipe))
+//        var newRecipe = recipe
+//        if let duplicateItem = try? recipeManager.findDuplicates(of: newRecipe), let duplicate = Recipe(dataItem: duplicateItem) {
+//          return reduce(into: &state, action: .showDuplicateFoundAlert(new: recipe, duplicate: duplicate))
+//        } else {
+//          newRecipe.dataEntity = try? recipeManager.save(recipe: recipe).objectID
+//          return reduce(into: &state, action: .openRecipe(newRecipe))
+//        }
       case let .openRecipe(recipe):
-        if let groups = try? coreDataService.fetchAll(GroupItem.self), !groups.isEmpty {
-          state.tabSelection = .group
-          state.groupGridState.newRecipe = recipe
-          return reduce(into: &state, action: .groupGrid(.newRecipeReceived(recipe)))
-        } else {
-          state.tabSelection = .allRecipes
-          return reduce(into: &state, action: .allRecipes(.recipeTapped(recipe)))
-        }
+        state.tabSelection = .allRecipes
+        return reduce(into: &state, action: .allRecipes(.recipeTapped(recipe)))
         
       case .showFailedAlert:
         state.viewState = .failedToLoad
@@ -63,9 +59,9 @@ struct ContentReducer: Reducer {
         case .recipeFailedOk, .duplicateCancel:
           return .none
         case let .duplicateOverwrite(new, duplicate):
-          if let id = duplicate.dataEntity {
-            try? coreDataService.delete(id: id)
-          }
+//          if let id = duplicate.dataEntity {
+//            try? coreDataService.delete(id: id)
+//          }
           return reduce(into: &state, action: .openRecipe(new))
         case let .duplicateSaveCopy(recipe):
           return reduce(into: &state, action: .openRecipe(recipe))

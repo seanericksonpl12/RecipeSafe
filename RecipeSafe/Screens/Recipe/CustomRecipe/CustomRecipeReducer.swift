@@ -39,7 +39,7 @@ struct CustomRecipeReducer {
         return .none
       case .save:
         return .run { [state] send in
-          _ = try recipeManager.save(recipe: state.recipe)
+          _ = try? recipeManager.save(recipe: state.recipe)
           await dismiss()
         }
       case .dismiss:
