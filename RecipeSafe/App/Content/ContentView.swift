@@ -21,11 +21,11 @@ struct ContentView: View {
           Label("app.group".localized, systemImage: "circlebadge.2")
         }
         .tag(ContentTab.group)
-//      ShoppingListViewTCA(store: store.scope(state: \.shoppingListState, action: \.shoppingList))
-//        .tabItem {
-//          Label("app.shopping".localized, systemImage: "list.clipboard")
-//        }
-//        .tag(ContentTab.shoppingList)
+      ShoppingListView(store: store.scope(state: \.shoppingListState, action: \.shoppingList))
+        .tabItem {
+          Label("app.shopping".localized, systemImage: "cart")
+        }
+        .tag(ContentTab.shoppingList)
     }
   }
   

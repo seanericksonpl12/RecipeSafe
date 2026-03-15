@@ -6,7 +6,9 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:www.pointfree.co)",
-      "WebFetch(domain:swiftpackageindex.com)"
+      "WebFetch(domain:swiftpackageindex.com)",
+      "mcp__xcode__XcodeRead",
+      "mcp__xcode__XcodeGrep"
     ]
   }
 }

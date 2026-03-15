@@ -130,6 +130,26 @@ extension PersistenceController {
         CREATE INDEX "index_recipeCategoryTagTables_on_tagId" ON "recipeCategoryTagTables"("tagId")
       """).execute(db)
     }
+    migrator.registerMigration("Add Shopping List Tables") { db in
+      try #sql("""
+        CREATE TABLE "shoppingListRecipeTables" (
+          "id" TEXT PRIMARY KEY NOT NULL,
+          "addedAt" TEXT NOT NULL DEFAULT ''
+        ) STRICT
+      """).execute(db)
+      try #sql("""
+        CREATE TABLE "shoppingListItemTables" (
+          "id" TEXT PRIMARY KEY NOT NULL,
+          "value" TEXT NOT NULL DEFAULT '',
+          "isCompleted" INTEGER NOT NULL DEFAULT 0,
+          "sortIndex" INTEGER NOT NULL DEFAULT 0,
+          "recipeId" TEXT REFERENCES "shoppingListRecipeTables"("id") ON DELETE SET NULL
+        ) STRICT
+      """).execute(db)
+      try #sql("""
+        CREATE INDEX "index_shoppingListItemTables_on_recipeId" ON "shoppingListItemTables"("recipeId")
+      """).execute(db)
+    }
     try migrator.migrate(database)
     
     // Custom Database setup

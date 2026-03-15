@@ -1,5 +1,5 @@
 {
-  "originHash" : "3c7724ad1045a675756847b566d3875f863d1d7f95f649fe6660aa8b6adad659",
+  "originHash" : "a7ad47a2fadecab9fbda6062b7fccc976db036fd439aa757249885dd65f68e5c",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -11,12 +11,30 @@
       }
     },
     {
+      "identity" : "embrace-apple-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/embrace-io/embrace-apple-sdk.git",
+      "state" : {
+        "revision" : "ecb2ec0c296ae57ba3528be4d40c72203a0a5637",
+        "version" : "6.16.1"
+      }
+    },
+    {
       "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift",
       "state" : {
         "revision" : "36e30a6f1ef10e4194f6af0cff90888526f0c115",
         "version" : "7.10.0"
+      }
+    },
+    {
+      "identity" : "kscrash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kstenerud/KSCrash",
+      "state" : {
+        "revision" : "95a8895d75f3c22aa9ad9f2a15d2fbd97b0a55e2",
+        "version" : "2.5.1"
       }
     },
     {
@@ -44,6 +62,15 @@
       "state" : {
         "revision" : "0ead44350d2737db384908569c012fe67c421e4d",
         "version" : "12.8.0"
+      }
+    },
+    {
+      "identity" : "opentelemetry-swift-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/open-telemetry/opentelemetry-swift-core",
+      "state" : {
+        "revision" : "240c8d5e36c3c7b774ed961325369f0b1f2c965f",
+        "version" : "2.3.0"
       }
     },
     {

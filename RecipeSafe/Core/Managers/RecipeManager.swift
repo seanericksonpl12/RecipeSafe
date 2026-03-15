@@ -40,7 +40,7 @@ struct RecipeManager {
   }
   
   func update(recipe: Recipe, sendUpdateMessage: Bool = false) throws {
-    try databaseService.updateRecipe(recipe)
+    try recipeDatabaseService.updateRecipe(recipe)
     if sendUpdateMessage {
       eventBus.send(.recipeDatabaseUpdated)
     }
@@ -54,7 +54,7 @@ struct RecipeManager {
   }
   
   func delete(_ recipe: Recipe) throws {
-    try databaseService.deleteRecipe(recipe)
+    try recipeDatabaseService.deleteRecipe(recipe)
     eventBus.send(.recipeDatabaseUpdated)
 //    guard let id = recipe.dataEntity else { return }
 //    try coreDataService.delete(id: id)
@@ -82,11 +82,11 @@ struct RecipeManager {
   }
   
   func fetchAll() throws -> [Recipe] {
-    try databaseService.getRecipes()
+    try recipeDatabaseService.getRecipes()
   }
   
   private func saveRecipe(_ recipe: Recipe) throws {
-    try databaseService.saveRecipe(recipe)
+    try recipeDatabaseService.saveRecipe(recipe)
     eventBus.send(.recipeDatabaseUpdated)
   }
   
@@ -96,8 +96,8 @@ struct RecipeManager {
   @Dependency(\.coreDataService)
   private var coreDataService
   
-  @Dependency(\.databaseService)
-  private var databaseService
+  @Dependency(\.recipeDatabaseService)
+  private var recipeDatabaseService
   
   @Dependency(\.eventBus)
   private var eventBus

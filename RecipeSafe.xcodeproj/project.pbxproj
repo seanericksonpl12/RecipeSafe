@@ -17,6 +17,9 @@
 		926D78CC2ECA6C0000CAC75C /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 926D78CB2ECA6C0000CAC75C /* Dependencies */; };
 		926D78CE2ECA6C0000CAC75C /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 926D78CD2ECA6C0000CAC75C /* DependenciesMacros */; };
 		929F12342D6F91CF0037F97A /* SimpleAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 929F12332D6F91CF0037F97A /* SimpleAnalytics */; };
+		92A141DF2F5E65CC00B440A3 /* EmbraceCrash in Frameworks */ = {isa = PBXBuildFile; productRef = 92A141DE2F5E65CC00B440A3 /* EmbraceCrash */; };
+		92A141E12F5E65CC00B440A3 /* EmbraceIO in Frameworks */ = {isa = PBXBuildFile; productRef = 92A141E02F5E65CC00B440A3 /* EmbraceIO */; };
+		92A141E32F5E65CC00B440A3 /* EmbraceMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 92A141E22F5E65CC00B440A3 /* EmbraceMacros */; };
 		92F09A252C9C6E660038A031 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 92F09A242C9C6E660038A031 /* Nuke */; };
 		92F09A272C9C6E660038A031 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 92F09A262C9C6E660038A031 /* NukeUI */; };
 /* End PBXBuildFile section */
@@ -97,10 +100,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92A141E12F5E65CC00B440A3 /* EmbraceIO in Frameworks */,
 				92F09A272C9C6E660038A031 /* NukeUI in Frameworks */,
 				926687A02A6094CB00117A59 /* SwiftyJSON in Frameworks */,
 				920C39EE2F4250C80035D576 /* SQLiteData in Frameworks */,
 				926D78C32ECA695B00CAC75C /* ComposableArchitecture in Frameworks */,
+				92A141E32F5E65CC00B440A3 /* EmbraceMacros in Frameworks */,
+				92A141DF2F5E65CC00B440A3 /* EmbraceCrash in Frameworks */,
 				926D78CC2ECA6C0000CAC75C /* Dependencies in Frameworks */,
 				9266879B2A608E3D00117A59 /* SwiftSoup in Frameworks */,
 				926D78CE2ECA6C0000CAC75C /* DependenciesMacros in Frameworks */,
@@ -198,6 +204,9 @@
 				926D78CB2ECA6C0000CAC75C /* Dependencies */,
 				926D78CD2ECA6C0000CAC75C /* DependenciesMacros */,
 				920C39ED2F4250C80035D576 /* SQLiteData */,
+				92A141DE2F5E65CC00B440A3 /* EmbraceCrash */,
+				92A141E02F5E65CC00B440A3 /* EmbraceIO */,
+				92A141E22F5E65CC00B440A3 /* EmbraceMacros */,
 			);
 			productName = RecipeSafe;
 			productReference = 926687672A608C9200117A59 /* RecipeSafe.app */;
@@ -306,6 +315,7 @@
 				926D78C12ECA695B00CAC75C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				926D78C92ECA6A9500CAC75C /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 				920C39EC2F4250C80035D576 /* XCRemoteSwiftPackageReference "sqlite-data" */,
+				92A141DD2F5E65CC00B440A3 /* XCRemoteSwiftPackageReference "embrace-apple-sdk" */,
 			);
 			productRefGroup = 926687682A608C9200117A59 /* Products */;
 			projectDirPath = "";
@@ -536,7 +546,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -579,7 +589,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -812,7 +822,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -974,7 +984,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1142,7 +1152,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1304,7 +1314,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1517,6 +1527,14 @@
 				minimumVersion = 0.4.1;
 			};
 		};
+		92A141DD2F5E65CC00B440A3 /* XCRemoteSwiftPackageReference "embrace-apple-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/embrace-io/embrace-apple-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.16.1;
+			};
+		};
 		92F09A232C9C6E660038A031 /* XCRemoteSwiftPackageReference "Nuke" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kean/Nuke";
@@ -1572,6 +1590,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 929F12322D6F91CF0037F97A /* XCRemoteSwiftPackageReference "swift-package" */;
 			productName = SimpleAnalytics;
+		};
+		92A141DE2F5E65CC00B440A3 /* EmbraceCrash */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92A141DD2F5E65CC00B440A3 /* XCRemoteSwiftPackageReference "embrace-apple-sdk" */;
+			productName = EmbraceCrash;
+		};
+		92A141E02F5E65CC00B440A3 /* EmbraceIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92A141DD2F5E65CC00B440A3 /* XCRemoteSwiftPackageReference "embrace-apple-sdk" */;
+			productName = EmbraceIO;
+		};
+		92A141E22F5E65CC00B440A3 /* EmbraceMacros */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92A141DD2F5E65CC00B440A3 /* XCRemoteSwiftPackageReference "embrace-apple-sdk" */;
+			productName = EmbraceMacros;
 		};
 		92F09A242C9C6E660038A031 /* Nuke */ = {
 			isa = XCSwiftPackageProductDependency;

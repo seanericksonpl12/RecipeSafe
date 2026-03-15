@@ -13,9 +13,9 @@ struct ContentReducer: Reducer {
     Scope(state: \.groupGridState, action: \.groupGrid) {
       GroupGridReducer()
     }
-//    Scope(state: \.shoppingListState, action: \.shoppingList) {
-//      ShoppingListReducer()
-//    }
+    Scope(state: \.shoppingListState, action: \.shoppingList) {
+      ShoppingListReducer()
+    }
     Reduce { state, action in
       switch action {
       case let .tabSelected(tab):
@@ -88,7 +88,7 @@ struct ContentState: Sendable, Equatable {
   
   var allRecipesState = AllRecipesState()
   var groupGridState = GroupGridState()
-//  var shoppingListState = ShoppingListState()
+  var shoppingListState = ShoppingListState()
 
   var viewState: ViewState = .started
   var tabSelection: ContentTab = .allRecipes
@@ -110,7 +110,7 @@ enum ContentTab: Equatable, Sendable {
 enum ContentAction: Sendable, Equatable {
   case allRecipes(AllRecipesAction)
   case groupGrid(GroupGridAction)
-//  case shoppingList(ShoppingListAction)
+  case shoppingList(ShoppingListAction)
   
   case tabSelected(ContentTab)
   case urlOpened(URL)

@@ -2,15 +2,15 @@ import Dependencies
 import Foundation
 import SQLiteData
 
-struct DatabaseService: Sendable {
+struct RecipeDatabaseService: Sendable {
   var getRecipes: @Sendable () throws -> [Recipe]
   var saveRecipe: @Sendable (Recipe) throws -> Void
   var deleteRecipe: @Sendable (Recipe) throws -> Void
   var updateRecipe: @Sendable (Recipe) throws -> Void
 }
 
-extension DatabaseService: DependencyKey {
-  static let liveValue = DatabaseService {
+extension RecipeDatabaseService: DependencyKey {
+  static let liveValue = RecipeDatabaseService {
     
     // MARK: Get Recipes
     @Dependency(\.defaultDatabase) var database
@@ -146,7 +146,7 @@ extension DatabaseService: DependencyKey {
     }
   }
 
-  static let testValue = DatabaseService {
+  static let testValue = RecipeDatabaseService {
     []
   } saveRecipe: { _ in
 
@@ -155,8 +155,8 @@ extension DatabaseService: DependencyKey {
 }
 
 extension DependencyValues {
-  var databaseService: DatabaseService {
-    get { self[DatabaseService.self] }
-    set { self[DatabaseService.self] = newValue }
+  var recipeDatabaseService: RecipeDatabaseService {
+    get { self[RecipeDatabaseService.self] }
+    set { self[RecipeDatabaseService.self] = newValue }
   }
 }

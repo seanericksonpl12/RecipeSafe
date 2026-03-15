@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-@available(iOS 18.0, *)
 struct NewRecipeView: View {
   
   @Bindable var store: StoreOf<RecipeReducer>
@@ -84,7 +83,6 @@ struct NewRecipeView: View {
 }
 
 // MARK: - Segmented Control
-@available(iOS 18.0, *)
 extension NewRecipeView {
   private var segmentedControl: some View {
     Picker("", selection: $selectedTab) {
@@ -100,7 +98,6 @@ extension NewRecipeView {
 }
 
 // MARK: - Content List
-@available(iOS 18.0, *)
 extension NewRecipeView {
   @ViewBuilder
   private var contentList: some View {
@@ -149,7 +146,6 @@ extension NewRecipeView {
   }
 }
 
-@available(iOS 18.0, *)
 private extension NewRecipeView {
   @ToolbarContentBuilder
   var toolBarContent: some ToolbarContent {
@@ -179,17 +175,15 @@ private extension NewRecipeView {
 #if DEBUG
 #Preview {
   NavigationStack {
-    if #available(iOS 18.0, *) {
-      NewRecipeView(
-        store: .init(
-          initialState: RecipeState(
-            recipe: .recipeMockSpaghetti,
-            editingEnabled: false
-          ),
-          reducer: RecipeReducer.init
-        )
+    NewRecipeView(
+      store: .init(
+        initialState: RecipeState(
+          recipe: .recipeMockSpaghetti,
+          editingEnabled: false
+        ),
+        reducer: RecipeReducer.init
       )
-    }
+    )
   }
 }
 #endif
